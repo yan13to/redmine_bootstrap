@@ -1,0 +1,67 @@
+<%= form_with(scope: :settings, url: { action: 'edit' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :app_title, l(:setting_app_title) %>
+    <%= f.text_field :app_title, value: Setting.app_title, size: 30, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :welcome_text, l(:setting_welcome_text) %>
+    <%= f.text_area :welcome_text, value: Setting.welcome_text, cols: 60, rows: 5, class: 'form-control', id: 'settings_welcome_text' %>
+  </div>
+
+  <%= wikitoolbar_for 'settings_welcome_text' %>
+
+  <div class="mb-3">
+    <%= f.label :per_page_options, l(:setting_per_page_options) %>
+    <%= f.text_field :per_page_options, value: Setting.per_page_options, size: 20, class: 'form-control' %>
+    <em class="text-muted small"><%= l(:text_comma_separated) %></em>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :search_results_per_page, l(:setting_search_results_per_page) %>
+    <%= f.text_field :search_results_per_page, value: Setting.search_results_per_page, size: 6, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :activity_days_default, l(:setting_activity_days_default) %>
+    <div class="input-group">
+      <%= f.text_field :activity_days_default, value: Setting.activity_days_default, size: 6, class: 'form-control' %>
+      <span class="input-group-text"><%= l(:label_day_plural) %></span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :host_name, l(:setting_host_name) %>
+    <%= f.text_field :host_name, value: Setting.host_name, size: 60, class: 'form-control' %>
+    <em class="text-muted small"><%= l(:label_example) %>: <%= @guessed_host_and_path %></em>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :protocol, l(:setting_protocol) %>
+    <%= f.select :protocol, options_for_setting_protocol, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :text_formatting, l(:setting_text_formatting) %>
+    <%= f.select :text_formatting, options_for_setting_text_formatting, { include_blank: l(:label_none) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check">
+    <%= f.label :cache_formatted_text, l(:setting_cache_formatted_text), class: 'form-check-label' %>
+    <%= f.check_box :cache_formatted_text, checked: Setting.cache_formatted_text.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :wiki_compression, l(:setting_wiki_compression) %>
+    <%= f.select :wiki_compression, options_for_setting_wiki_compression, { include_blank: l(:label_none) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :feeds_limit, l(:setting_feeds_limit) %>
+    <%= f.text_field :feeds_limit, value: Setting.feeds_limit.to_s, size: 6, class: 'form-control' %>
+  </div>
+
+  <%= call_hook(:view_settings_general_form) %>
+
+  <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+<% end %>

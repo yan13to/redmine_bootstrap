@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-between mt-3">
+  <%= title l(:label_project_plural) %>
+  <div>
+    <%= link_to l(:label_project_new), new_project_path, class: 'btn btn-success' %>
+  </div>
+</div>
+
+<div class="accordion my-3" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="filters-section-heading">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filters-section" aria-expanded="true" aria-controls="filters-section">
+        <strong><%= l(:label_filter_plural) %></strong>
+      </button>
+    </h2>
+    <div id="filters-section" class="accordion-collapse collapse" aria-labelledby="filters-section">
+      <div class="accordion-body">
+        <%= render 'projects_filter' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if @projects.any? %>
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th><%= l(:label_project) %></th>
+            <th><%= l(:field_is_public) %></th>
+            <th><%= l(:field_created_on) %></th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% project_tree(@projects, init_level: true) do |project, level| %>
+            <tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+              <td class="name">
+                <span><%= link_to_project_settings(project, {}, title: project.short_description) %></span>
+              </td>
+              <td>
+                <%= checked_image project.is_public? %>
+              </td>
+              <td>
+                <%= format_date(project.created_on) %>
+              </td>
+              <td class="buttons">
+                <%= link_to(l(:button_archive), archive_project_path(project, status: params[:status]), data: { confirm: l(:text_are_you_sure) }, method: :post, class: 'icon icon-lock') unless project.archived? %>
+                <%= link_to(l(:button_unarchive), unarchive_project_path(project, status: params[:status]), method: :post, class: 'icon icon-unlock') if project.archived? %>
+                <%= link_to(l(:button_copy), copy_project_path(project), class: 'icon icon-copy') %>
+                <%= link_to(l(:button_delete), project_path(project), method: :delete, class: 'icon icon-del') %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <span class="pagination"><%= pagination_links_full @project_pages, @project_count %></span>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

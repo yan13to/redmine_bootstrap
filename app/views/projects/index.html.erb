@@ -1,0 +1,36 @@
+<% html_title(l(:label_project_plural)) -%>
+
+<div class="d-flex justify-content-between mt-3">
+  <h2><%= @query.new_record? ? l(:label_project_plural) : @query.name %></h2>
+  <%= render 'actions_index' %>
+</div>
+
+<%= form_tag(projects_path(@project, nil), method: :get, id: 'query_form') do %>
+  <%= render 'queries/query_form' %>
+<% end %>
+
+<% if @query.valid? %>
+  <% if @entries.empty? %>
+    <p class="nodata"><%= l(:label_no_data) %></p>
+  <% else %>
+    <%= render @query.display_type, entries: @entries %>
+  <% end %>
+<% end %>
+
+<% if User.current.logged? %>
+  <p style="text-align:right;">
+    <span class="icon icon-user my-project"><%= l(:label_my_projects) %></span>
+    <span class="icon icon-bookmarked-project"><%= l(:label_my_bookmarks) %></span>
+  </p>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render 'projects/sidebar' %>
+<% end %>
+
+<% other_formats_links do |f| %>
+  <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+  <% if @query.display_type == 'list' %>
+    <%= f.link_to_with_query_parameters 'CSV', {}, :onclick => "showModal('csv-export-options', '350px'); return false;" %>
+  <% end %>
+<% end %>

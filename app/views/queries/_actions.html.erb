@@ -1,0 +1,20 @@
+<div class="btn-group btn-group-sm">
+  <%= link_to_function "<i class='bi bi-check'></i>&nbsp;#{l(:button_apply)}".html_safe,
+        '$("#query_form").submit()', class: 'btn btn-primary' %>
+  <%= link_to "<i class='bi bi-arrow-repeat'></i>&nbsp;#{l(:button_clear)}".html_safe,
+        { set_filter: 1, sort: '', project_id: @project }, class: 'btn btn-primary' %>
+  <% if @query.new_record? %>
+    <% if User.current.allowed_to?(:save_queries, @project, global: true) %>
+      <%= link_to_function "<i class='bi bi-save'></i>&nbsp;#{l(:button_save)}".html_safe,
+            "$('#query_type').prop('disabled',false);$('#query_form').attr('action', '#{ @project ? new_project_query_path(@project) : new_query_path }').submit()",
+            class: 'btn btn-primary' %>
+    <% end %>
+  <% else %>
+    <% if @query.editable_by?(User.current) %>
+      <%= link_to "<i class='bi bi-pen'></i>&nbsp;#{l(:button_edit)}".html_safe, edit_query_path(@query), class: 'btn btn-primary' %>
+      <%= link_to query_path(@query), method: :delete, confirm: l(:text_are_you_sure), class: 'btn btn-danger' do %>
+          <i class='bi bi-trash'></i>&nbsp;<%= l(:button_delete) %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

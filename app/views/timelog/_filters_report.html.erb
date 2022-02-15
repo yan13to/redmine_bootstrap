@@ -1,0 +1,23 @@
+<%= form_tag(_report_time_entries_path(@project, nil), method: :get, id: 'query_form') do %>
+  <% @report.criteria.each do |criterion| %>
+    <%= hidden_field_tag 'criteria[]', criterion, id: nil %>
+  <% end %>
+  <div class="row align-items-center my-3">
+    <div class="col-auto">
+      <label for='columns'><%= l(:label_details) %></label>:
+    </div>
+    <div class="col-auto">
+      <%= select_tag 'columns', options_for_select([[l(:label_year), 'year'], [l(:label_month), 'month'], [l(:label_week), 'week'], [l(:label_day_plural).titleize, 'day']], @report.columns), onchange: 'this.form.submit();', class: 'form-select' %>
+    </div>
+    <div class="col-auto">
+      <label for='criterias'><%= l(:button_add) %></label>:
+    </div>
+    <div class="col-auto">
+      <%= select_tag('criteria[]', options_for_select([[]] + (@report.available_criteria.keys - @report.criteria).collect{|k| [l_or_humanize(@report.available_criteria[k][:label]), k]}), onchange: 'this.form.submit();', style: 'width: 200px', disabled: (@report.criteria.length >= 3), id: 'criterias', class: 'form-select') %>
+    </div>
+    <div class="col-auto">
+      <%= link_to l(:button_clear), {params: request.query_parameters.merge(criteria: nil)}, class: 'btn btn-primary' %>
+    </div>
+  </div>
+  <%= hidden_field_tag 'encoding', l(:general_csv_encoding) unless l(:general_csv_encoding).casecmp('UTF-8') == 0 %>
+<% end %>

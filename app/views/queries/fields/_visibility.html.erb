@@ -1,0 +1,25 @@
+<div class="form-check">
+  <%= radio_button 'query', 'visibility', Query::VISIBILITY_PRIVATE, class: 'form-check-input' %>
+  <label class="form-check-label"><%= l(:label_visibility_private) %></label>
+</div>
+
+<div class="form-check">
+  <%= radio_button 'query', 'visibility', Query::VISIBILITY_PUBLIC, class: 'form-check-input' %>
+  <label class="form-check-label"><%= l(:label_visibility_public) %></label>
+</div>
+
+<% unless @query.type == 'ProjectQuery' %>
+  <div class="form-check">
+    <%= radio_button 'query', 'visibility', Query::VISIBILITY_ROLES, class: 'form-check-input' %> 
+    <label class="form-check-label"><%= l(:label_visibility_roles) %></label>
+  </div>
+
+  <% Role.givable.sorted.each do |role| %>
+    <div class="form-check">
+      <%= check_box_tag 'query[role_ids][]', role.id, @query.roles.include?(role), id: nil, class: 'form-check-input' %>
+      <label class="form-check-label"><%= role.name %></label>
+    </div>
+  <% end %>
+
+  <%= hidden_field_tag 'query[role_ids][]', '' %>
+<% end %>

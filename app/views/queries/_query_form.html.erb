@@ -1,0 +1,26 @@
+<%= hidden_field_tag 'set_filter', '1' %>
+<%= hidden_field_tag 'type', @query.type, disabled: true, id: 'query_type' %>
+<%= query_hidden_sort_tag(@query) %>
+
+<div id="query_form_with_buttons" class="hide-when-print mb-3">
+  <div class="accordion my-3" id="accordionPanelsStayOpenExample">
+    <%= render 'queries/filters_section' %>
+    <%= render 'queries/options_section' if @query.available_columns.any? %>
+  </div>
+  <%= render 'queries/actions' %>
+</div>
+
+<%= error_messages_for @query %>
+
+<%= javascript_tag do %>
+  $(function ($) {
+    $('input[name=display_type]').change(function (e) {
+      if ($("#display_type_list").is(':checked')) {
+        $('table#list-definition').show();
+      } else {
+        $('table#list-definition').hide();
+      }
+
+    })
+  });
+<% end %>

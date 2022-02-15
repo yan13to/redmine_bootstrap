@@ -1,0 +1,10 @@
+<h3><%= l(:label_user_new) %></h3>
+
+<%= form_for(@group, url: group_users_path(@group), remote: true, method: :post) do |f| %>
+  <%= render 'new_users_form' %>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_add), class: 'btn btn-primary' %>
+    <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+  </div>
+<% end %>

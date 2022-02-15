@@ -1,0 +1,87 @@
+<%= error_messages_for 'query' %>
+
+<%= hidden_field_tag 'gantt', '1' if params[:gantt] %>
+<%= hidden_field_tag 'calendar', '1' if params[:calendar] %>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="my-3 row">
+      <div class="col-auto">
+        <label for="query_name"><%= l(:field_name) %></label>
+      </div>
+      <div class="col">
+        <%= text_field 'query', 'name', size: 80, class: 'form-control' %>
+      </div>
+    </div>
+
+    <% if User.current.admin? || User.current.allowed_to?(:manage_public_queries, @query.project) %>
+      <div class="row">
+        <div class="col-auto">
+          <label><%= l(:field_visible)%></label>
+        </div>
+        <div class="col-auto">
+          <%= render 'queries/fields/visibility' %>
+        </div>
+      </div>
+    <% end %>
+
+    <%= render 'queries/fields/visible_for_all' unless @query.type == 'ProjectQuery' %>
+  </div>
+</div>
+
+<div class="accordion mb-3" id="accordionPanelsStayOpenFilter">
+  <% unless params[:calendar] %>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+          <strong><%= l(:label_options) %></strong>
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+        <div class="accordion-body">
+          <%= render 'queries/fields/options' %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+        <strong><%= l(:label_filter_plural) %></strong>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
+      <div class="accordion-body">
+        <%= render 'queries/filters', query: query %>
+      </div>
+    </div>
+  </div>
+  <% if params[:calendar].nil? && params[:gantt].nil? %>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+          <strong><%= l(:label_sort) %></strong>
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingThree">
+        <div class="accordion-body">
+          <%= render 'queries/fields/sort_by', query: query %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <% unless params[:calendar] %>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+          <strong><%= l(:field_column_names) %></strong>
+        </button>
+      </h2>
+      <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingFour">
+        <div class="accordion-body">
+          <%= render_query_columns_selection(query) %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

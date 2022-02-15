@@ -1,0 +1,5 @@
+<% if @user.email_addresses.count > 1 || Setting.max_additional_emails.to_i > 0 %>
+  <%= link_to l(:label_email_address_plural), user_email_addresses_path(@user), class: 'btn btn-success' %>
+<% end %>
+<%= link_to(l(:button_change_password), { action: 'password' }, class: 'btn btn-primary') if @user.change_password_allowed? %>
+<%= call_hook(:view_my_account_contextual, user: @user) %>

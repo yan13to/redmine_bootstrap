@@ -1,0 +1,55 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'mail_handler' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :mail_handler_body_delimiters, l(:setting_mail_handler_body_delimiters) %>
+    <%= f.text_area :mail_handler_body_delimiters, value: Setting.mail_handler_body_delimiters, rows: 5, class: 'form-control' %>
+    <div class="form-check form-switch">
+      <%= f.check_box :mail_handler_enable_regex_delimiters, checked: (Setting.mail_handler_enable_regex_delimiters.to_s != '0'), class: 'form-check-input' %>
+      <%= f.label :mail_handler_enable_reges, l(:setting_mail_handler_enable_regex), class: 'form-check-label' %>
+    </div>
+    <div class="small text-muted">
+      <em><%= l(:text_line_separated) %></em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :mail_handler_excluded_filenames, l(:setting_mail_handler_excluded_filenames) %>
+    <%= f.text_area :mail_handler_excluded_filenames, value: Setting.mail_handler_excluded_filenames.to_s, class: 'form-control' %>
+    <div class="form-check form-switch">
+      <%= f.check_box :mail_handler_enable_regex_excluded_filenames, checked: (Setting.mail_handler_enable_regex_excluded_filenames.to_s != '0'), class: 'form-check-input' %>
+      <%= f.label :mail_handler_enable_regex_excluded_filenames, l(:setting_mail_handler_enable_regex), class: 'form-check-label' %>
+    </div>
+    <div class="small text-muted">
+      <em><%= l(:text_comma_separated) %> <%= l(:label_example) %>: smime.p7s, *.vcf</em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :mail_handler_preferred_body_part, l(:setting_mail_handler_preferred_body_part) %>
+    <%= f.select :mail_handler_preferred_body_part, options_for_setting_mail_handler_preferred_body_part, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :mail_handler_api_enabled, l(:setting_mail_handler_api_enabled), class: 'form-check-label' %>
+    <%= f.check_box :mail_handler_api_enabled,
+          checked: Setting.mail_handler_api_enabled.to_s != '0',
+          class: 'form-check-input',
+          data: { processor: 'settings/mail_handler/api_enabled' } %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :mail_handler_api_key, l(:setting_mail_handler_api_key) %>
+    <div class="input-group">
+      <%= f.text_field :mail_handler_api_key,
+                      value: Setting.mail_handler_api_key.to_s,
+                      size: 30,
+                      id: 'settings_mail_handler_api_key',
+                      class: 'form-control',
+                      disabled: !Setting.mail_handler_api_enabled? %>
+      <span class="input-group-text">
+        <%= link_to l(:label_generate_key), '#', data: { processor: 'settings/mail_handler/generate_key' }, class: 'text-decoration-none' %>
+      </span>
+    </div>
+  </div>
+
+  <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+<% end %>

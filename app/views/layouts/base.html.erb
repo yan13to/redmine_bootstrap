@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="<%= current_language %>">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title><%= html_title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="<%= Redmine::Info.app_name %>" />
+  <meta name="keywords" content="issue,bug,tracker" />
+  <%= csrf_meta_tag %>
+  <%= favicon %>
+  <%= stylesheet_link_tag 'application', media: :all, plugin: :redmine_bootstrap %>
+  <%= javascript_include_tag 'application', plugin: :redmine_bootstrap, type: :module %>
+  <%= heads_for_theme %>
+  <%= heads_for_auto_complete(@project) %>
+  <%= call_hook :view_layouts_base_html_head %>
+  <!-- page specific tags -->
+  <%= yield :header_tags -%>
+</head>
+<body class="<%= body_css_classes %>">
+  <%= call_hook :view_layouts_base_body_top %>
+  <%#= render 'flyout_menu' %>
+  <%= render 'header_top' %>
+  <%= render 'header' %>
+  <div class="container">
+    <%= render_flash_messages %>
+    <div class="d-flex">
+      <div class="container-fluid">
+        <%= yield %>
+      </div>
+      <% if sidebar_content? %>
+        <div class="bg-opacity-25 w-25 mt-3 rounded-3">
+          <%= render 'sidebar' %>
+        </div>
+      <% end %>
+    </div>
+    <%= call_hook :view_layouts_base_content %>
+  </div>
+  <%= render 'footer' %>
+  <%= call_hook :view_layouts_base_body_bottom %>
+</body>
+</html>

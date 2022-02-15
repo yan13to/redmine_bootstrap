@@ -1,0 +1,8 @@
+<div class="mb-3 row">
+  <div class="col-auto">
+    <label for="query_is_for_all" class="form-check-label"><%= l(:field_is_for_all) %></label>
+  </div>
+  <div class="form-check col-auto">
+    <%= check_box_tag 'query_is_for_all', 1, @query.project.nil?, class: (User.current.admin? ? 'form-check-input' : 'form-check-input disable-unless-private') %>
+  </div>
+</div>

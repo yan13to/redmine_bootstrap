@@ -1,0 +1,45 @@
+<% html_title(l(:label_settings), l(:label_administration)) -%>
+
+<div class="d-flex align-items-center justify-content-between my-3">
+  <h2><%= l(:label_settings) %></h2>
+</div>
+
+<%= render_settings_error @setting_errors %>
+
+<% tabs = administration_settings_tabs %>
+<% selected_tab = params[:tab] || 'general' %>
+
+<ul class="nav nav-tabs nav-paginator" id="nav-tab" role="tablist" data-paginator-item-count="9" data-paginator-buttons-class="nav-link">
+  <% tabs.each do |tab| %>
+    <li class="nav-item">
+      <% selected = (tab[:name] == selected_tab) %>
+      <button class="nav-link<%= ' active' if selected %>"
+        id="nav-<%= tab[:name] %>-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#<%= tab[:name] %>"
+        type="button"
+        role="tab"
+        aria-controls="nav-<%= tab[:name] %>"
+        aria-selected="true">
+        <%= l(tab[:label]) %>
+      </button>
+    </li>
+  <% end %>
+</ul>
+
+<div class="tab-content" id="nav-tabContent">
+  <% tabs.each do |tab| %>
+    <% selected = (tab[:name] == selected_tab) %>
+    <div class="tab-pane<%= ' show active' if selected %>"
+      id="<%= tab[:name] %>"
+      role="tabpanel"
+      aria-labelledby="nav-<%= tab[:name] %>-tab">
+      <div class="card border-top-0">
+        <div class="card-body">
+          <h3 class="mb-3"><%= l(tab[:label]) %></h3>
+          <%= render tab[:partial] %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

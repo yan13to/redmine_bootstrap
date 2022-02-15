@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-between my-3">
+  <%= title [l(:label_group_plural), groups_path], @group.name %>
+</div>
+
+<% tabs = group_settings_tabs(@group) %>
+<% selected_tab = params[:tab] || 'general' %>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <% tabs.each do |tab| %>
+      <% selected = tab[:name] == selected_tab %>
+      <button class="nav-link<%= ' active' if selected %>"
+        id="nav-<%= tab[:name] %>-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#nav-<%= tab[:name] %>"
+        type="button"
+        role="tab"
+        aria-controls="nav-<%= tab[:name] %>"
+        aria-selected="true">
+        <%= l(tab[:label]) %>
+      </button>
+    <% end %>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <% tabs.each do |tab| %>
+    <% selected = tab[:name] == selected_tab %>
+    <div class="tab-pane fade<%= ' show active' if selected %>"
+      id="nav-<%= tab[:name] %>"
+      role="tabpanel"
+      aria-labelledby="nav-<%= tab[:name] %>-tab">
+      <div class="card border-top-0">
+        <div class="card-body">
+          <%= render tab[:partial] %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

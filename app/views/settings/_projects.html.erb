@@ -1,0 +1,68 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'projects' }) do |f| %>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :default_projects_public, l(:setting_default_projects_public), class: 'form-check-label fw-bold' %>
+    <%= f.check_box :default_projects_public, checked: Setting.default_projects_public.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :default_projects_modules, l(:setting_default_projects_modules), class: 'd-block fw-bold' %>
+    <% Redmine::AccessControl.available_project_modules.each do |m| %>
+      <div class="form-check form-check-inline form-switch">
+        <%= f.label :default_projects_modules, l_or_humanize(m, prefix: 'project_module'), class: 'form-check-label' %>
+        <%= f.check_box :default_projects_modules, {
+              name: 'settings[default_projects_modules][]',
+              checked: Setting.default_projects_modules.include?(m.to_s),
+              class: 'form-check-input'
+            }, m.to_s %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :default_projects_tracker_ids, l(:setting_default_projects_tracker_ids), class: 'd-block fw-bold' %>
+    <% Tracker.sorted.each do |t| %>
+      <div class="form-check form-check-inline form-switch">
+        <%= f.label :default_projects_tracker_ids, t.name, class: 'form-check-label' %>
+        <%= f.check_box :default_projects_tracker_ids, {
+              name: 'settings[default_projects_tracker_ids][]',
+              checked: Setting.default_projects_tracker_ids.include?(t.id.to_s),
+              class: 'form-check-input'
+            }, t.id.to_s %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :sequential_project_identifiers, l(:setting_sequential_project_identifiers), class: 'form-check-label fw-bold' %>
+    <%= f.check_box :sequential_project_identifiers, checked: Setting.sequential_project_identifiers, class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :new_project_user_role_id, l(:setting_new_project_user_role_id) %>
+    <%= f.select :new_project_user_role_id, options_for_setting_new_project_user_role_id,
+          { include_blank: "--- #{l(:actionview_instancetag_blank_option)} ---" },
+          class: 'form-select' %>
+  </div>
+
+  <h3><%= l(:setting_project_list_defaults) %></h3>
+  <div class="mb-3">
+    <label class="d-block fw-bold"><%= l(:label_display_type) %></label>
+    <% query = ProjectQuery.new(Setting.project_list_defaults) %>
+    <% query.available_display_types.each do |t| %>
+      <div class="form-check form-check-inline">
+        <%= f.label :project_list_display_type, l(:"label_display_type_#{t}"), class: 'form-check-label' %>
+        <%= f.radio_button :project_list_display_type, t, 
+                checked: Setting.project_list_display_type == t,
+                class: 'form-check-input' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= render_query_columns_selection(query, name: 'settings[project_list_defaults][column_names]') %>
+  </div>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
+<% end %>

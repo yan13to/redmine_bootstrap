@@ -1,0 +1,15 @@
+<div class="d-flex align-items-center gap-1" role="group" aria-label="Project actions">
+  <%= link_to l(:label_user_new), new_user_path, class: 'btn btn-success' %>
+  <div class="dropdown">
+    <button id="btnGroupUserAction" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+      <%= l(:button_actions) %>
+    </button>
+    <ul class="dropdown-menu">
+      <li>
+        <% if User.current.allowed_to?(:import_users, nil, global: true) %>
+          <%= link_to l(:button_import), new_users_import_path, class: 'dropdown-item' %>
+        <% end %>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="my-3">
+  <h2><span class="fs-3"><%= link_to_back %></span>&nbsp;<%= l(:label_query) %></h2>
+</div>
+
+<%= form_tag(query_path(@query), method: :put) do %>
+  <%= render 'form', query: @query %>
+  <div class="mb-3 form-actions">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
+<% end %>

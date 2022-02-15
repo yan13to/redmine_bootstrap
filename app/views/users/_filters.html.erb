@@ -1,0 +1,27 @@
+<%= form_tag(users_path, { method: :get, id: 'users_form' }) do %>
+  <div class="mb-3 form-group">
+    <label for='status'><%= l(:field_status) %>:</label>
+    <%= select_tag 'status', users_status_options_for_select(@status), class: 'form-select', onchange: "this.form.submit(); return false;"  %>
+  </div>
+
+  <% if @groups.present? %>
+    <div class="mb-3 form-group">
+      <label for='group_id'><%= l(:label_group) %>:</label>
+      <%= select_tag 'group_id', content_tag('option') + options_from_collection_for_select(@groups, :id, :name, params[:group_id].to_i),
+        onchange: "this.form.submit(); return false;",
+        class: 'form-select' %>
+    </div>
+  <% end %>
+
+  <div class="mb-3 form-group">
+    <label for='name'><%= l(:label_user) %>:</label>
+    <%= text_field_tag 'name', params[:name], size: 30, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_apply), class: 'btn btn-success', name: nil %>
+    <%= link_to l(:button_clear), users_path, class: 'btn btn-link text-decoration-none' %>
+  </div>
+
+  <%= hidden_field_tag 'encoding', l(:general_csv_encoding) unless l(:general_csv_encoding).casecmp('UTF-8') == 0 %>
+<% end %>

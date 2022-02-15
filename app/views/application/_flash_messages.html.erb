@@ -1,0 +1,8 @@
+<% flash.keys.each do |key| %>
+  <% type = if key == 'error'
+              'danger'
+            else
+              'warning'
+            end %>
+  <%= render 'alert', type: type, message: flash[key] %>
+<% end %>

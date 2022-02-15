@@ -1,0 +1,83 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'display' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :ui_theme, l(:label_theme) %>
+    <%= f.select :ui_theme, options_for_setting_ui_theme, { include_blank: l(:label_default) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :default_language, l(:setting_default_language) %>
+    <%= f.select :default_language, options_for_select(languages_options, selected: Setting.default_language), {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :force_default_language_for_anonymous, l(:setting_force_default_language_for_anonymous), class: 'form-check-label' %>
+    <%= f.check_box :force_default_language_for_anonymous, checked: Setting.force_default_language_for_anonymous.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :force_default_language_for_loggedin, l(:setting_force_default_language_for_loggedin), class: 'form-check-label' %>
+    <%= f.check_box :force_default_language_for_loggedin, checked: Setting.force_default_language_for_loggedin.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :start_of_week, l(:setting_start_of_week) %>
+    <%= f.select :start_of_week, options_for_setting_start_of_week, { include_blank: l(:label_language_based) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :date_format, l(:setting_date_format) %>
+    <%= f.select :date_format, options_for_setting_date_format, { include_blank: l(:label_language_based) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :time_format, l(:setting_time_format) %>
+    <%= f.select :time_format, options_for_setting_time_format, { include_blank: l(:label_language_based) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :timespan_format, l(:setting_timespan_format) %>
+    <%= f.select :timespan_format, options_for_setting_timespan_format, { include_blank: false }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :user_format, l(:setting_user_format) %>
+    <%= f.select :user_format, options_for_select(@options[:user_format], selected: Setting.user_format), {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :gravatar_enabled, l(:setting_gravatar_enabled), class: 'form-check-label' %>
+    <%= f.check_box :gravatar_enabled, checked: Setting.gravatar_enabled.to_s != '0',
+            data: { enables: '#settings_gravatar_default' }, class: 'form-check-input' %>
+    <div class="small text-muted">
+      <em><%= t(:text_avatar_server_config_html, url: Redmine::Configuration['avatar_server_url']) %></em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :gravatar_default, l(:setting_gravatar_default) %>
+    <%= f.select :gravatar_default, options_for_setting_gravatar_default, { include_blank: l(:label_none) }, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :thumbnails_enabled, l(:setting_thumbnails_enabled), class: 'form-check-label' %>
+    <%= f.check_box :thumbnails_enabled, checked: Setting.thumbnails_enabled.to_s != '0',
+            data: { enables: '#settings_thumbnails_size' }, class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :thumbnails_size, l(:setting_thumbnails_size) %>
+    <div class="input-group">
+      <%= f.text_field :thumbnails_size, value: Setting.thumbnails_size, size: 6, class: 'form-control' %>
+      <span class="input-group-text">pixels</span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :new_item_menu_tab, l(:setting_new_item_menu_tab) %>
+    <%= f.select :new_item_menu_tab, options_for_setting_new_item_menu_tab, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
+<% end %>

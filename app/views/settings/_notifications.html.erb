@@ -1,0 +1,69 @@
+<% if @deliveries %>
+  <%= form_with(scope: :settings, url: { action: 'edit', tab: 'notifications' }) do |f| %>
+    <div class="box tabular settings">
+      <div class="mb-3">
+        <%= f.label :mail_from, l(:setting_mail_from), class: 'fw-bold' %>
+        <%= f.text_field :mail_from, value: Setting.mail_from, size: 60, class: 'form-control' %>
+      </div>
+
+      <div class="mb-3 form-check form-switch">
+        <%= f.label :bcc_recipients, l(:setting_bcc_recipients), class: 'form-check-label' %>
+        <%= f.check_box :bcc_recipients, checked: Setting.bcc_recipients.to_s != '0', class: 'form-check-input' %>
+      </div>
+
+      <div class="mb-3 form-check form-switch">
+        <%= f.label :plain_text_mail, l(:setting_plain_text_mail), class: 'form-check-label' %>
+        <%= f.check_box :plain_text_mail, checked: Setting.plain_text_mail.to_s != '0', class: 'form-check-input' %>
+      </div>
+
+      <div class="mb-3 form-check form-switch">
+        <%= f.label :show_status_changes_in_mail_subject, l(:setting_show_status_changes_in_mail_subject), class: 'form-check-label' %>
+        <%= f.check_box :show_status_changes_in_mail_subject, checked: Setting.show_status_changes_in_mail_subject.to_s != '0', class: 'form-check-input' %>
+      </div>
+    </div>
+
+    <h3 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#text_select_mail_notifications"><%= l(:text_select_mail_notifications) %></h3>
+    <div id="text_select_mail_notifications" class="mb-3 accordion-collapse collapse show">
+      <%= hidden_field_tag 'settings[notified_events][]', '' %>
+      <% @notifiables.each do |notifiable| %>
+        <% data = notifiable.parent.present? ? { parent_notifiable: notifiable.parent } : { disables: "input[data-parent-notifiable=#{notifiable.name}]" } %>
+        <div class="form-check form-switch<%= ' ms-3' if notifiable.parent.present? %>">
+          <%= f.label :notified_events, l_or_humanize(notifiable.name, prefix: 'label_'), class: 'form-check-label' %>
+          <%= f.check_box :notified_events, {
+                  name: 'settings[notified_events][]',
+                  checked: Setting.notified_events.include?(notifiable.name),
+                  class: 'form-check-input',
+                  data: data },
+                  notifiable.name %>
+        </div>
+      <% end %>
+      <div>
+        <%= check_all_links('notified_events') %>
+      </div>
+    </div>
+
+    <h3 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#setting_emails_header"><%= l(:setting_emails_header) %></h3>
+    <div id="setting_emails_header" class="mb-3 accordion-collapse collapse show">
+      <%= f.text_area :emails_header, value: Setting.emails_header, class: 'form-control', id: 'settings_emails_header', rows: 5 %>
+      <%= wikitoolbar_for 'settings_emails_header' %>
+    </div>
+
+    <h3 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#setting_emails_footer"><%= l(:setting_emails_footer) %></h3>
+    <div id="setting_emails_footer" class="mb-3 accordion-collapse collapse show">
+      <%= f.text_area :emails_footer, value: Setting.emails_footer, class: 'form-control', id: 'settings_emails_footer', rows: 5 %>
+      <%= wikitoolbar_for 'settings_emails_footer' %>
+    </div>
+
+    <div class="mb-3 text-end">
+      <%= link_to l(:label_send_test_email), test_email_path, method: :post, class: 'text-decoration-none' %>
+    </div>
+
+    <div class="mb-3">
+      <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% else %>
+  <div class="alert alert-warning text-center" role="alert">
+    <em class="small text-muted"><%= simple_format(l(:text_email_delivery_not_configured)) %></em>
+  </div>
+<% end %>

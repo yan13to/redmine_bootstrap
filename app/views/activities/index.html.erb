@@ -1,0 +1,28 @@
+<% html_title(l(:label_activity), @author) -%>
+
+<div class="my-3">
+  <h2>
+    <%= @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %>
+  </h2>
+  <div class="small text-muted">
+    <%= l(:label_date_from_to, start: format_date(@date_to - @days), end: format_date(@date_to-1)) %>
+  </div>
+</div>
+
+<%= render 'activities/activities', events_by_day: @events_by_day %>
+
+<%= content_tag('p', l(:label_no_data), class: 'nodata') if @events_by_day.empty? %>
+
+<%= render 'pagination' %>
+
+<% other_formats_links do |f| %>
+  <%= f.link_to_with_query_parameters 'Atom', from: nil, key: User.current.rss_key %>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= auto_discovery_link_tag(:atom, params: request.query_parameters.merge(from: nil, key: User.current.rss_key), format: 'atom') %>
+<% end %>
+
+<% content_for :sidebar do %>
+  <%= render 'sidebar' %>
+<% end %>

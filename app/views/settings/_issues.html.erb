@@ -1,0 +1,112 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'issues' }) do |f| %>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :cross_project_issue_relations, l(:setting_cross_project_issue_relations), class: 'form-check-label' %>
+    <%= f.check_box :cross_project_issue_relations, checked: Setting.cross_project_issue_relations.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :link_copied_issue, l(:setting_link_copied_issue) %>
+    <%= f.select :link_copied_issue, options_for_select(link_copied_issue_options, selected: Setting.link_copied_issue.to_s), {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :cross_project_subtasks, l(:setting_cross_project_subtasks) %>
+    <%= f.select :cross_project_subtasks, options_for_select(cross_project_subtasks_options, selected: Setting.cross_project_subtasks), {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :close_duplicate_issues, l(:setting_close_duplicate_issues), class: 'form-check-label' %>
+    <%= f.check_box :close_duplicate_issues, checked: (Setting.close_duplicate_issues.to_s != '0'), class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :issue_group_assignment, l(:setting_issue_group_assignment), class: 'form-check-label' %>
+    <%= f.check_box :issue_group_assignment, checked: (Setting.issue_group_assignment.to_s != '0'), class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :default_issue_start_date_to_creation_date, l(:setting_default_issue_start_date_to_creation_date), class: 'form-check-label' %>
+    <%= f.check_box :default_issue_start_date_to_creation_date, checked: (Setting.default_issue_start_date_to_creation_date.to_s != '0'), class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :display_subprojects_issues, l(:setting_display_subprojects_issues), class: 'form-check-label' %>
+    <%= f.check_box :display_subprojects_issues, checked: (Setting.display_subprojects_issues.to_s != '0'), class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :issue_done_ratio, l(:setting_issue_done_ratio) %>
+    <%= f.select :issue_done_ratio, options_for_setting_issue_done_ratio, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :non_working_week_days, l(:setting_non_working_week_days), class: 'fw-bold d-block' %>
+    <% (1..7).map do |d| %>
+      <div class="form-check form-check-inline form-switch">
+        <%= f.check_box :non_working_week_days, {
+              name: 'settings[non_working_week_days][]',
+              checked: Setting.non_working_week_days.include?(d.to_s),
+              class: 'form-check-input'
+        }, d.to_s %>
+        <%= f.label :non_working_week_days, day_name(d), class: 'form-check-label' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :issues_export_limit, l(:setting_issues_export_limit) %>
+    <%= f.text_field :issues_export_limit, value: Setting.issues_export_limit.to_s, size: 6, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :gantt_items_limit, l(:setting_gantt_items_limit) %>
+    <%= f.text_field :gantt_items_limit, value: Setting.gantt_items_limit.to_s, size: 6, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :gantt_months_limit, l(:setting_gantt_months_limit) %>
+    <%= f.text_field :gantt_months_limit, value: Setting.gantt_months_limit.to_s, size: 6, class: 'form-control' %>
+  </div>
+
+  <h3 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#label_parent_task_attributes"><%= l(:label_parent_task_attributes) %></h3>
+
+  <div id="label_parent_task_attributes" class="accordion-collapse collapse show">
+    <div class="mb-3">
+      <%= f.label :parent_issue_dates, "#{l(:field_start_date)} / #{l(:field_due_date)}" %>
+      <%= f.select :parent_issue_dates, options_for_select(parent_issue_dates_options, selected: Setting.parent_issue_dates.to_s), {}, class: 'form-select' %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :parent_issue_priority, l(:field_priority) %>
+      <%= f.select :parent_issue_priority, options_for_select(parent_issue_priority_options, selected: Setting.parent_issue_priority.to_s), {}, class: 'form-select' %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :parent_issue_done_ratio, l(:field_done_ratio) %>
+      <%= f.select :parent_issue_done_ratio, options_for_select(parent_issue_done_ratio_options, selected: Setting.parent_issue_done_ratio.to_s), {}, class: 'form-select' %>
+    </div>
+  </div>
+
+  <h3 class="dropdown-toggle" data-bs-toggle="collapse" data-bs-target="#setting_issue_list_default_columns"><%= l(:setting_issue_list_default_columns) %></h3>
+  <div id="setting_issue_list_default_columns" class="accordion-collapse collapse show">
+    <div class="mb-3">
+      <%= render_query_columns_selection(IssueQuery.new(column_names: Setting.issue_list_default_columns), name: 'settings[issue_list_default_columns]') %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :issue_list_default_totals, l(:label_total_plural), class: 'fw-bold d-block' %>
+      <% IssueQuery.new(totalable_names: Setting.issue_list_default_totals).available_totalable_columns.each do |c| %>
+        <div class="form-check form-check-inline form-switch">
+          <%= f.check_box c.name.to_s, {
+                name: 'settings[issue_list_default_totals][]',
+                checked: Setting.issue_list_default_totals.include?(c.name.to_s),
+                class: 'form-check-input'
+              }, c.name %>
+          <%= f.label c.name, c.caption, class: 'form-check-label' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+<% end %>

@@ -1,0 +1,27 @@
+<div class="accordion my-3" id="accordionPanelsStayOpenExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+        <strong><%= l(:label_filter_plural) %></strong>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+      <div class="accordion-body">
+        <%= form_tag(groups_path, method: :get) do %>
+          <div class="mb-3 row align-items-center">
+            <div class="col-auto">
+              <label for='name'><%= l(:label_group) %>:</label>
+            </div>
+            <div class="col-auto">
+              <%= text_field_tag 'name', params[:name], size: 30, class: 'form-control' %>
+            </div>
+            <div class="col-auto">
+              <%= submit_tag l(:button_apply), class: "btn btn-primary btn-sm", name: nil %>
+              <%= link_to l(:button_clear), groups_path, class: 'btn btn-link' %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

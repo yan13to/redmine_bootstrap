@@ -1,0 +1,58 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'attachments' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :attachment_max_size, l(:setting_attachment_max_size) %>
+    <div class="input-group">
+      <%= f.text_field :attachment_max_size, value: Setting.attachment_max_size, size: 6, class: 'form-control' %>
+      <span class="input-group-text"><%= l(:"number.human.storage_units.units.kb") %></span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :bulk_download_max_size, l(:setting_bulk_download_max_size) %>
+    <div class="input-group">
+      <%= f.text_field :bulk_download_max_size, value: Setting.bulk_download_max_size, size: 6, class: 'form-control' %>
+      <span class="input-group-text"><%= l(:"number.human.storage_units.units.kb") %></span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :attachment_extensions_allowed, l(:setting_attachment_extensions_allowed) %>
+    <%= f.text_area :attachment_extensions_allowed, value: Setting.attachment_extensions_allowed, class: 'form-control' %>
+    <div class="small text-muted">
+      <em><%= l(:text_comma_separated) %> <%= l(:label_example) %>: txt, png</em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :attachment_extensions_denied, l(:setting_attachment_extensions_denied) %>
+    <%= f.text_area :attachment_extensions_denied, value: Setting.attachment_extensions_denied, class: 'form-control' %>
+    <div class="small text-muted">
+      <em><%= l(:text_comma_separated) %> <%= l(:label_example) %>: js, swf</em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :file_max_size_displayed, l(:setting_file_max_size_displayed) %>
+    <div class="input-group">
+      <%= f.text_field :file_max_size_displayed, value: Setting.file_max_size_displayed, size: 6, class: 'form-control' %>
+      <span class="input-group-text"><%= l(:"number.human.storage_units.units.kb") %></span>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :diff_max_lines_displayed, l(:setting_diff_max_lines_displayed) %>
+    <%= f.text_field :diff_max_lines_displayed, value: Setting.diff_max_lines_displayed, size: 6, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :repositories_encodings, l(:setting_repositories_encodings) %>
+    <%= f.text_field :repositories_encodings, value: Setting.repositories_encodings, size: 60, class: 'form-control' %>
+    <div class="small text-muted">
+      <em><%= l(:text_comma_separated) %></em>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
+<% end %>

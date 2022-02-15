@@ -1,0 +1,50 @@
+<div class="accordion-item">
+  <h2 class="accordion-header" id="options-section-heading">
+    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#options-section" aria-expanded="false" aria-controls="options-section">
+      <strong><%= l(:label_options) %></strong>
+    </button>
+  </h2>
+  <div id="options-section" class="accordion-collapse collapse" aria-labelledby="options-section">
+    <div class="accordion-body">
+      <table class="table<%= ' hidden' if (@query.display_type != 'list') %>">
+        <% if @query.available_display_types.size > 1 %>
+          <tr>
+            <td><label for='display_type'><%= l(:label_display_type) %></label></td>
+            <td><%= available_display_types_tags(@query) %></td>
+          </tr>
+        <% end %>
+
+        <% if @query.available_columns.any? %>
+          <tr>
+            <td><%= l(:field_column_names) %></td>
+            <td><%= render_query_columns_selection(@query) %></td>
+          </tr>
+        <% end %>
+
+        <% if @query.groupable_columns.any? %>
+          <tr>
+            <td><label for='group_by'><%= l(:field_group_by) %></label></td>
+            <td>
+              <%= select_tag('group_by', options_for_select([[]] + @query.groupable_columns.collect {|c| [c.caption, c.name.to_s]}, @query.group_by),
+                    class: 'form-select') %>
+            </td>
+          </tr>
+        <% end %>
+
+        <% if @query.available_block_columns.any? %>
+          <tr>
+            <td><%= l(:button_show) %></td>
+            <td><%= available_block_columns_tags(@query) %></td>
+          </tr>
+        <% end %>
+
+        <% if @query.available_totalable_columns.any? %>
+          <tr>
+            <td><%= l(:label_total_plural) %></td>
+            <td><%= available_totalable_columns_tags(@query) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'authentication' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :login_required, l(:setting_login_required) %>
+    <%= f.select :login_required, options_for_setting_login_required, {}, class: 'form-select' %>
+    <em class="small text-muted"><%= t(:text_login_required_html, anonymous_role_path: edit_role_path(Role.anonymous)) %></em>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :autologin, l(:setting_autologin) %>
+    <%= f.select :autologin, options_for_setting_autologin, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :self_registration, l(:setting_self_registration) %>
+    <%= f.select :self_registration, options_for_setting_self_registration, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :show_custom_fields_on_registration, l(:setting_show_custom_fields_on_registration), class: 'form-check-label' %>
+    <%= f.check_box :show_custom_fields_on_registration,
+          checked: Setting.show_custom_fields_on_registration.to_s != '0',
+          class: 'form-check-input',
+          disabled: !Setting.self_registration? %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_min_length, l(:setting_password_min_length) %>
+    <%= f.text_field :password_min_length, value: Setting.password_min_length.to_s, size: 6, class: 'form-control' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_required_char_classes, l(:setting_password_required_char_classes), class: 'fw-bold d-block' %>
+    <% Setting::PASSWORD_CHAR_CLASSES.keys.each do |choice| %>
+      <div class="form-check form-check-inline form-switch">
+        <%= f.check_box :password_required_char_classes, {
+              name: 'settings[password_required_char_classes][]',
+              checked: Setting.password_required_char_classes.include?(choice),
+              class: 'form-check-input'
+            }, choice %>
+        <%= f.label :password_required_char_classes, l("label_password_char_class_#{choice}"), class: 'form-check-label' %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :password_max_age, l(:setting_password_max_age) %>
+    <%= f.select :password_max_age, options_for_setting_self_registration, {}, class: 'form-select' %>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :lost_password, l(:setting_lost_password), class: 'form-check-label' %>
+    <%= f.check_box :lost_password, checked: Setting.lost_password.to_s != '0', class: 'form-check-input' %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :twofa, l(:setting_twofa) %>
+    <%= f.select :twofa, options_for_setting_twofa, {}, class: 'form-select' -%>
+    <em class="small text-muted">
+      <%= t 'twofa_hint_disabled_html', label: t(:label_disabled) -%><br/>
+      <%= t 'twofa_hint_required_html', label: t(:label_required_lower) -%>
+    </em>
+  </div>
+
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :openid, l(:setting_openid), class: 'form-check-label' %>
+    <%= f.check_box :openid, disabled: !Object.const_defined?(:OpenID), class: 'form-check-input' %>
+  </div>
+
+  <fieldset>
+    <legend><%= l(:label_session_expiration) %></legend>
+    <div class="mb-3">
+      <%= f.label :session_lifetime, l(:setting_session_lifetime) %>
+      <%= f.select :session_lifetime, session_lifetime_options, {}, class: 'form-select' %>
+    </div>
+    <div class="mb-3">
+      <%= f.label :session_timeout, l(:setting_session_timeout) %>
+      <%= f.select :session_timeout, session_timeout_options, {}, class: 'form-select' %>
+    </div>
+  </fieldset>
+  <div class="small text-muted mb-3">
+    <em><%= l(:text_session_expiration_settings) %></em>
+  </div>
+
+  <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+<% end %>

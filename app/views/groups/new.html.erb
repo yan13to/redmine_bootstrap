@@ -1,0 +1,11 @@
+<div class="d-flex justify-content-between mt-3">
+  <%= title [l(:label_group_plural), groups_path], l(:label_group_new) %>
+</div>
+
+<%= labelled_form_for @group, html: { multipart: true } do |f| %>
+  <%= render 'form', f: f %>
+  <div class="mb-3">
+    <%= f.submit l(:button_create), class: 'btn btn-primary' %>
+    <%= f.submit l(:button_create_and_continue), name: 'continue', class: 'btn btn-secondary' %>
+  </div>
+<% end %>

@@ -1,0 +1,23 @@
+<div class="dropdown">
+  <button class="btn btn-info dropdown-toggle" type="button" id="projectJumpBox" data-bs-toggle="dropdown" aria-expanded="false">
+    <%= @project && @project.persisted? ? @project.name_was : l(:label_jump_to_a_project) %>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="projectJumpBox">
+    <li class="px-2">
+      <%= text_field_tag('q', params[:q], class: 'form-control', data: { automcomplete_url: autocomplete_projects_path(format: 'js', jump: current_menu_item) }, autocomplete: 'off') %>
+    </li>
+    <% links.each do |link| %>
+      <li>
+        <% if link[:level] == -1 %>
+          <span class="dropdown-item"><strong><%= link[:text] %></strong></span>
+        <% else %>
+          <%= link_to link[:text], link[:url], class: "dropdown-item#{' active' if link[:selected]}" %>
+        <% end %>
+      </li>
+    <% end %>
+    <li><hr class="dropdown-divider"></li>
+    <li>
+      <%= link_to(l(:label_project_all), projects_path(jump: current_menu_item), class: (@project.nil? && controller.class.main_menu ? 'active dropdown-item' : 'dropdown-item')) %>
+    </li>
+  </ul>
+</div>

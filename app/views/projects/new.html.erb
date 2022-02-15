@@ -1,0 +1,7 @@
+<%= title l(:label_project_new) %>
+
+<%= labelled_form_for @project, html: { multipart: true } do |f| %>
+  <%= render 'form', f: f %>
+  <%= submit_tag l(:button_create), class: 'btn btn-primary' %>
+  <%= submit_tag l(:button_create_and_continue), name: 'continue', class: 'btn btn-secondary' %>
+<% end %>

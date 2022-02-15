@@ -1,0 +1,12 @@
+<div class="d-flex align-items-center justify-content-between my-3">
+  <%= title l(:label_auth_source_plural) %>
+  <%= link_to l(:label_auth_source_new), { action: 'new' }, class: 'btn btn-success' %>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= render 'listing' %>
+  </div>
+</div>
+
+<span class="pagination"><%= pagination_links_full @auth_source_pages %></span>

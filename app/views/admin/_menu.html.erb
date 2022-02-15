@@ -1,0 +1,25 @@
+<div class="list-group list-group-flush">
+  <% menu_items_for(:admin_menu) do |node| %>
+    <% caption, url, selected = extract_node_details(node) %>
+    <% if node.name == :settings %>
+      <div class="btn-group list-group-item list-group-item-action<%= ' active' if selected %>">
+        <%= link_to caption, url, class: "btn p-0#{' text-white' if selected}" %>
+        <button type="button"
+                class="btn dropdown-toggle dropdown-toggle-split rounded-0<%= ' text-white' if selected %>"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+          <span class="visually-hidden">Toggle Dropdown</span>
+        </button>
+        <ul class="dropdown-menu">
+          <% administration_settings_tabs.each_with_index do |tab, index| %>
+            <li>
+              <%= link_to l(tab[:label]), { controller: 'settings', action: 'index', tab: tab[:name] }, class: "dropdown-item#{' active' if tab[:name] == params[:tab]}" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% else %>
+      <%= link_to caption, url, class: "list-group-item list-group-item-action#{' active' if selected}" %>
+    <% end %>
+  <% end %>
+</div>

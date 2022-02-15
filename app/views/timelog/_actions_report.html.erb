@@ -1,0 +1,7 @@
+<div class="d-flex align-items-center gap-1" role="group" aria-label="Projects actions">
+  <%= link_to l(:button_log_time), _new_time_entry_path(@project, @issue),
+              class: 'btn btn-success' if User.current.allowed_to?(:log_time, @project, global: true) %>
+  <%= link_to_if_authorized l(:label_settings),
+              {controller: 'projects', action: 'settings', id: @project, tab: 'activities'},
+              class: 'btn btn-primary' if User.current.allowed_to?(:manage_project_activities, @project) %>
+</div>

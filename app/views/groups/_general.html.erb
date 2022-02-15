@@ -1,0 +1,4 @@
+<%= labelled_form_for @group, url: group_path(@group), html: { multipart: true } do |f| %>
+  <%= render 'form', f: f %>
+  <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+<% end %>
