@@ -50,8 +50,10 @@
 
     <div class="mb-3 form-check form-switch">
       <%= f.label :sys_api_enabled, l(:setting_sys_api_enabled), class: 'form-check-label' %>
-      <%= f.check_box :sys_api_enabled, checked: Setting.sys_api_enabled.to_s != '0', class: 'form-check-input',
-                      onclick: "if (this.checked) { $('#settings_sys_api_key').removeAttr('disabled'); } else { $('#settings_sys_api_key').attr('disabled', true); }" %>
+      <%= f.check_box :sys_api_enabled,
+            checked: Setting.sys_api_enabled.to_s != '0',
+            class: 'form-check-input',
+            data: { processor: 'settings/repositories/sys_api_enabled' } %>
     </div>
 
     <div class="mb-3">
@@ -59,7 +61,7 @@
       <div class="input-group">
         <%= f.text_field :sys_api_key, value: Setting.sys_api_key.to_s, size: 30, id: 'settings_sys_api_key', class: 'form-control', disabled: !Setting.sys_api_enabled? %>
         <span class="input-group-text">
-          <%= link_to_function l(:label_generate_key), "if (!$('#settings_sys_api_key').attr('disabled')) { $('#settings_sys_api_key').val(randomKey(20)) }", class: 'text-decoration-none' %>
+          <%= link_to l(:label_generate_key), "#", data: { processor: 'settings/repositories/generate_key' }, class: 'text-decoration-none' %>
         </span>
       </div>
     </div>
@@ -92,14 +94,17 @@
     <div class="mb-3 form-check form-switch">
       <%= f.label :commit_logtime_enabled, l(:setting_commit_logtime_enabled), class: 'form-check-label' %>
       <%= f.check_box :commit_logtime_enabled,
-                      checked: Setting.commit_logtime_enabled.to_s != '0',
-                      class: 'form-check-input',
-                      onclick: "if (this.checked) { $('#settings_commit_logtime_activity_id').removeAttr('disabled'); } else { $('#settings_commit_logtime_activity_id').attr('disabled', true); }"%>
+            checked: Setting.commit_logtime_enabled.to_s != '0',
+            class: 'form-check-input',
+            data: { processor: 'settings/repositories/commit_logtime_enabled' } %>
     </div>
 
     <div class="mb-3">
       <%= f.label :commit_logtime_activity_id, l(:setting_commit_logtime_activity_id) %>
-      <%= f.select :commit_logtime_activity_id, options_for_setting_commit_logtime_activity_id, {}, disabled: !Setting.commit_logtime_enabled?, class: 'form-select' %>
+      <%= f.select :commit_logtime_activity_id, options_for_setting_commit_logtime_activity_id, {},
+            disabled: !Setting.commit_logtime_enabled?,
+            id: 'settings_commit_logtime_activity_id',
+            class: 'form-select' %>
     </div>
   </fieldset>
 
