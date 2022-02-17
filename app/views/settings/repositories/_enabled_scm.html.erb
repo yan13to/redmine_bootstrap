@@ -1,0 +1,39 @@
+<%= hidden_field_tag 'settings[enabled_scm][]', '' %>
+
+<table class="table table-hover">
+  <tr>
+    <th>&nbsp;</th>
+    <th><%= l(:text_scm_command) %></th>
+    <th><%= l(:text_scm_command_version) %></th>
+  </tr>
+  <% Redmine::Scm::Base.all.collect do |choice| %>
+    <% scm_class = "Repository::#{choice}".constantize %>
+    <% enabled = Setting.enabled_scm.include?(choice) %>
+    <tr>
+      <td>
+        <div class="form-check form-switch">
+          <%= f.check_box :enabled_scm, {
+                name: 'settings[enabled_scm][]',
+                checked: enabled,
+                class: 'form-check-input'
+              }, choice %>
+          <label class="form-check-label font-monospace"><%= choice.to_s %></label>
+        </div>
+      </td>
+      <td class="ps-3">
+        <% if enabled %>
+          <div class="d-inline-flex align-items-center gap-1">
+            <i class="bi <%= (scm_class.scm_available ? 'bi-check-lg text-success fw-bold' : 'bi-exclamation-circle-fill text-danger fw-bold') %>"></i>
+            <span class="font-monospace"><%= scm_class.scm_command %></span>
+          </div>
+        <% end %>
+      </td>
+      <td class="font-monospace">
+        <%= scm_class.scm_version_string if enabled %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<div class="text-muted small mb-3">
+  <em><%= l(:text_scm_config) %></em>
+</div>

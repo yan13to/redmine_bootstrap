@@ -1,45 +1,7 @@
 <%= form_with(scope: :settings, url: { action: 'edit', tab: 'repositories' }) do |f| %>
   <fieldset class="box settings enabled_scm">
     <legend><%= l(:setting_enabled_scm) %></legend>
-
-    <%= hidden_field_tag 'settings[enabled_scm][]', '' %>
-    <table class="table table-hover">
-      <tr>
-        <th>&nbsp;</th>
-        <th><%= l(:text_scm_command) %></th>
-        <th><%= l(:text_scm_command_version) %></th>
-      </tr>
-      <% Redmine::Scm::Base.all.collect do |choice| %>
-        <% scm_class = "Repository::#{choice}".constantize %>
-        <% enabled = Setting.enabled_scm.include?(choice) %>
-        <tr>
-          <td>
-            <div class="form-check form-switch">
-              <%= f.check_box :enabled_scm, {
-                    name: 'settings[:enabled_scm][]',
-                    checked: enabled,
-                    class: 'form-check-input'
-                  }, choice %>
-              <label class="form-check-label font-monospace"><%= choice.to_s %></label>
-            </div>
-          </td>
-          <td class="ps-3">
-            <% if enabled %>
-              <div class="d-inline-flex align-items-center gap-1">
-                <i class="bi <%= (scm_class.scm_available ? 'bi-check-lg text-success fw-bold' : 'bi-exclamation-circle-fill text-danger fw-bold') %>"></i>
-                <span class="font-monospace"><%= scm_class.scm_command %></span>
-              </div>
-            <% end %>
-          </td>
-          <td class="font-monospace">
-            <%= scm_class.scm_version_string if enabled %>
-          </td>
-        </tr>
-      <% end %>
-    </table>
-    <div class="text-muted small mb-3">
-      <em><%= l(:text_scm_config) %></em>
-    </div>
+    <%= render 'settings/repositories/enabled_scm', f: f %>
   </fieldset>
 
   <div class="box tabular settings">
@@ -79,36 +41,10 @@
 
   <fieldset class="box tabular settings">
     <legend><%= l(:text_issues_ref_in_commit_messages) %></legend>
-
-    <div class="mb-3">
-      <%= f.label :commit_ref_keywords, l(:setting_commit_ref_keywords) %>
-      <%= f.text_field :commit_ref_keywords, value: Setting.commit_ref_keywords.to_s, size: 30, class: 'form-control' %>
-      <em class="text-muted small"><%= l(:text_comma_separated) %></em>
-    </div>
-
-    <div class="mb-3 form-check form-switch">
-      <%= f.label :commit_cross_project_ref, l(:setting_commit_cross_project_ref), class: 'form-check-label' %>
-      <%= f.check_box :commit_cross_project_ref, checked: Setting.commit_cross_project_ref.to_s != '0', class: 'form-check-input' %>
-    </div>
-
-    <div class="mb-3 form-check form-switch">
-      <%= f.label :commit_logtime_enabled, l(:setting_commit_logtime_enabled), class: 'form-check-label' %>
-      <%= f.check_box :commit_logtime_enabled,
-            checked: Setting.commit_logtime_enabled.to_s != '0',
-            class: 'form-check-input',
-            data: { processor: 'settings/repositories/commit_logtime_enabled' } %>
-    </div>
-
-    <div class="mb-3">
-      <%= f.label :commit_logtime_activity_id, l(:setting_commit_logtime_activity_id) %>
-      <%= f.select :commit_logtime_activity_id, options_for_setting_commit_logtime_activity_id, {},
-            disabled: !Setting.commit_logtime_enabled?,
-            id: 'settings_commit_logtime_activity_id',
-            class: 'form-select' %>
-    </div>
+    <%= render 'settings/repositories/text_issues_ref_in_commit_messages', f: f %>
   </fieldset>
 
-  <table class="table">
+  <table class="table table-hover">
     <thead>
       <tr>
         <th><%= l(:label_tracker) %></th>
@@ -120,35 +56,29 @@
     </thead>
     <tbody>
       <% @commit_update_keywords.each do |rule| %>
-        <tr>
-          <td>
-            <%= select_tag "settings[commit_update_keywords][if_tracker_id][]", options_for_setting_commit_update_keywords_if_tracker_id(rule['if_tracker_id']), class: 'form-select' %>
-          </td>
-          <td>
-            <%= text_field_tag("settings[commit_update_keywords][keywords][]", rule['keywords'], size: 30, class: 'form-control') %>
-          </td>
-          <td>
-            <%= select_tag("settings[commit_update_keywords][status_id][]", options_for_setting_commit_update_keywords_status_id(rule['status_id']), class: 'form-select') %>
-          </td>
-          <td>
-            <%= select_tag("settings[commit_update_keywords][done_ratio][]", options_for_setting_commit_update_keywords_done_ratio(rule['done_ratio']), class: 'form-select') %>
-          </td>
-          <td>
-            <%= link_to '#', class: 'btn btn-danger', title: l(:button_delete) do %>
-              <i class="bi bi-trash-fill"></i>
-            <% end %>
-          </td>
-        </tr>
+        <%= render 'settings/repositories/commit_update_keywords', rule: rule %>
       <% end %>
       <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><em class="text-muted small"><%= l(:text_comma_separated) %></em></td>
+        <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>
-          <em class="text-muted small"><%= l(:text_comma_separated) %></em>
-        </td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
-        <td>
-          <%= link_to '#', class: 'btn btn-success', title: l(:button_add) do %>
+          <%= link_to '#repositories',
+            class: 'btn btn-success',
+            title: l(:button_add),
+            data: {
+              processor: 'settings/repositories/commit_update_keywords',
+              record: render('settings/repositories/commit_update_keywords')
+            } do %>
             <i class="bi bi-plus"></i>
           <% end %>
         </td>

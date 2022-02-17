@@ -70,6 +70,26 @@ module Helpers
 
       options_for_select(options)
     end
+
+    def render_icon(name, options={})
+      icon_type = options[:type]
+
+      icon_name = case name
+                  when :info
+                    'exclamation-triangle'
+                  when :projects
+                    'briefcase'
+                  when :settings
+                    'gear'
+                  when :users
+                    'people'
+                  else
+                      'bootstrap'
+                  end
+
+      icon_class = [icon_name, icon_type].compact.join('-')
+      content_tag :i, nil, class: "bi bi-#{icon_class} #{options[:class]}"
+    end
   end
 end
 

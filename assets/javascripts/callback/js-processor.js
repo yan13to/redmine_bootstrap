@@ -1,14 +1,13 @@
 export default function JsProcessor() {
-  const processors = document.querySelectorAll('[data-processor]')
+  const elements = document.querySelectorAll('[data-processor]');
 
-  for (let i = 0; i < processors.length; i++) {
-    const processor = processors[i];
-    const path = processor.getAttribute('data-processor');
+  for(const element of elements) {
+    const processor = element.getAttribute('data-processor');
 
-    if (!path) return;
+    if (!processor) return;
 
-    import('../processor/'+ path + '.js')
-      .then(module => module.default(processor))
+    import('../processor/' + processor + '.js')
+      .then(module => module.default(element))
       .catch(error => console.error(error))
   }
 }

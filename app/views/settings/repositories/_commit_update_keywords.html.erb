@@ -1,0 +1,20 @@
+<% rule ||= {} %>
+<tr class="record">
+  <td>
+    <%= select_tag "settings[commit_update_keywords][if_tracker_id][]", options_for_setting_commit_update_keywords_if_tracker_id(rule['if_tracker_id']), class: 'form-select' %>
+  </td>
+  <td>
+    <%= text_field_tag("settings[commit_update_keywords][keywords][]", rule['keywords'], size: 30, class: 'form-control') %>
+  </td>
+  <td>
+    <%= select_tag("settings[commit_update_keywords][status_id][]", options_for_setting_commit_update_keywords_status_id(rule['status_id']), class: 'form-select') %>
+  </td>
+  <td>
+    <%= select_tag("settings[commit_update_keywords][done_ratio][]", options_for_setting_commit_update_keywords_done_ratio(rule['done_ratio']), class: 'form-select') %>
+  </td>
+  <td>
+    <%= link_to '#repositories', class: 'btn btn-danger btn-remove', title: l(:button_delete) do %>
+      <i class="bi bi-trash-fill"></i>
+    <% end %>
+  </td>
+</tr>
