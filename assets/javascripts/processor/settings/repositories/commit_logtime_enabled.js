@@ -1,4 +1,4 @@
-export default function SettingsRepositoriesCommitLogtimeEnabled(currentElement) {
+export default function (currentElement) {
   const targetElement = document.getElementById('settings_commit_logtime_activity_id');
 
   currentElement.addEventListener('change', function (e) {

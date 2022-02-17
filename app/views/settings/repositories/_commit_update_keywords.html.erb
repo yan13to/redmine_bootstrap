@@ -13,7 +13,7 @@
     <%= select_tag("settings[commit_update_keywords][done_ratio][]", options_for_setting_commit_update_keywords_done_ratio(rule['done_ratio']), class: 'form-select') %>
   </td>
   <td>
-    <%= link_to '#repositories', class: 'btn btn-danger btn-remove', title: l(:button_delete) do %>
+    <%= link_to '#repositories', class: 'btn btn-danger btn-remove', title: l(:button_delete), data: { processor: 'settings/repositories/rm_commit_update_keywords' } do %>
       <i class="bi bi-trash-fill"></i>
     <% end %>
   </td>

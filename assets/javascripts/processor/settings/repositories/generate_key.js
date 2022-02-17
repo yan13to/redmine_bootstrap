@@ -1,6 +1,6 @@
 import { randomKey } from "../../../libs/shared.js";
 
-export default function SettingsRepositoriesGenerateKey(currentElement) {
+export default function (currentElement) {
   currentElement.addEventListener('click', function(e) {
     e.preventDefault();
 

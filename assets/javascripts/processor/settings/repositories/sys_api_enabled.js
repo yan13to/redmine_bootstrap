@@ -1,4 +1,4 @@
-export default function SettingsRepositoriesSysApiEnabled(currentElement) {
+export default function (currentElement) {
   const targetElement = document.getElementById('settings_sys_api_key');
 
   currentElement.addEventListener('change', function (e) {

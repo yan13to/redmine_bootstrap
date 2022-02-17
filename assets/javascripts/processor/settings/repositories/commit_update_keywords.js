@@ -1,4 +1,6 @@
-export default function SettingsRepositoriesCommitUpdateKeywords(currentElement) {
+import btnDelete from "./rm_commit_update_keywords.js";
+
+export default function (currentElement) {
   currentElement.addEventListener('click', function(e) {
     e.preventDefault();
 
@@ -16,11 +18,7 @@ export default function SettingsRepositoriesCommitUpdateKeywords(currentElement)
         if (addedElement) {
           const btnRemove = addedElement.querySelector('.btn-remove');
 
-          btnRemove.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            btnRemove.closest('tr').remove()
-          })
+          btnDelete(btnRemove);
         }
       }
     }

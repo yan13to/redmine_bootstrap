@@ -4,39 +4,37 @@
     <%= render 'settings/repositories/enabled_scm', f: f %>
   </fieldset>
 
-  <div class="box tabular settings">
-    <div class="mb-3 form-check form-switch">
-      <%= f.label :autofetch_changesets, l(:setting_autofetch_changesets), class: 'form-check-label' %>
-      <%= f.check_box :autofetch_changesets, checked: Setting.autofetch_changesets.to_s != '0', class: 'form-check-input' %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :autofetch_changesets, l(:setting_autofetch_changesets), class: 'form-check-label fw-bold' %>
+    <%= f.check_box :autofetch_changesets, checked: Setting.autofetch_changesets.to_s != '0', class: 'form-check-input' %>
+  </div>
 
-    <div class="mb-3 form-check form-switch">
-      <%= f.label :sys_api_enabled, l(:setting_sys_api_enabled), class: 'form-check-label' %>
-      <%= f.check_box :sys_api_enabled,
-            checked: Setting.sys_api_enabled.to_s != '0',
-            class: 'form-check-input',
-            data: { processor: 'settings/repositories/sys_api_enabled' } %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :sys_api_enabled, l(:setting_sys_api_enabled), class: 'form-check-label fw-bold' %>
+    <%= f.check_box :sys_api_enabled,
+          checked: Setting.sys_api_enabled.to_s != '0',
+          class: 'form-check-input',
+          data: { processor: 'settings/repositories/sys_api_enabled' } %>
+  </div>
 
-    <div class="mb-3">
-      <%= f.label :sys_api_key, l(:setting_sys_api_key) %>
-      <div class="input-group">
-        <%= f.text_field :sys_api_key, value: Setting.sys_api_key.to_s, size: 30, id: 'settings_sys_api_key', class: 'form-control', disabled: !Setting.sys_api_enabled? %>
-        <span class="input-group-text">
-          <%= link_to l(:label_generate_key), "#", data: { processor: 'settings/repositories/generate_key' }, class: 'text-decoration-none' %>
-        </span>
-      </div>
+  <div class="mb-3">
+    <%= f.label :sys_api_key, l(:setting_sys_api_key), class: 'fw-bold' %>
+    <div class="input-group">
+      <%= f.text_field :sys_api_key, value: Setting.sys_api_key.to_s, size: 30, id: 'settings_sys_api_key', class: 'form-control', disabled: !Setting.sys_api_enabled? %>
+      <span class="input-group-text">
+        <%= link_to l(:label_generate_key), "#", data: { processor: 'settings/repositories/generate_key' }, class: 'text-decoration-none' %>
+      </span>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <%= f.label :repository_log_display_limit, l(:setting_repository_log_display_limit) %>
-      <%= f.text_field :repository_log_display_limit, value: Setting.repository_log_display_limit.to_s, size: 6, class: 'form-control' %>
-    </div>
+  <div class="mb-3">
+    <%= f.label :repository_log_display_limit, l(:setting_repository_log_display_limit), class: 'fw-bold' %>
+    <%= f.text_field :repository_log_display_limit, value: Setting.repository_log_display_limit.to_s, size: 6, class: 'form-control' %>
+  </div>
 
-    <div class="mb-3 form-check form-switch">
-      <%= f.label :commit_logs_formatting, l(:setting_commit_logs_formatting), class: 'form-check-label' %>
-      <%= f.check_box :commit_logs_formatting, checked: Setting.commit_logs_formatting.to_s != '0', class: 'form-check-input' %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :commit_logs_formatting, l(:setting_commit_logs_formatting), class: 'form-check-label fw-bold' %>
+    <%= f.check_box :commit_logs_formatting, checked: Setting.commit_logs_formatting.to_s != '0', class: 'form-check-input' %>
   </div>
 
   <fieldset class="box tabular settings">
@@ -58,7 +56,7 @@
       <% @commit_update_keywords.each do |rule| %>
         <%= render 'settings/repositories/commit_update_keywords', rule: rule %>
       <% end %>
-      <tr>
+      <tr class="d-none">
         <td></td>
         <td></td>
         <td></td>

@@ -1,4 +1,4 @@
-export default function SettingsMailHandlerApiEnabled(currentElement) {
+export default function (currentElement) {
   const targetElement = document.getElementById('settings_mail_handler_api_key');
 
   currentElement.addEventListener('change', function (e) {
