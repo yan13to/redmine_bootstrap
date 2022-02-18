@@ -1,0 +1,14 @@
+<% html_title(l(:label_role_plural)) -%>
+
+<div class="d-flex justify-content-between my-3">
+  <h2><%= l(:label_role_plural) %></h2>
+  <div class="d-flex align-items-center gap-1" role="group" aria-label="Roles actions">
+    <%= render 'actions' %>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <%= render 'listing' %>
+  </div>
+</div>

@@ -114,6 +114,16 @@ module Helpers
       options_for_select options, selected: selected
     end
 
+    def options_for_setting_default_notification_option
+      options = User.valid_notification_options.collect {|o| [l(o.last), o.first.to_s]}
+      options_for_select options, selected: Setting.default_notification_option.to_s
+    end
+
+    def options_for_setting_default_users_time_zone
+      options = ActiveSupport::TimeZone.all.collect {|z| [ z.to_s, z.name ]}
+      options_for_select options, selected: Setting.default_users_time_zone.to_s
+    end
+
     private
 
     def locale

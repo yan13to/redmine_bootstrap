@@ -3,17 +3,25 @@
     <% caption, url, selected = extract_node_details(node) %>
     <% if node.name == :administration %>
       <li class="nav-item dropdown">
-        <%= link_to caption, url, class: "nav-link dropdown-toggle#{' active' if selected}", 'data-bs-toggle': 'dropdown' %>
+        <%= link_to url, class: "nav-link dropdown-toggle#{' active' if selected}", 'data-bs-toggle': 'dropdown', 'data-name': node.name do %>
+          <%= render_icon(node.name, class: 'pe-2') %><%= caption %>
+        <% end %>
         <ul class="dropdown-menu">
           <% menu_items_for(:admin_menu) do |n| %>
             <% caption, url, selected = extract_node_details(n) %>
-            <li><%= link_to caption, url, class: "dropdown-item#{' active' if selected}" %></li>
+            <li>
+              <%= link_to url, class: "dropdown-item#{' active' if selected}", 'data-name': node.name do %>
+                <%= render_icon(n.name, type: 'fill', class: 'pe-2') %><%= caption %>
+              <% end %>
+            </li>
           <% end %>
         </ul>
       </li>
     <% else %>
       <li class="nav-item">
-        <%= link_to caption, url, class: "nav-link#{' active' if selected}" %>
+        <%= link_to url, class: "nav-link#{' active' if selected}", 'data-name': node.name do %>
+          <%= render_icon(node.name, type: 'fill', class: 'pe-2') %><%= caption %>
+        <% end %>
       </li>
     <% end %>
   <% end %>

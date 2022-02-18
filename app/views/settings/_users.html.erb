@@ -1,28 +1,51 @@
-<%= form_tag({:action => 'edit', :tab => 'users'}) do %>
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'users' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :max_additional_emails, l(:setting_max_additional_emails) %>
+    <%= f.text_field :max_additional_emails, value: Setting.max_additional_emails, size: 6, class: 'form-control' %>
+  </div>
 
-  <div class="box tabular settings">
-    <p><%= setting_text_field :max_additional_emails, :size => 6 %></p>
+  <div class="mb-3">
+    <%= f.label :email_domains_allowed, l(:setting_email_domains_allowed) %>
+    <%= f.text_area :email_domains_allowed, value: Setting.email_domains_allowed, class: 'form-control' %>
+    <em class="text-muted small"><%= l(:text_comma_separated) %> <%= l(:label_example) %>: example.com, example.org</em>
+  </div>
 
-    <p><%= setting_text_area :email_domains_allowed %>
-    <em class="info"><%= l(:text_comma_separated) %> <%= l(:label_example) %>: example.com, example.org</em></p>
+  <div class="mb-3">
+    <%= f.label :email_domains_denied, l(:setting_email_domains_denied) %>
+    <%= f.text_area :email_domains_denied, value: Setting.email_domains_denied, class: 'form-control' %>
+    <em class="text-muted small"><%= l(:text_comma_separated) %> <%= l(:label_example) %>: .example.com, foo.example.org, example.net</em>
+  </div>
 
-    <p><%= setting_text_area :email_domains_denied %>
-    <em class="info"><%= l(:text_comma_separated) %> <%= l(:label_example) %>: .example.com, foo.example.org, example.net</em></p>
-
-    <p><%= setting_check_box :unsubscribe %></p>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :unsubscribe, l(:setting_unsubscribe), class: 'form-check-label' %>
+    <%= f.check_box :unsubscribe, checked: Setting.unsubscribe.to_s != '0', class: 'form-check-input' %>
   </div>
 
   <fieldset class="box tabular settings">
     <legend><%= l(:label_default_values_for_new_users) %></legend>
 
-    <p><%= setting_check_box :default_users_hide_mail, :label => :field_hide_mail %></p>
+    <div class="mb-3 form-check form-switch">
+      <%= f.label :default_users_hide_mail, l(:field_hide_mail), class: 'form-check-label' %>
+      <%= f.check_box :default_users_hide_mail, checked: Setting.default_users_hide_mail.to_s != '0', class: 'form-check-input' %>
+    </div>
 
-    <p><%= setting_select(:default_notification_option, User.valid_notification_options.collect {|o| [l(o.last), o.first.to_s]}) %></p>
+    <div class="mb-3">
+      <%= f.label :default_notification_option, l(:setting_default_notification_option) %>
+      <%= f.select :default_notification_option, options_for_setting_default_notification_option, {}, class: 'form-select' %>
+    </div>
 
-    <p><%= setting_check_box :default_users_no_self_notified, :label => :label_user_mail_no_self_notified %></p>
+    <div class="mb-3 form-check form-switch">
+      <%= f.label :default_users_no_self_notified, l(:label_user_mail_no_self_notified), class: 'form-check-label' %>
+      <%= f.check_box :default_users_no_self_notified, checked: Setting.default_users_no_self_notified.to_s != '0', class: 'form-check-input' %>
+    </div>
 
-    <p><%= setting_select :default_users_time_zone, ActiveSupport::TimeZone.all.collect {|z| [ z.to_s, z.name ]}, :label => :field_time_zone, :blank => :label_none %></p>
+    <div class="mb-3">
+      <%= f.label :default_users_time_zone, l(:field_time_zone) %>
+      <%= f.select :default_users_time_zone, options_for_setting_default_users_time_zone, { include_blank: l(:label_none) }, class: 'form-select' %>
+    </div>
   </fieldset>
 
-  <%= submit_tag l(:button_save) %>
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
 <% end %>

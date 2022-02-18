@@ -1,5 +1,6 @@
 require 'helpers/application_patch_helper'
 require 'helpers/projects_patch_helper'
+require 'helpers/roles_patch_helper'
 require 'helpers/settings_patch_helper'
 require 'controllers/projects_patch_controller'
 

@@ -11,16 +11,3 @@
 </div>
 
 <%= error_messages_for @query %>
-
-<%= javascript_tag do %>
-  $(function ($) {
-    $('input[name=display_type]').change(function (e) {
-      if ($("#display_type_list").is(':checked')) {
-        $('table#list-definition').show();
-      } else {
-        $('table#list-definition').hide();
-      }
-
-    })
-  });
-<% end %>

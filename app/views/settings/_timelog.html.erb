@@ -1,29 +1,47 @@
-<%= form_tag({:action => 'edit', :tab => 'timelog'}) do %>
+<%= form_with(scope: :settings, url: { action: 'edit', tab: 'timelog' }) do |f| %>
+  <div class="mb-3">
+    <%= f.label :timelog_required_fields, l(:setting_timelog_required_fields), class: 'd-block fw-bold' %>
+    <% [[l(:field_issue), 'issue_id'], [l(:field_comments), 'comments']].each do |fields| %>
+      <div class="form-check form-check-inline form-switch">
+        <%= f.label fields[0] %>
+        <%= f.check_box :timelog_required_fields,
+              {
+                name: 'settings[timelog_required_fields][]',
+                checked: Setting.timelog_required_fields.include?(fields[1]),
+                class: 'form-check-input'
+              }, fields[1] %>
+      </div>
+    <% end %>
+  </div>
 
-<div class="box tabular settings">
-<p><%= setting_multiselect(:timelog_required_fields,
-        [[l(:field_issue), 'issue_id'], [l(:field_comments), 'comments'] ]) %></p>
+  <div class="mb-3">
+    <%= f.label :timelog_max_hours_per_day, l(:setting_timelog_max_hours_per_day), class: 'fw-bold' %>
+    <%= f.text_field :timelog_max_hours_per_day, value: Setting.timelog_max_hours_per_day, size: 6, class: 'form-control' %>
+  </div>
 
-<p><%= setting_text_field :timelog_max_hours_per_day, :size => 6 %></p>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :timelog_accept_0_hours, l(:setting_timelog_accept_0_hours), class: 'fw-bold form-check-label' %>
+    <%= f.check_box :timelog_accept_0_hours, checked: Setting.timelog_accept_0_hours.to_s != '0', class: 'form-check-input' %>
+  </div>
 
-<p><%= setting_check_box :timelog_accept_0_hours %></p>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :timelog_accept_future_dates, l(:setting_timelog_accept_future_dates), class: 'fw-bold form-check-label' %>
+    <%= f.check_box :timelog_accept_future_dates, checked: Setting.timelog_accept_future_dates.to_s != '0', class: 'form-check-input' %>
+  </div>
 
-<p><%= setting_check_box :timelog_accept_future_dates %></p>
-</div>
+  <fieldset class="box">
+    <legend><%= l(:setting_time_entry_list_defaults) %></legend>
 
-<fieldset class="box">
-  <legend><%= l(:setting_time_entry_list_defaults) %></legend>
+    <% query = TimeEntryQuery.new(Setting.time_entry_list_defaults) %>
+    <%= hidden_field_tag('settings[time_entry_list_defaults][column_names][]', '') %>
+    <%= render_query_columns_selection(query, name: 'settings[time_entry_list_defaults][column_names]') %>
+    <p>
+      <label><%= l(:label_total_plural) %></label>
+      <%= available_totalable_columns_tags(query, name: 'settings[time_entry_list_defaults][totalable_names]') %>
+    </p>
+  </fieldset>
 
-  <% query = TimeEntryQuery.new(Setting.time_entry_list_defaults) %>
-  <%= hidden_field_tag('settings[time_entry_list_defaults][column_names][]', '') %>
-  <%= render_query_columns_selection(query,
-        :name => 'settings[time_entry_list_defaults][column_names]') %>
-  <p>
-    <label><%= l(:label_total_plural) %></label>
-    <%= available_totalable_columns_tags(query,
-          :name => 'settings[time_entry_list_defaults][totalable_names]') %>
-  </p>
-</fieldset>
-
-<%= submit_tag l(:button_save) %>
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
 <% end %>

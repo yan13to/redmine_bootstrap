@@ -75,10 +75,22 @@ module Helpers
       icon_type = options[:type]
 
       icon_name = case name
+                  when :administration
+                    'tools'
+                  when :groups
+                    'vinyl'
+                  when :help
+                    'question-circle'
+                  when :home
+                    'house'
                   when :info
                     'exclamation-triangle'
+                  when :my_page
+                    'laptop'
                   when :projects
                     'briefcase'
+                  when :roles
+                    'lock'
                   when :settings
                     'gear'
                   when :users

@@ -36,11 +36,3 @@
     </td>
   </tr>
 </table>
-
-<%= javascript_tag do %>
-$(document).ready(function(){
-  $('.query-columns').closest('form').submit(function(){
-    $('#<%= selected_tag_id %> option:not(:disabled)').prop('selected', true);
-  });
-});
-<% end %>

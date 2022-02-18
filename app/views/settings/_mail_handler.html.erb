@@ -3,7 +3,7 @@
     <%= f.label :mail_handler_body_delimiters, l(:setting_mail_handler_body_delimiters) %>
     <%= f.text_area :mail_handler_body_delimiters, value: Setting.mail_handler_body_delimiters, rows: 5, class: 'form-control' %>
     <div class="form-check form-switch">
-      <%= f.check_box :mail_handler_enable_regex_delimiters, checked: (Setting.mail_handler_enable_regex_delimiters.to_s != '0'), class: 'form-check-input' %>
+      <%= f.check_box :mail_handler_enable_regex_delimiters, checked: Setting.mail_handler_enable_regex_delimiters.to_s != '0', class: 'form-check-input' %>
       <%= f.label :mail_handler_enable_reges, l(:setting_mail_handler_enable_regex), class: 'form-check-label' %>
     </div>
     <div class="small text-muted">
@@ -15,7 +15,7 @@
     <%= f.label :mail_handler_excluded_filenames, l(:setting_mail_handler_excluded_filenames) %>
     <%= f.text_area :mail_handler_excluded_filenames, value: Setting.mail_handler_excluded_filenames.to_s, class: 'form-control' %>
     <div class="form-check form-switch">
-      <%= f.check_box :mail_handler_enable_regex_excluded_filenames, checked: (Setting.mail_handler_enable_regex_excluded_filenames.to_s != '0'), class: 'form-check-input' %>
+      <%= f.check_box :mail_handler_enable_regex_excluded_filenames, checked: Setting.mail_handler_enable_regex_excluded_filenames.to_s != '0', class: 'form-check-input' %>
       <%= f.label :mail_handler_enable_regex_excluded_filenames, l(:setting_mail_handler_enable_regex), class: 'form-check-label' %>
     </div>
     <div class="small text-muted">

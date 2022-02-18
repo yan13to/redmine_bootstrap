@@ -1,16 +1,16 @@
 <div class="mb-3">
-  <%= f.label :commit_ref_keywords, l(:setting_commit_ref_keywords) %>
+  <%= f.label :commit_ref_keywords, l(:setting_commit_ref_keywords), class: 'fw-bold' %>
   <%= f.text_field :commit_ref_keywords, value: Setting.commit_ref_keywords.to_s, size: 30, class: 'form-control' %>
   <em class="text-muted small"><%= l(:text_comma_separated) %></em>
 </div>
 
 <div class="mb-3 form-check form-switch">
-  <%= f.label :commit_cross_project_ref, l(:setting_commit_cross_project_ref), class: 'form-check-label' %>
+  <%= f.label :commit_cross_project_ref, l(:setting_commit_cross_project_ref), class: 'form-check-label fw-bold' %>
   <%= f.check_box :commit_cross_project_ref, checked: Setting.commit_cross_project_ref.to_s != '0', class: 'form-check-input' %>
 </div>
 
 <div class="mb-3 form-check form-switch">
-  <%= f.label :commit_logtime_enabled, l(:setting_commit_logtime_enabled), class: 'form-check-label' %>
+  <%= f.label :commit_logtime_enabled, l(:setting_commit_logtime_enabled), class: 'form-check-label fw-bold' %>
   <%= f.check_box :commit_logtime_enabled,
         checked: Setting.commit_logtime_enabled.to_s != '0',
         class: 'form-check-input',
@@ -18,7 +18,7 @@
 </div>
 
 <div class="mb-3">
-  <%= f.label :commit_logtime_activity_id, l(:setting_commit_logtime_activity_id) %>
+  <%= f.label :commit_logtime_activity_id, l(:setting_commit_logtime_activity_id), class: 'fw-bold' %>
   <%= f.select :commit_logtime_activity_id, options_for_setting_commit_logtime_activity_id, {},
         disabled: !Setting.commit_logtime_enabled?,
         id: 'settings_commit_logtime_activity_id',
