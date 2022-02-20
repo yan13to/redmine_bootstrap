@@ -1,0 +1,17 @@
+<%= form_for(@membership, url: principal_membership_path(@principal, @membership), as: :membership, remote: request.xhr?, method: :put) do |f| %>
+  <div class="mb-3">
+    <% @roles.each do |role| %>
+      <div class="mb-3 form-check form-switch">
+        <label class="form-check-label"><%= role.name %></label>
+        <%= check_box_tag 'membership[role_ids][]', role.id, @membership.roles.to_a.include?(role), id: nil, disabled: !@membership.role_editable?(role), class: 'form-check-input' %>
+        <%= render_role_inheritance(@membership, role) %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= hidden_field_tag 'membership[role_ids][]', '', id: nil %>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<% icon ||= true %>
+<% text ||= false %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
+<% html << content_tag(:span, l(:label_add_projects)) if text %>
+
+<%= link_to new_principal_membership_path(principal),
+      'data-bs-toggle': 'modal',
+      'data-bs-target': '#mainModal',
+      'data-modal-body': ''+render('principal_memberships/new', principal: principal, projects: Project.active.all, roles: Role.find_all_givable),
+      'data-processor': 'principal_memberships/actions/add',
+      title: l(:label_add_projects),
+      class: 'btn btn-link text-decoration-none' do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

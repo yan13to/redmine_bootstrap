@@ -1,7 +1,14 @@
-<%= labelled_form_for @user, :html => {:multipart => true} do |f| %>
-  <%= render :partial => 'form', :locals => { :f => f } %>
+<%= form_with model: @user, html: { multipart: true } do |f| %>
+  <%= render 'users/form', f: f %>
+
   <% if @user.active? && email_delivery_enabled? && @user != User.current -%>
-    <p><label><%= check_box_tag 'send_information', 1, params[:send_information] %> <%= l(:label_send_information) %></label></p>
+    <div class="mb-3 form-check form-switch">
+      <label class="form-check-label"><%= l(:label_send_information) %></label>
+      <%= check_box_tag 'send_information', 1, params[:send_information], class: 'form-check-input' %>
+    </div>
   <% end -%>
-  <p><%= submit_tag l(:button_save) %></p>
+
+  <div class="mb-3">
+    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+  </div>
 <% end %>

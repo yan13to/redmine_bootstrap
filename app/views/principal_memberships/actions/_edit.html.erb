@@ -1,0 +1,9 @@
+<% icon ||= true %>
+<% text ||= false %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-pen') if icon %>
+<% html << content_tag(:span, l(:button_edit)) if text %>
+
+<%= link_to edit_principal_membership_path(principal, membership), remote: true, title: l(:button_edit), class: 'btn btn-dark' do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end%>

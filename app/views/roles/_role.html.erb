@@ -1,15 +1,15 @@
 <tr class="<%= role.builtin? ? "builtin" : "givable" %>">
-  <td class="name">
+  <td class="align-middle">
     <%= content_tag(role.builtin? ? 'em' : 'span', link_to(role.name, edit_role_path(role), class: 'text-decoration-none')) %>
   </td>
-  <td>
+  <td class="align-middle">
     <% unless role.builtin? || role.workflow_rules.exists? %>
       <span class="icon icon-warning">
         <%= l(:text_role_no_workflow) %> (<%= link_to l(:button_edit), workflows_edit_path(role_id: role) %>)
       </span>
     <% end %>
   </td>
-  <td class="buttons">
+  <td class="align-middle">
     <div class="btn-group btn-group-sm" role="group" aria-label="Role action">
       <% unless role.builtin? %>
         <button type="button" class="btn btn-info"
@@ -19,9 +19,11 @@
           <i class="bi bi-arrows-move"></i>
         </button>
       <% end %>
+
       <%= link_to new_role_path(copy: role), title: l(:button_copy), class: 'btn btn-dark' do %>
         <i class="bi bi-check-all"></i>
       <% end %>
+
       <% unless role.builtin? %>
         <%= link_to role_path(role), title: l(:button_delete), class: 'btn btn-danger', data: { method: :delete, confirm: l(:text_are_you_sure) } do %>
           <i class="bi bi-trash"></i>

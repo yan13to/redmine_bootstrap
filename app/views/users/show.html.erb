@@ -124,7 +124,7 @@
 
   </div>
 
-  <div class="col">
+  <div class="col-auto">
 
     <% unless @events_by_day.empty? %>
       <h3><%= link_to l(:label_activity), controller: 'activities', action: 'index', id: nil, user_id: @user, from: @events_by_day.keys.first %></h3>

@@ -1,0 +1,9 @@
+<% icon ||= true %>
+<% text ||= false %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-trash') if icon %>
+<% html << content_tag(:span, l(:button_delete)) if text %>
+
+<%= link_to user_path(user, back_url: request.original_fullpath, data: {}), class: 'btn btn-danger', title: l(:button_delete) do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

@@ -1,0 +1,11 @@
+<% icon ||= true %>
+<% text ||= false %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-envelope') if icon %>
+<% html << content_tag(:span, l(:label_email_address_plural)) if text %>
+
+<% if user.email_addresses.count > 1 || Setting.max_additional_emails.to_i > 0 %>
+  <%= link_to user_email_addresses_path(user), class: 'btn btn-primary' do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% end %>

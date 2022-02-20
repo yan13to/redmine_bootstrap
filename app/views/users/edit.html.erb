@@ -1,13 +1,51 @@
-<div class="contextual">
-<%= link_to l(:label_profile), user_path(@user), :class => 'icon icon-user' %>
-<%= additional_emails_link(@user) %>
-<%= change_status_link(@user) %>
-<%= delete_link user_path(@user) if User.current != @user %>
+<div class="d-flex align-items-center justify-content-between my-3">
+  <%=
+    page_title = title [l(:label_user_plural), users_path, class: 'text-decoration-none'], @user.login
+    page_title.insert(page_title.rindex(' ') + 1, avatar(@user).to_s)
+  %>
+
+  <div class="btn-group btn-group-sm" role="group" aria-label="User actions">
+    <%= render 'users/actions/profile', text: true, user: @user %>
+    <%= render 'users/actions/email', text: true, user: @user %>
+    <%= render 'users/actions/change_status', text: true, user: @user %>
+    <%= render 'users/actions/delete', text: true, user: @user if User.current != @user %>
+  </div>
 </div>
 
-<%=
-  page_title = title [l(:label_user_plural), users_path], @user.login
-  page_title.insert(page_title.rindex(' ') + 1, avatar(@user).to_s)
-%>
+<% tabs = user_settings_tabs %>
+<% selected_tab = params[:tab] || 'general' %>
 
-<%= render_tabs user_settings_tabs %>
+<ul class="nav nav-tabs nav-paginator" id="nav-tab" role="tablist">
+  <% tabs.each do |tab| %>
+    <li class="nav-item">
+      <% selected = (tab[:name] == selected_tab) %>
+      <button class="nav-link<%= ' active' if selected %>"
+        id="nav-<%= tab[:name] %>-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#<%= tab[:name] %>"
+        type="button"
+        role="tab"
+        aria-controls="nav-<%= tab[:name] %>"
+        aria-selected="true">
+        <%= l(tab[:label]) %>
+      </button>
+    </li>
+  <% end %>
+</ul>
+
+<div class="tab-content" id="nav-tabContent">
+  <% tabs.each do |tab| %>
+    <% selected = (tab[:name] == selected_tab) %>
+    <div class="tab-pane<%= ' show active' if selected %>"
+      id="<%= tab[:name] %>"
+      role="tabpanel"
+      aria-labelledby="nav-<%= tab[:name] %>-tab">
+      <div class="card border-top-0">
+        <div class="card-body">
+          <h3 class="mb-3"><%= l(tab[:label]) %></h3>
+          <%= render tab[:partial] %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

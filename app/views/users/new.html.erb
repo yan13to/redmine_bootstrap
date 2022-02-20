@@ -1,14 +1,17 @@
 <%= title [l(:label_user_plural), users_path], l(:label_user_new) %>
 
-<%= labelled_form_for @user, :html => {:multipart => true} do |f| %>
-  <%= render :partial => 'form', :locals => { :f => f } %>
+<%= labelled_form_for @user, html: { multipart: true } do |f| %>
+  <%= render 'form', f: f %>
   <% if email_delivery_enabled? %>
-  <p><label><%= check_box_tag 'send_information', 1, params[:send_information] %> <%= l(:label_send_information) %></label></p>
+    <div class="mb-3">
+      <label><%= l(:label_send_information) %></label>
+      <%= check_box_tag 'send_information', 1, params[:send_information] %> 
+    </div>
   <% end %>
-  <p>
-    <%= submit_tag l(:button_create) %>
-    <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
-  </p>
+  <div class="mb-3">
+    <%= submit_tag l(:button_create), class: 'btn btn-primary' %>
+    <%= submit_tag l(:button_create_and_continue), name: 'continue', class: 'btn btn-secondary' %>
+  </div>
 <% end %>
 
 <% if @auth_sources.present? && @auth_sources.any?(&:searchable?) %>

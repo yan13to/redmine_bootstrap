@@ -1,0 +1,30 @@
+<tr class="<%= user.css_classes %>">
+  <td class="align-middle">
+    <%= avatar(user, size: '14') %>
+    <%= link_to user.login, edit_user_path(user), class: 'text-decoration-none' %>
+  </td>
+  <td class="align-middle">
+    <%= user.firstname %>
+  </td>
+  <td class="align-middle">
+    <%= user.lastname %>
+  </td>
+  <td class="align-middle">
+    <%= mail_to(user.mail, nil, class: 'text-decoration-none') %>
+  </td>
+  <td class="align-middle">
+    <%= content_tag(:i, nil, class: 'bi bi-check-lg') if user.admin? %>
+  </td>
+  <td class="align-middle">
+    <%= format_time(user.created_on) %>
+  </td>
+  <td class="align-middle">
+    <%= format_time(user.last_login_on) unless user.last_login_on.nil? %>
+  </td>
+  <td class="align-middle">
+    <div class="btn-group btn-group-sm">
+      <%= render 'users/actions/change_status', user: user %>
+      <%= render 'users/actions/delete', user: user unless user == User.current %>
+    </div>
+  </td>
+</tr>

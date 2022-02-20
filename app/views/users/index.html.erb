@@ -1,8 +1,11 @@
 <% html_title(l(:label_user_plural)) -%>
 
-<div class="d-flex justify-content-between mt-3">
+<div class="d-flex justify-content-between my-3">
   <h2><%= l(:label_user_plural) %></h2>
-  <%= render 'actions' %>
+  <div class="d-flex align-items-center gap-1" role="group" aria-label="Users actions">
+    <%= render 'users/actions/add' %>
+    <%= render 'users/actions/index' %>
+  </div>
 </div>
 
 <div class="accordion my-3" id="accordionPanelsStayOpenExample">
@@ -21,81 +24,44 @@
 </div>
 
 <% if @users.any? %>
-<div class="card">
-  <div class="card-body">
-    <table class="table">
-      <thead>
-        <tr>
-        <%= sort_header_tag('login', caption: l(:field_login)) %>
-        <%= sort_header_tag('firstname', caption: l(:field_firstname)) %>
-        <%= sort_header_tag('lastname', caption: l(:field_lastname)) %>
-        <th><%= l(:field_mail) %></th>
-        <%= sort_header_tag('admin', caption: l(:field_admin), default_order: 'desc') %>
-        <%= sort_header_tag('created_on', caption: l(:field_created_on), default_order: 'desc') %>
-        <%= sort_header_tag('last_login_on', caption: l(:field_last_login_on), default_order: 'desc') %>
-        <th>&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% for user in @users -%>
-          <tr class="<%= user.css_classes %>">
-            <td class="username"><%= avatar(user, size: '14') %>
-              <%= link_to user.login, edit_user_path(user) %>
-            </td>
-            <td class="firstname">
-              <%= user.firstname %>
-            </td>
-            <td class="lastname">
-              <%= user.lastname %>
-            </td>
-            <td class="email">
-              <%= mail_to(user.mail) %>
-            </td>
-            <td class="tick">
-              <%= checked_image user.admin? %>
-            </td>
-            <td class="created_on">
-              <%= format_time(user.created_on) %>
-            </td>
-            <td class="last_login_on">
-              <%= format_time(user.last_login_on) unless user.last_login_on.nil? %>
-            </td>
-            <td class="buttons">
-              <%= change_status_link(user) %>
-              <%= delete_link user_path(user, back_url: request.original_fullpath), :data => {} unless User.current == user %>
-            </td>
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-hover table-sm">
+        <thead>
+          <tr>
+            <%= sort_header_tag('login', caption: l(:field_login)) %>
+            <%= sort_header_tag('firstname', caption: l(:field_firstname)) %>
+            <%= sort_header_tag('lastname', caption: l(:field_lastname)) %>
+            <th><%= l(:field_mail) %></th>
+            <%= sort_header_tag('admin', caption: l(:field_admin), default_order: 'desc') %>
+            <%= sort_header_tag('created_on', caption: l(:field_created_on), default_order: 'desc') %>
+            <%= sort_header_tag('last_login_on', caption: l(:field_last_login_on), default_order: 'desc') %>
+            <th>&nbsp;</th>
           </tr>
-        <% end -%>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <%= render @users %>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 
-<span class="pagination"><%= pagination_links_full @user_pages, @user_count %></span>
+  <span class="pagination"><%= pagination_links_full @user_pages, @user_count %></span>
 
-<% other_formats_links do |f| %>
-  <%= f.link_to_with_query_parameters 'CSV', {}, :onclick => "showModal('csv-export-options', '330px'); return false;" %>
-<% end %>
+  <% other_formats_links do |f| %>
+    <%= f.link_to_with_query_parameters 'CSV', {}, onclick: "showModal('csv-export-options', '330px'); return false;" %>
+  <% end %>
 
-<div id="csv-export-options" style="display: none;">
-  <h3 class="title"><%= l(:label_export_options, :export_format => 'CSV') %></h3>
-  <%= export_csv_encoding_select_tag %>
-  <p class="buttons">
-    <%= submit_tag l(:button_export), name: nil, id: 'csv-export-button' %>
-    <%= submit_tag l(:button_cancel), name: nil, onclick: 'hideModal(this);', type: 'button' %>
-  </p>
-</div>
-
-<%= javascript_tag do %>
-$(document).ready(function(){
-  $('input#csv-export-button').click(function(){
-    $('form input#encoding').val($('select#encoding option:selected').val());
-    $('form#users_form').attr('action', "<%= users_path(:format => 'csv') %>").submit();
-    $('form#users_form').attr('action', '<%= users_path %>');
-    hideModal(this);
-  });
-});
-<% end %>
+  <div id="csv-export-options" style="display: none;">
+    <h3 class="title"><%= l(:label_export_options, export_format: 'CSV') %></h3>
+    <%= export_csv_encoding_select_tag %>
+    <p class="buttons">
+      <%= submit_tag l(:button_export), name: nil, id: 'csv-export-button' %>
+      <%= submit_tag l(:button_cancel), name: nil, onclick: 'hideModal(this);', type: 'button' %>
+    </p>
+  </div>
 <% else %>
-  <p class="nodata"><%= l(:label_no_data) %></p>
+  <div class="mb-3">
+    <%= l(:label_no_data) %>
+  </div>
 <% end %>

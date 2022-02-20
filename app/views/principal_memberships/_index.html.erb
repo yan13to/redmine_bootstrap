@@ -1,0 +1,46 @@
+<div class="mb-3">
+  <%= render 'principal_memberships/actions/add', principal: principal, text: true %>
+</div>
+
+<% memberships = principal.memberships.preload(:member_roles, :roles).sorted_by_project.to_a %>
+
+<% if memberships.any? %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><%= l(:label_project) %></th>
+        <th><%= l(:label_role_plural) %></th>
+        <th>&nbsp;</th>
+        <%= call_table_header_hook principal %>
+      </tr>
+    </thead>
+    <tbody>
+    <% memberships.each do |membership| %>
+      <% next if membership.new_record? %>
+
+      <tr id="member-<%= membership.id %>">
+        <td class="align-middle">
+          <%= link_to_project membership.project, {}, class: 'text-decoration-none fw-bold' %>
+        </td>
+        <td class="align-middle">
+          <span id="member-<%= membership.id %>-roles">
+            <%= h membership.roles.sort.collect(&:to_s).join(', ') %>
+          </span>
+          <div id="member-<%= membership.id %>-form"></div>
+        </td>
+        <td class="align-middle">
+          <div class="btn-group btn-group-sm">
+            <%= render 'principal_memberships/actions/edit', principal: principal, membership: membership %>
+            <%= render 'principal_memberships/actions/delete', principal: principal, membership: membership if membership.deletable? %>
+          </div>
+        </td>
+        <%= call_table_row_hook principal, membership %>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class="mb-3 text-center">
+    <%= l(:label_no_data) %>
+  </div>
+<% end %>

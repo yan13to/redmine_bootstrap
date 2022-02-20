@@ -1,11 +1,7 @@
 <%= fields_for :pref, @user.pref do |pref_fields| %>
-  <div class="mb-3 row">
-    <div class="col-auto">
-      <%= pref_fields.label :hide_mail %>
-    </div>
-    <div class="col-auto">
-      <%= pref_fields.check_box :hide_mail %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= pref_fields.label :hide_mail, class: 'form-check-label' %>
+    <%= pref_fields.check_box :hide_mail, class: 'form-check-input' %>
   </div>
   <div class="mb-3">
     <%= pref_fields.label :time_zone %>
@@ -15,13 +11,9 @@
     <%= pref_fields.label :comments_sorting %>
     <%= pref_fields.select :comments_sorting, [[l(:label_chronological_order), 'asc'], [l(:label_reverse_chronological_order), 'desc']], {}, class: 'form-select' %>
   </div>
-  <div class="mb-3 row">
-    <div class="col-auto">
-      <%= pref_fields.label :warn_on_leaving_unsaved %>
-    </div>
-    <div class="col-auto">
-      <%= pref_fields.check_box :warn_on_leaving_unsaved %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= pref_fields.label :warn_on_leaving_unsaved, class: 'form-check-label' %>
+    <%= pref_fields.check_box :warn_on_leaving_unsaved, class: 'form-check-input' %>
   </div>
   <div class="mb-3">
     <%= pref_fields.label :textarea_font %>

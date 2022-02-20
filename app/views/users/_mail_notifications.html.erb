@@ -1,10 +1,6 @@
-<div class="mb-3 row align-items-center">
-  <div class="col-auto">
-    <%= label_tag 'user_mail_notification', l(:description_user_mail_notification) %>
-  </div>
-  <div class="col-auto">
-    <%= select_tag('user[mail_notification]', options_for_select(user_mail_notification_options(@user), @user.mail_notification), onchange: 'if (this.value == "selected") {$("#notified-projects").show();} else {$("#notified-projects").hide();}', class: 'form-select') %>
-  </div>
+<div class="mb-3">
+  <%= f.label :mail_notification, l(:description_user_mail_notification) %>
+  <%= f.select :mail_notification, user_mail_notification_options(@user), {}, class: 'form-select' %>
 </div>
 
 <%= content_tag 'fieldset', id: 'notified-projects', style: (@user.mail_notification == 'selected' ? '' : 'display:none;') do %>
@@ -27,22 +23,14 @@
 
 <%= fields_for :pref, @user.pref do |pref_fields| %>
   <% if IssuePriority.default_or_middle and high_priority = IssuePriority.where(['position > ?', IssuePriority.default_or_middle.position]).first %>
-    <div class="mb-3 row">
-      <div class="col-auto">
-        <label for="pref_notify_about_high_priority_issues"><%= t(:label_user_mail_notify_about_high_priority_issues_html, prio: high_priority.name.downcase) %></label>
-      </div>
-      <div class="col-auto">
-        <%= pref_fields.check_box :notify_about_high_priority_issues %>
-      </div>
+    <div class="mb-3 form-check form-switch">
+      <%= pref_fields.label :notify_about_high_priority_issues, t(:label_user_mail_notify_about_high_priority_issues_html, prio: high_priority.name.downcase), class: 'form-check-label' %>
+      <%= pref_fields.check_box :notify_about_high_priority_issues, class: 'form-check-input' %>
     </div>
   <% end %>
 
-  <div class="mb-3 row">
-    <div class="col-auto">
-      <label for="pref_no_self_notified"><%= l(:label_user_mail_no_self_notified) %></label>
-    </div>
-    <div class="col-auto">
-      <%= pref_fields.check_box :no_self_notified %>
-    </div>
+  <div class="mb-3 form-check form-switch">
+    <%= f.label :no_self_notified, l(:label_user_mail_no_self_notified), class: 'form-check-label' %>
+    <%= pref_fields.check_box :no_self_notified, class: 'form-check-input' %>
   </div>
 <% end %>

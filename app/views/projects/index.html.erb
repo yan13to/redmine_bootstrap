@@ -2,7 +2,9 @@
 
 <div class="d-flex justify-content-between mt-3">
   <h2><%= @query.new_record? ? l(:label_project_plural) : @query.name %></h2>
-  <%= render 'actions_index' %>
+  <div class="d-flex align-items-center gap-1" role="group" aria-label="Projects actions">
+    <%= render 'actions_index' %>
+  </div>
 </div>
 
 <%= form_tag(projects_path(@project, nil), method: :get, id: 'query_form') do %>
