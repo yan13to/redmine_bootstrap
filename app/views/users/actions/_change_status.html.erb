@@ -19,7 +19,7 @@
 <% elsif user != User.current %>
   <%= link_to url.merge(user: { status: User::STATUS_LOCKED }), title: l(:button_lock), method: :put, class: 'btn btn-warning' do %>
     <% html_locked = [] %>
-    <% html_locked << content_tag(:i, nil, class: 'bi bi-lock') if icon %>
+    <% html_locked << content_tag(:i, nil, class: 'bi bi-unlock') if icon %>
     <% html_locked << content_tag(:span, l(:button_unlock)) if text %>
     <%= html_locked.compact.join('&nbsp;').html_safe %>
   <% end %>

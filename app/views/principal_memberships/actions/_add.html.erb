@@ -7,7 +7,8 @@
 <%= link_to new_principal_membership_path(principal),
       'data-bs-toggle': 'modal',
       'data-bs-target': '#mainModal',
-      'data-modal-body': ''+render('principal_memberships/new', principal: principal, projects: Project.active.all, roles: Role.find_all_givable),
+      'data-modal-title': l(:label_add_projects),
+      'data-modal-path': new_principal_membership_path(principal, format: :js),
       'data-processor': 'principal_memberships/actions/add',
       title: l(:label_add_projects),
       class: 'btn btn-link text-decoration-none' do %>

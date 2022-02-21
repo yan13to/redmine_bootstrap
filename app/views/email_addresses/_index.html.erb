@@ -1,26 +1,30 @@
 <% if @addresses.present? %>
-  <table class="list email_addresses">
-  <% @addresses.each do |address| %>
-    <tr>
-      <td class="email"><%= address.address %></td>
-      <td class="buttons">
-        <%= toggle_email_address_notify_link(address) %>
-        <%= delete_link user_email_address_path(@user, address), :remote => true %>
-      </td>
-    </tr>
-  <% end %>
+  <table class="table table-hover">
+    <% @addresses.each do |address| %>
+      <tr>
+        <td class="email">
+          <%= address.address %>
+        </td>
+        <td class="buttons">
+          <%= toggle_email_address_notify_link(address) %>
+          <%= delete_link user_email_address_path(@user, address) %>
+        </td>
+      </tr>
+    <% end %>
   </table>
 <% end %>
 
 <% unless @addresses.size >= Setting.max_additional_emails.to_i %>
-  <div>
-  <%= form_for @address, :url => user_email_addresses_path(@user), :remote => true do |f| %>
-    <p><%= l(:label_email_address_add) %></p>
+  <%= form_for @address, url: user_email_addresses_path(@user) do |f| %>
     <%= error_messages_for @address %>
-    <p>
-      <%= f.text_field :address, :size => 40 %>
-      <%= submit_tag l(:button_add) %>
-    </p>
+
+    <div class="mb-3">
+      <%= l(:label_email_address_add) %>
+      <%= f.text_field :address, size: 40, class: 'form-control' %>
+    </div>
+
+    <div class="mb-3">
+      <%= submit_tag l(:button_add), class: 'btn btn-primary' %>
+    </div>
   <% end %>
-  </div>
 <% end %>

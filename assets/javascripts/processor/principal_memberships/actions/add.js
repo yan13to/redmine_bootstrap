@@ -1,4 +1,5 @@
 import mainModal from "../../../components/main_modal.js";
+import requestHeaders from "../../../components/request_headers.js";
 
 export default function(currentElement) {
   currentElement.addEventListener('click', function(event) {
@@ -8,11 +9,18 @@ export default function(currentElement) {
   })
 
   mainModal().addEventListener('shown.bs.modal', function(event) {
-    const content = currentElement.getAttribute('data-modal-body');
-    const target = event.target.querySelector('.modal-body');
+    const title = currentElement.getAttribute('data-modal-title');
+    const path = currentElement.getAttribute('data-modal-path');
 
-    console.log(content);
+    const targetTitle = event.target.querySelector('.modal-title');
+    const targetBody = event.target.querySelector('.modal-body');
 
-    target.innerHTML = content;
+    targetTitle.innerHTML = title;
+
+    fetch(path, requestHeaders)
+      .then(data => data.text())
+      .then(html => {
+        targetBody.innerHTML = html;
+    })
   });
 }

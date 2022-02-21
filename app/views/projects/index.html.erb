@@ -11,13 +11,17 @@
   <%= render 'queries/query_form' %>
 <% end %>
 
-<% if @query.valid? %>
-  <% if @entries.empty? %>
-    <p class="nodata"><%= l(:label_no_data) %></p>
-  <% else %>
-    <%= render @query.display_type, entries: @entries %>
-  <% end %>
-<% end %>
+<div class="card">
+  <div class="card-body">
+    <% if @query.valid? %>
+      <% if @entries.empty? %>
+        <%= render 'no_data' %>
+      <% else %>
+        <%= render @query.display_type, entries: @entries %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
 
 <% if User.current.logged? %>
   <p style="text-align:right;">
