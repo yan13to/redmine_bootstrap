@@ -1,0 +1,16 @@
+<% show_label = options[:show_label] %>
+<% label = options[:label] %>
+<% label_class = options[:label_class] %>
+<% group_class = ['mb-3 form-group', options[:group_class]].compact.join(' ') %>
+
+<% options.delete(:show_label) %>
+<% options.delete(:label) %>
+<% options.delete(:label_class) %>
+<% options.delete(:group_class) %>
+
+<div class="<%= group_class %>">
+  <%= f.label method, label, { class: label_class } if show_label %>
+  <%= f.email_field method, options %>
+  <%= f.invalid_feedback method %>
+  <%= f.valid_feedback method %>
+</div>

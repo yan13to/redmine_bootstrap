@@ -1,5 +1,5 @@
 <%= page_title title(l(:label_auth_source_plural)) do %>
-  <%= link_to l(:label_auth_source_new), { action: 'new' }, class: 'btn btn-success' %>
+  <%= render 'auth_sources/actions/add', text: true %>
 <% end %>
 
 <%= page_card do %>

@@ -12,7 +12,7 @@
     <% for source in @auth_sources %>
       <tr id="auth-source-<%= source.id %>">
         <td class="name">
-          <%= link_to(source.name, :action => 'edit', :id => source) %>
+          <%= link_to(source.name, action: 'edit', id: source) %>
         </td>
         <td>
           <%= source.auth_method_name %>
