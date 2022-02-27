@@ -1,0 +1,93 @@
+<% html_title(l(:label_search)) -%>
+
+<div class="d-flex justify-content-between my-3">
+  <h2><%= l(:label_search) %></h2>
+</div>
+
+<%= form_tag({}, method: :get, id: 'search-form') do %>
+<div class="box">
+  <%= label_tag "search-input", l(:description_search), class: 'd-none' %>
+  <div class="card">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <div class="form-check form-check-inline">
+            <label class="form-check-label"><%= l(:label_all_words) %></label>
+            <%= check_box_tag 'all_words', 1, @all_words, class: 'form-check-input' %>
+            <%= hidden_field_tag 'all_words', '', id: nil %>
+          </div>
+          <div class="form-check form-check-inline">
+            <label class="form-check-label"><%= l(:label_search_titles_only) %></label>
+            <%= check_box_tag 'titles_only', 1, @titles_only, class: 'form-check-input' %>
+            <%= hidden_field_tag 'titles_only', '', id: nil %>
+          </div>
+        </div>
+        <div class="col">
+          <%= text_field_tag 'q', @question, size: 60, id: 'search-input', data: { auto_complete: true }, class: 'form-control' %>
+          <%= project_select_tag %>
+        </div>
+        <div class="col-auto">
+          <%= submit_tag l(:label_search), class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <fieldset class="box">
+    <legend><%= toggle_checkboxes_link('p#search-types input') %></legend>
+    <div id="search-types" class="mb-3">
+      <% @object_types.each do |t| %>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label"><%= link_to type_label(t), "#", class: 'text-decoration-none' %></label>
+          <%= check_box_tag t, 1, @scope.include?(t), class: 'form-check-input' %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+
+  <fieldset class="collapsible collapsed">
+    <legend data-bs-toggle="collapse" data-bs-target="#options-content"><%= l(:label_options) %></legend>
+    <div id="options-content" class="collapse show">
+      <div class="mb-3 form-check">
+        <label class="form-check-label"><%= l(:label_search_open_issues_only) %></label>
+        <%= check_box_tag 'open_issues', 1, @open_issues, class: 'form-check-input' %> 
+      </div>
+      <div class="mb-3">
+        <label><%= radio_button_tag 'attachments', '0', @search_attachments == '0' %> <%= l(:label_search_attachments_no) %></label>
+        <label><%= radio_button_tag 'attachments', '1', @search_attachments == '1' %> <%= l(:label_search_attachments_yes) %></label>
+        <label><%= radio_button_tag 'attachments', 'only', @search_attachments == 'only' %> <%= l(:label_search_attachments_only) %></label>
+      </div>
+      <%= call_hook(:view_search_index_options_content_bottom) %>
+    </div>
+  </fieldset>
+
+  <%= hidden_field_tag 'options', '', id: 'show-options' %>
+
+</div>
+
+<% end %>
+
+<% if @results %>
+  <div id="search-results-counts">
+    <%= render_results_by_type(@result_count_by_type) unless @scope.size == 1 %>
+  </div>
+  <h3>
+    <%= l(:label_result_plural) %> (<%= @result_count %>)
+  </h3>
+  <dl id="search-results">
+    <% @results.each do |e| %>
+      <dt class="<%= e.event_type %> icon icon-<%= e.event_type %>">
+        <%= content_tag('span', e.project, class: 'project') unless @project == e.project %>
+        <%= link_to(highlight_tokens(e.event_title.truncate(255), @tokens), e.event_url) %>
+      </dt>
+      <dd>
+        <span class="description"><%= highlight_tokens(e.event_description, @tokens) %></span>
+        <span class="author"><%= format_time(e.event_datetime) %></span>
+      </dd>
+    <% end %>
+  </dl>
+<% end %>
+
+<% if @result_pages %>
+  <span class="pagination"><%= pagination_links_full @result_pages, @result_count, :per_page_links => false %></span>
+<% end %>

@@ -1,7 +1,7 @@
 import '../libs/bootstrap-nav-paginator.min.js';
 
 export default function TabCallback() {
-  const navTabs =  document.querySelectorAll('[data-bs-toggle="tab"], [data-bs-toggle="pill"]')
+  const navTabs =  [].slice.call(document.querySelectorAll('[data-bs-toggle="tab"], [data-bs-toggle="pill"]'));
 
   for (let i = 0; i < navTabs.length; i++) {
     // const processor = navTab.getAttribute('data-bs-processor');

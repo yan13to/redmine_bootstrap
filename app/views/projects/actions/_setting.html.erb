@@ -1,0 +1,17 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-gear') if icon %>
+<% html << content_tag(:span, project.name) if text %>
+
+<% if project.active? %>
+  <%= link_to settings_project_path(project), title: project.short_description, 'data-bs-toggle': 'tooltip', 'data-bs-placement': 'bottom', class: 'text-decoration-none' do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% elsif project.archived? %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% else %>
+  <%= link_to project_path(project), title: project.short_description, 'data-bs-toggle': 'tooltip', 'data-bs-placement': 'bottom', class: 'text-decoration-none' do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% end %>

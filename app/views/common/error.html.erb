@@ -1,13 +1,19 @@
-<h2><%= @status %></h2>
+<% html_title @status %>
+
+<div class="my-3">
+  <h2><%= @status %></h2>
+</div>
 
 <% if @message.present? %>
-  <p id="errorExplanation"><%= @message %></p>
+  <div class="alert alert-danger" id="errorExplanation"><%= @message %></div>
 <% end %>
 
 <% if @archived_project && User.current.admin? %>
-  <p><%= link_to l(:button_unarchive), unarchive_project_path(@archived_project), :method => :post, :class => 'icon icon-unlock' %></p>
+  <div class="alert alert-warning">
+    <%= link_to l(:button_unarchive), unarchive_project_path(@archived_project), method: :post, :class => 'icon icon-unlock' %>
+  </div>
 <% end %>
 
-<p><a href="javascript:history.back()"><%= l(:button_back) %></a></p>
-
-<% html_title @status %>
+<p>
+  <a href="javascript:history.back()"><%= l(:button_back) %></a>
+</p>

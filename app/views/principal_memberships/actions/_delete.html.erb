@@ -4,6 +4,8 @@
 <% html << content_tag(:i, nil, class: 'bi bi-trash') if icon %>
 <% html << content_tag(:span, l(:button_delete)) if text %>
 
-<%= link_to principal_membership_path(principal, membership), class: 'btn btn-danger', title: l(:button_delete) do %>
-  <%= html.compact.join('&nbsp;').html_safe %>
+<%= form_tag principal_membership_path(principal, membership), method: :delete, class: 'btn btn-danger', title: l(:button_delete) do %>
+  <span onclick="javascript:this.form.submit();return false;">
+    <%= html.compact.join('&nbsp;').html_safe %>
+  </span>
 <% end %>

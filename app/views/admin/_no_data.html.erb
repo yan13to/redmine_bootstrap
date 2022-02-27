@@ -3,7 +3,7 @@
 
   <div class="mb-3">
     <label><%= l(:field_language) %></label>
-    <%= select_tag 'lang', options_for_select(lang_options_for_select(false), current_language.to_s), {}, class: 'form-select' %>
+    <%= select_tag 'lang', options_for_select(lang_options_for_select(false), current_language.to_s), class: 'form-select' %>
   </div>
 
   <div class="mb-3">

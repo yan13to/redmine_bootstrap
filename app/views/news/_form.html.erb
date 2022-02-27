@@ -1,0 +1,28 @@
+<%= error_messages_for @news %>
+
+<% if @project.nil? %>
+  <div class="mb-3">
+    <label><%= l(:field_project) %> <span class="required">*</span></label>
+    <%= select_tag :project_id, options_for_select(project_tree_options_for_select(Project.allowed_to(:manage_news).to_a), Project.allowed_to(:manage_news).first), { required: true }, class: 'form-select' %>
+    <%= hidden_field_tag :cross_project, 1, id: nil %>
+  </div>
+<% end %>
+
+<div class="mb-3">
+  <%= f.text_field :title, required: true, size: 60, class: 'form-control' %>
+</div>
+
+<div class="mb-3">
+  <%= f.text_area :summary, cols: 60, rows: 2, class: 'form-control' %>
+</div>
+
+<div class="mb-3">
+  <%= f.text_area :description, required: true, cols: 60, rows: 15, class: 'wiki-edit form-control', data: { auto_complete: true } %>
+</div>
+
+<div class="mb-3" id="attachments_form">
+  <label><%= l(:label_attachment_plural) %></label>
+  <%= render 'attachments/form', container: @news %>
+</div>
+
+<%= wikitoolbar_for 'news_description', preview_news_path(project_id: @project, id: @news) %>

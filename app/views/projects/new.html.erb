@@ -1,4 +1,4 @@
-<%= title l(:label_project_new) %>
+<%= page_title title(l(:label_project_new)) %>
 
 <%= labelled_form_for @project, html: { multipart: true } do |f| %>
   <%= render 'form', f: f %>

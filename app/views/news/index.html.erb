@@ -1,0 +1,48 @@
+<% html_title(l(:label_news_plural)) -%>
+
+<div class="d-flex justify-content-between my-3">
+  <h2 class="m-0"><%= l(:label_news_plural) %></h2>
+  <div class="d-flex align-items-center gap-1" role="group" aria-label="News actions">
+    <%= render 'news/actions/add', project: @project, text: true if User.current.allowed_to?(:manage_news, @project, global: true)%>
+    <%= render 'news/actions/watch', text: true if @project && User.current.logged? %>
+  </div>
+</div>
+
+<div id="add-news" style="display:none;">
+  <h2><%= l(:label_news_new) %></h2>
+  <%= labelled_form_for @news, url: (@project ? project_news_index_path(@project) : news_index_path), html: { id: 'news-form', multipart: true } do |f| %>
+    <%= render 'news/form', f: f %>
+    <%= submit_tag l(:button_create) %>
+  <% end %>
+</div>
+
+<% if @newss.empty? %>
+  <%= render 'no_data' %>
+<% else %>
+  <% @newss.each do |news| %>
+    <article class="news-article">
+      <header class="mb-3">
+        <h3>
+          <%= avatar(news.author) %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
+          <%= link_to h(news.title), news_path(news), class: 'text-decoration-none' %>
+          <%= "(#{l(:label_x_comments, count: news.comments_count)})" if news.comments_count > 0 %>
+        </h3>
+        <div class="text-muted small"><%= authoring news.created_on, news.author %></div>
+      </header>
+      <div class="wiki">
+        <%= textilizable(news, :description) %>
+      </div>
+    </article>
+  <% end %>
+<% end %>
+
+<span class="pagination"><%= pagination_links_full @news_pages %></span>
+
+<% other_formats_links do |f| %>
+  <%= f.link_to 'Atom', url: { project_id: @project, key: User.current.rss_key } %>
+<% end %>
+
+<% content_for :header_tags do %>
+  <%= auto_discovery_link_tag(:atom, _project_news_path(@project, key: User.current.rss_key, format: 'atom')) %>
+  <%= stylesheet_link_tag 'scm' %>
+<% end %>

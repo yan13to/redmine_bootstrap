@@ -1,0 +1,8 @@
+<div class="my-3">
+  <h2><%= l(:label_news_new) %></h2>
+</div>
+
+<%= labelled_form_for @news, url: (@project ? project_news_index_path(@project) : news_index_path), html: { multipart: true } do |f| %>
+  <%= render 'news/form', f: f %>
+  <%= submit_tag l(:button_create) %>
+<% end %>

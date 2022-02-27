@@ -1,10 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerHeader" aria-controls="navbarTogglerHeader" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
     <h1><%= page_header_title %></h1>
-    <div class="collapse navbar-collapse" id="navbarTogglerHeader">
+    <div class="collapse navbar-collapse">
       <% if User.current.logged? || !Setting.login_required? %>
         <div class="d-flex gap-2 ms-auto">
           <%= form_tag({controller: 'search', action: 'index', id: @project}, method: :get) do %>

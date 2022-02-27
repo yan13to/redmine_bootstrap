@@ -1,4 +1,4 @@
-<ul class="navbar-nav">
+<ul class="navbar-nav" data-menu-name="top_menu">
   <% menu_items_for(:top_menu) do |node| %>
     <% caption, url, selected = extract_node_details(node) %>
     <% if node.name == :administration %>

@@ -1,0 +1,15 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: "bi #{project.archived? ? 'bi-archive-fill' : 'bi-archive'}") if icon %>
+<% html << content_tag(:span, (project.archived? ? l(:button_unarchive) : l(:button_archive))) if text %>
+
+<% if project.archived? %>
+  <%= link_to unarchive_project_path(project, status: params[:status]), method: :post, class: 'btn btn-info', title: l(:button_unarchive) do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% else %>
+  <%= link_to archive_project_path(project, status: params[:status]), data: { confirm: l(:text_are_you_sure) }, method: :post, class: 'btn btn-dark', title: l(:button_archive) do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% end %>

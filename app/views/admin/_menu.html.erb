@@ -2,20 +2,19 @@
   <% menu_items_for(:admin_menu) do |node| %>
     <% caption, url, selected = extract_node_details(node) %>
     <% if node.name == :settings %>
-      <div class="btn-group list-group-item list-group-item-action<%= ' active rounded-pill' if selected %>">
-        <%= link_to url, class: "btn p-0#{' text-white' if selected}", data: { name: node.name } do %>
+      <% tabs = administration_settings_tabs.map{|tab| tab[:name]} %>
+      <div class="list-group-item list-group-item-action<%= ' ' if selected %>">
+        <%= link_to url, class: "btn p-0 accordion-button shadow-none bg-transparent #{'collapsed' unless tabs.include?(params[:tab])}",
+              'data-name': node.name,
+              'data-bs-toggle': 'collapse',
+              'data-bs-target': '#sub-settings-menu' do %>
           <%= render_icon(node.name, type: 'fill', class: 'pe-2') %><%= caption %>
         <% end %>
-        <button type="button"
-                class="btn dropdown-toggle dropdown-toggle-split rounded-0<%= ' text-white' if selected %>"
-                data-bs-toggle="dropdown"
-                aria-expanded="false">
-          <span class="visually-hidden">Toggle Dropdown</span>
-        </button>
-        <ul class="dropdown-menu">
+        <ul class="collapse<%= ' show' if tabs.include?(params[:tab]) %> list-group list-group-flush" id="sub-settings-menu">
           <% administration_settings_tabs.each_with_index do |tab, index| %>
-            <li>
-              <%= link_to l(tab[:label]), { controller: 'settings', action: 'index', tab: tab[:name] }, class: "dropdown-item#{' active' if tab[:name] == params[:tab]}" %>
+            <li class="list-group-item">
+              <%= link_to l(tab[:label]), { controller: 'settings', action: 'index', tab: tab[:name] },
+                    class: "dropdown-item#{' active rounded-pill' if tab[:name] == params[:tab]}" %>
             </li>
           <% end %>
         </ul>

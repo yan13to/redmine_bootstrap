@@ -1,0 +1,9 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-back') if icon %>
+<% html << content_tag(:span, l(:button_copy)) if text %>
+
+<%= link_to copy_project_path(project), class: 'btn btn-warning', title: l(:button_copy) do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

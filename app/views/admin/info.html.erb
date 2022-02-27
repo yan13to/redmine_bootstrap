@@ -1,8 +1,6 @@
 <% html_title(l(:label_information_plural)) -%>
 
-<div class="d-flex align-items-center justify-content-between my-3">
-  <h2><%=l(:label_information_plural)%></h2>
-</div>
+<%= page_title content_tag(:h2, l(:label_information_plural)) %>
 
 <div class="card">
   <div class="card-body">
@@ -12,13 +10,17 @@
     <table class="table">
       <% @checklist.each do |label, result| %>
         <tr>
-          <td class="name"><%= label.is_a?(Symbol) ? l(label) : label %></td>
-          <td class="tick"><span class="icon-only <%= (result ? 'icon-ok' : 'icon-error') %>"></span></td>
+          <td>
+            <%= label.is_a?(Symbol) ? l(label) : label %>
+          </td>
+          <td>
+            <span class="icon-only <%= (result ? 'icon-ok' : 'icon-error') %>"></span>
+          </td>
         </tr>
       <% end %>
     </table>
     <br />
-    <div class="box autoscroll">
+    <div>
       <pre><%= Redmine::Info.environment %></pre>
     </div>
   </div>

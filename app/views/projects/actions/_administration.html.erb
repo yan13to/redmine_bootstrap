@@ -1,0 +1,9 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-gear') if icon %>
+<% html << content_tag(:span, l(:label_administration)) if text %>
+
+<%= link_to admin_projects_path, title: l(:label_administration), class: 'btn btn-primary' do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

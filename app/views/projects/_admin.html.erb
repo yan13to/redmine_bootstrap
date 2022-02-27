@@ -1,0 +1,18 @@
+<tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+  <td class="align-middle">
+    <%= render 'projects/actions/setting', project: project, text: true, icon: false %>
+  </td>
+  <td class="align-middle">
+    <%= content_tag(:i, nil, class: 'bi bi-check h3') if project.is_public? %>
+  </td>
+  <td class="align-middle">
+    <%= format_date(project.created_on) %>
+  </td>
+  <td class="align-middle">
+    <div class="btn btn-group btn-group-sm">
+      <%= render 'projects/actions/archive', project: project, text: true %>
+      <%= render 'projects/actions/copy', project: project, text: true %>
+      <%= render 'projects/actions/delete', project: project, text: true %>
+    </div>
+  </td>
+</tr>

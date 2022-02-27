@@ -1,9 +1,6 @@
-<div class="d-flex justify-content-between mt-3">
-  <%= title l(:label_project_plural) %>
-  <div>
-    <%= link_to l(:label_project_new), new_project_path, class: 'btn btn-success' %>
-  </div>
-</div>
+<%= page_title title(l(:label_project_plural)) do %>
+  <%= render 'projects/actions/add', text: true %>
+<% end %>
 
 <div class="accordion my-3" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">
@@ -34,45 +31,7 @@
         </thead>
         <tbody>
           <% project_tree(@projects, init_level: true) do |project, level| %>
-            <tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-              <td class="align-middle">
-                <span><%= link_to_project_settings(project, {}, title: project.short_description, class: 'text-decoration-none') %></span>
-              </td>
-              <td class="align-middle">
-                <%= checked_image project.is_public? %>
-              </td>
-              <td class="align-middle">
-                <%= format_date(project.created_on) %>
-              </td>
-              <td class="align-middle">
-                <div class="btn btn-group btn-group-sm">
-                  <% unless project.archived? %>
-                    <%= link_to archive_project_path(project, status: params[:status]),
-                          data: { confirm: l(:text_are_you_sure) },
-                          method: :post,
-                          class: 'btn btn-dark' do %>
-                      <%= l(:button_archive) %>
-                    <% end %>
-                  <% end %>
-
-                  <% if project.archived? %>
-                    <%= link_to unarchive_project_path(project, status: params[:status]),
-                          method: :post,
-                          class: 'btn btn-info' do %>
-                      <%= l(:button_unarchive) %>
-                    <% end %>
-                  <% end %>
-
-                  <%= link_to copy_project_path(project), class: 'btn btn-warning' do %>
-                    <%= l(:button_copy) %>
-                  <% end %>
-
-                  <%= link_to project_path(project), method: :delete, class: 'btn btn-danger' do %>
-                    <%= l(:button_delete) %>
-                  <% end %>
-                </div>
-              </td>
-            </tr>
+            <%= render 'projects/admin', project: project, level: level %>
           <% end %>
         </tbody>
       </table>
@@ -80,5 +39,5 @@
   </div>
   <span class="pagination"><%= pagination_links_full @project_pages, @project_count %></span>
 <% else %>
-  <p class="nodata"><%= l(:label_no_data) %></p>
+  <%= render 'application/no_data' %>
 <% end %>

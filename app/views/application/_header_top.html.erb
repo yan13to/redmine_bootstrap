@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbarTopMenu">
       <%= render 'top_menu' if User.current.logged? || !Setting.login_required? -%>
       <%= content_tag('span', "#{l(:label_logged_as)} #{link_to_user(User.current, format: :username)}".html_safe, class: 'navbar-text ms-auto') if User.current.logged? %>
-      <ul class="navbar-nav">
+      <ul class="navbar-nav" data-menu-name="account_menu">
         <% menu_items_for(:account_menu) do |node| %>
           <% caption, url, selected = extract_node_details(node) %>
           <li class="nav-item">

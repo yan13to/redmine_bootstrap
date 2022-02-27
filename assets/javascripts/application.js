@@ -10,9 +10,15 @@ import '../bootstrap/js/bootstrap.bundle.min.js';
 import TabCallback from './callback/tab.js';
 import JsProcessor from './callback/js-processor.js';
 
+const loadTooltip = () => {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  tooltipTriggerList.map(function (tooltipTriggerEl) { return new bootstrap.Tooltip(tooltipTriggerEl) })
+}
+
 const loadApp = () => {
   TabCallback();
   JsProcessor();
+  loadTooltip();
 }
 
 // document.addEventListener('turbolinks:load', loadApp);

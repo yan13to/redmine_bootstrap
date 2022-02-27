@@ -1,10 +1,26 @@
 <% if menu_name = controller.current_menu(project) %>
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" data-menu-name=<%= menu_name %>>
     <% menu_items_for(menu_name, project) do |node| %>
       <% caption, url, selected = extract_node_details(node, project) %>
-      <li class="nav-item">
-        <%= link_to caption, url, class: "nav-link#{' active' if selected}", 'data-name': node.name %>
-      </li>
+      <% if node.children.any? %>
+        <li class="nav-item dropdown">
+          <%= link_to caption, url, class: "nav-link#{' active' if selected}", 'data-name': node.name, 'data-bs-toggle': 'dropdown' %>
+          <ul class="dropdown-menu">
+            <% node.children.each do |cld_node|%>
+              <% caption, url, selected = extract_node_details(cld_node, project) %>
+              <li>
+                <%= link_to url, class: "dropdown-item#{' active' if selected}", 'data-name': cld_node.name do %>
+                  <%= render_icon(cld_node.name, type: 'fill', class: 'pe-2') %><%= caption %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </li>
+      <% else %>
+        <li class="nav-item">
+          <%= link_to caption, url, class: "nav-link#{' active' if selected}", 'data-name': node.name %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 <% end %>

@@ -1,0 +1,9 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
+<% html << content_tag(:span, l(:label_project_new)) if text %>
+
+<%= link_to new_project_path, class: 'btn btn-success', 'data-bs-toggle': 'tooltip', title: l(:label_project_new) do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

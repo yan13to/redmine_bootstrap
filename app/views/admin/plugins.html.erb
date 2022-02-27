@@ -1,35 +1,16 @@
-<div class="d-flex align-items-center justify-content-between my-3">
-  <%= title l(:label_plugins) %>
-</div>
+<%= page_title title(l(:label_plugins)) %>
 
 <div class="card">
   <div class="card-body">
     <% if @plugins.any? %>
-      <div class="autoscroll">
-        <table class="table">
-          <% @plugins.each do |plugin| %>
-            <tr id="plugin-<%= plugin.id %>">
-              <td class="name">
-                <span class="name"><%= plugin.name %></span>
-                <%= content_tag('span', plugin.description) unless plugin.description.blank? %>
-                <%= content_tag('span', link_to(plugin.url, plugin.url)) unless plugin.url.blank? %>
-              </td>
-              <td class="author">
-                <%= plugin.author_url.blank? ? plugin.author : link_to(plugin.author, plugin.author_url) %>
-              </td>
-              <td class="version">
-                <span class="icon"><%= plugin.version %></span>
-              </td>
-              <td class="configure">
-                <%= link_to(l(:button_configure), plugin_settings_path(plugin)) if plugin.configurable? %>
-              </td>
-            </tr>
-          <% end %>
-        </table>
+      <table class="table">
+        <%= render partial: 'admin/plugin', collection: @plugins %>
+      </table>
+      <div class="mb-3">
+        <a href="#" class="text-decoration-none" id="check-for-updates"><%= l(:label_check_for_updates) %></a>
       </div>
-      <p><a href="#" id="check-for-updates"><%= l(:label_check_for_updates) %></a></p>
     <% else %>
-      <p class="nodata"><%= l(:label_no_data) %></p>
+      <%= render 'no_data' %>
     <% end %>
   </div>
 </div>

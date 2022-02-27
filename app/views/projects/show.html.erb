@@ -1,14 +1,13 @@
 <% html_title(l(:label_overview)) -%>
 
-<div class="d-flex justify-content-between mt-3">
-  <h2><%= l(:label_overview)%> </h2>
+<%= page_title content_tag(:h2, l(:label_overview)) do %>
   <%= render 'actions' %>
-</div>
+<% end %>
 
 <% unless @project.active? %>
-  <p class="warning">
-    <span class="icon icon-lock"><%= l(:text_project_closed) %></span>
-  </p>
+  <div class="alert alert-warning">
+    <span class="bi bi-lock"><%= l(:text_project_closed) %></span>
+  </div>
 <% end %>
 
 <div class="splitcontent">
@@ -33,7 +32,6 @@
         <% end %>
       </ul>
     <% end %>
-
     <%= render 'issues_box' if User.current.allowed_to?(:view_issues, @project) %>
     <%= render 'spent_time_box' if User.current.allowed_to?(:view_time_entries, @project) %>
     <%= call_hook(:view_projects_show_left, project: @project) %>

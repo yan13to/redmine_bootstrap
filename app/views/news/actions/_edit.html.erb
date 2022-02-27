@@ -1,0 +1,10 @@
+<% icon ||= true %>
+<% text ||= false %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-pencil') if icon %>
+<% html << content_tag(:span, l(:button_edit)) if text %>
+<% news ||= @news %>
+
+<%= link_to edit_news_path(news), class: 'btn btn-secondary', accesskey: accesskey(:edit) do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

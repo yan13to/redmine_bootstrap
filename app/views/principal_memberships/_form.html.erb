@@ -8,13 +8,17 @@
 <%= form_for :membership, url: url, method: method, remote: remote do %>
   <fieldset>
     <legend>
-      <%= toggle_checkboxes_link('.projects-selection input:enabled') %><%= l(:label_project_plural) %>
+      <%= link_to '#', class: 'check-all text-decoration-none', data: { processor: 'principal_memberships/actions/toggle_checkbox', target: '.projects' } do %>
+        <i class="bi bi-check-all"></i>
+      <% end %>
+      <%= l(:label_project_plural) %>
     </legend>
-    <div class="mb-3">
-      <%= render_project_nested_lists(projects) do |p| %>
+    <div class="mb-3 projects">
+      <% projects.sort_by(&:lft).each do |project| %>
         <div class="form-check form-switch">
-          <label class="form-check-label"><%= p %></label>
-          <%= check_box_tag 'membership[project_ids][]', p.id, false, id: nil, disabled: principal.member_of?(p), class: 'form-check-input' %>
+          <label class="form-check-label"><%= project.name %></label>
+          <%= check_box_tag 'membership[project_ids][]', project.id, principal.member_of?(project),
+                id: nil, disabled: principal.member_of?(project), class: 'form-check-input' %>
         </div>
       <% end %>
     </div>
@@ -22,9 +26,12 @@
 
   <fieldset>
     <legend>
-      <%= toggle_checkboxes_link('.roles-selection input') %><%= l(:label_role_plural) %>
+      <%= link_to '#', class: 'check-all text-decoration-none', data: { processor: 'principal_memberships/actions/toggle_checkbox', target: '.roles' } do %>
+        <i class="bi bi-check-all"></i>
+      <% end %>
+      <%= l(:label_role_plural) %>
     </legend>
-    <div class="mb-3">
+    <div class="mb-3 roles">
       <% roles.each do |role| %>
         <div class="form-check form-check-inline form-switch">
           <label class="form-check-label"><%= role %></label>

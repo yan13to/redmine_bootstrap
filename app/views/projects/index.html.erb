@@ -1,11 +1,10 @@
 <% html_title(l(:label_project_plural)) -%>
+<% title = @query.new_record? ? l(:label_project_plural) : @query.name %>
 
-<div class="d-flex justify-content-between mt-3">
-  <h2><%= @query.new_record? ? l(:label_project_plural) : @query.name %></h2>
-  <div class="d-flex align-items-center gap-1" role="group" aria-label="Projects actions">
-    <%= render 'actions_index' %>
-  </div>
-</div>
+<%= page_title content_tag(:h2, title) do %>
+  <%= render 'projects/actions/add', text: true if User.current.allowed_to?(:add_project, nil, global: true) %>
+  <%= render 'projects/actions/administration', text: true if User.current.admin? %>
+<% end %>
 
 <%= form_tag(projects_path(@project, nil), method: :get, id: 'query_form') do %>
   <%= render 'queries/query_form' %>
@@ -35,8 +34,8 @@
 <% end %>
 
 <% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => {:key => User.current.rss_key} %>
+  <%= f.link_to 'Atom', :url => { key: User.current.rss_key } %>
   <% if @query.display_type == 'list' %>
-    <%= f.link_to_with_query_parameters 'CSV', {}, :onclick => "showModal('csv-export-options', '350px'); return false;" %>
+    <%= f.link_to_with_query_parameters 'CSV', {}, onclick: "showModal('csv-export-options', '350px'); return false;" %>
   <% end %>
 <% end %>
