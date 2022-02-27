@@ -1,6 +1,8 @@
-<div id="login-form">
-  <h3><%=l :setting_twofa %></h3>
-  <p><%=l 'twofa_label_enter_otp' %></p>
+<%= page_card class: 'mx-auto w-25 shadow' do %>
+  <div class="card-title text-center">
+    <h3><%= l(:setting_twofa) %></h3>
+    <p><%= l('twofa_label_enter_otp') %></p>
+  </div>
 
   <%= form_tag({ action: 'twofa' }, { id: 'twofa_form', onsubmit: 'return keepAnchorOnSignIn(this);' }) do -%>
     <label for="twofa_code">
@@ -11,4 +13,4 @@
 
     <%= submit_tag l(:button_login), tabindex: '2', id: 'login-submit', name: :submit_otp -%>
   <% end %>
-</div>
+<% end %>

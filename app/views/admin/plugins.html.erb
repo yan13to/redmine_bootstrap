@@ -1,19 +1,17 @@
 <%= page_title title(l(:label_plugins)) %>
 
-<div class="card">
-  <div class="card-body">
-    <% if @plugins.any? %>
-      <table class="table">
-        <%= render partial: 'admin/plugin', collection: @plugins %>
-      </table>
-      <div class="mb-3">
-        <a href="#" class="text-decoration-none" id="check-for-updates"><%= l(:label_check_for_updates) %></a>
-      </div>
-    <% else %>
-      <%= render 'no_data' %>
-    <% end %>
+<% if @plugins.any? %>
+  <%= page_card do %>
+    <table class="table">
+      <%= render partial: 'admin/plugin', collection: @plugins %>
+    </table>
+  <% end %>
+  <div class="my-3">
+    <a href="#" class="text-decoration-none" id="check-for-updates"><%= l(:label_check_for_updates) %></a>
   </div>
-</div>
+<% else %>
+  <%= render 'no_data' %>
+<% end %>
 
 <%= javascript_tag do %>
 $(document).ready(function(){

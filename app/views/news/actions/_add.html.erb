@@ -4,7 +4,8 @@
 <% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
 <% html << content_tag(:span, l(:label_news_new)) if text %>
 <% project ||= @project %>
+<% url = project ? new_project_news_path(project) : news_index_path %>
 
-<%= link_to new_project_news_path(project), class: 'btn btn-success', title: l(:label_news_new) do %>
+<%= link_to url, class: 'btn btn-success', title: l(:label_news_new) do %>
   <%= html.compact.join('&nbsp;').html_safe %>
 <% end %>

@@ -20,19 +20,21 @@
   <%= render 'no_data' %>
 <% else %>
   <% @newss.each do |news| %>
-    <article class="news-article">
-      <header class="mb-3">
-        <h3>
-          <%= avatar(news.author) %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
-          <%= link_to h(news.title), news_path(news), class: 'text-decoration-none' %>
-          <%= "(#{l(:label_x_comments, count: news.comments_count)})" if news.comments_count > 0 %>
-        </h3>
-        <div class="text-muted small"><%= authoring news.created_on, news.author %></div>
-      </header>
-      <div class="wiki">
-        <%= textilizable(news, :description) %>
-      </div>
-    </article>
+    <%= page_card class: 'mb-3' do %>
+      <article class="news-article">
+        <header class="mb-3">
+          <h3>
+            <%= avatar(news.author) %><%= link_to_project(news.project) + ': ' unless news.project == @project %>
+            <%= link_to h(news.title), news_path(news), class: 'text-decoration-none' %>
+            <%= "(#{l(:label_x_comments, count: news.comments_count)})" if news.comments_count > 0 %>
+          </h3>
+          <div class="text-muted small"><%= authoring news.created_on, news.author %></div>
+        </header>
+        <div class="wiki">
+          <%= textilizable(news, :description) %>
+        </div>
+      </article>
+    <% end %>
   <% end %>
 <% end %>
 

@@ -1,12 +1,13 @@
-<div class="d-flex align-items-center justify-content-between my-3">
-  <%= title l(:label_auth_source_plural) %>
+<%= page_title title(l(:label_auth_source_plural)) do %>
   <%= link_to l(:label_auth_source_new), { action: 'new' }, class: 'btn btn-success' %>
-</div>
+<% end %>
 
-<div class="card">
-  <div class="card-body">
+<%= page_card do %>
+  <% if @auth_sources.any? %>
     <%= render 'listing' %>
-  </div>
-</div>
+  <% else %>
+    <%= render 'no_data' %>
+  <% end %>
+<% end %>
 
 <span class="pagination"><%= pagination_links_full @auth_source_pages %></span>

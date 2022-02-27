@@ -1,73 +1,71 @@
-<div class="card mx-auto w-25 shadow">
-  <div class="card-body">
-    <h3 class="card-title text-center">
-      <%= l(:label_register)%> <%=link_to l(:label_login_with_open_id_option), signin_url if Setting.openid? %>
-    </h3>
+<%= page_card class: 'mx-auto w-25 shadow' do %>
+  <h3 class="card-title text-center">
+    <%= l(:label_register)%> <%=link_to l(:label_login_with_open_id_option), signin_url if Setting.openid? %>
+  </h3>
 
-    <%= labelled_form_for @user, url: register_path do |f| %>
-      <%= render_alert 'danger', error_messages_for('user') %>
+  <%= labelled_form_for @user, url: register_path do |f| %>
+    <%= render_alert 'danger', error_messages_for('user') %>
 
-      <% if @user.auth_source_id.nil? %>
-        <div class="mb-3 form-group">
-          <%= f.text_field :login, size: 25, required: true, class: 'form-control' %>
-        </div>
+    <% if @user.auth_source_id.nil? %>
+      <div class="mb-3 form-group">
+        <%= f.text_field :login, size: 25, required: true, class: 'form-control' %>
+      </div>
 
-        <div class="mb-3 form-group">
-          <%= f.password_field :password, size: 25, required: true, class: 'form-control' %>
+      <div class="mb-3 form-group">
+        <%= f.password_field :password, size: 25, required: true, class: 'form-control' %>
+        <em class="info text-muted small">
+          <%= l(:text_caracters_minimum, count: Setting.password_min_length) %>
+        </em>
+        <% if Setting.password_required_char_classes.any? %>
           <em class="info text-muted small">
-            <%= l(:text_caracters_minimum, count: Setting.password_min_length) %>
+            <%= l(:text_characters_must_contain, character_classes: Setting.password_required_char_classes.collect{|c| l("label_password_char_class_#{c}")}.join(", ")) %>
           </em>
-          <% if Setting.password_required_char_classes.any? %>
-            <em class="info text-muted small">
-              <%= l(:text_characters_must_contain, character_classes: Setting.password_required_char_classes.collect{|c| l("label_password_char_class_#{c}")}.join(", ")) %>
-            </em>
-          <% end %>
-        </div>
-
-        <div class="mb-3 form-group">
-          <%= f.password_field :password_confirmation, size: 25, required: true, class: 'form-control' %>
-        </div>
-      <% end %>
-
-      <div class="mb-3 form-group">
-        <%= f.text_field :firstname, required: true, class: 'form-control' %>
+        <% end %>
       </div>
 
       <div class="mb-3 form-group">
-        <%= f.text_field :lastname, required: true, class: 'form-control' %>
-      </div>
-
-      <div class="mb-3 form-group">
-        <%= f.text_field :mail, required: true, class: 'form-control' %>
-      </div>
-
-      <%= labelled_fields_for :pref, @user.pref do |pref_fields| %>
-        <div class="mb-3 form-group form-check form-switch">
-          <%= pref_fields.check_box :hide_mail, class: 'form-check-input' %>
-        </div>
-      <% end %>
-
-      <% unless @user.force_default_language? %>
-        <div class="mb-3 form-group">
-          <%= f.select :language, lang_options_for_select, {}, class: 'form-select' %>
-        </div>
-      <% end %>
-
-      <% if Setting.openid? %>
-        <div class="mb-3 form-group">
-          <%= f.text_field :identity_url, class: 'form-control' %>
-        </div>
-      <% end %>
-
-      <% @user.custom_field_values.select {|v| (Setting.show_custom_fields_on_registration? && v.editable?) || v.required?}.each do |value| %>
-        <div class="mb-3 form-group">
-          <%= custom_field_tag_with_label :user, value, class: 'form-control' %>
-        </div>
-      <% end %>
-
-      <div class="mb-3 d-grid gap-2">
-        <%= submit_tag l(:button_submit), class: 'btn btn-primary' %>
+        <%= f.password_field :password_confirmation, size: 25, required: true, class: 'form-control' %>
       </div>
     <% end %>
-  </div>
-</div>
+
+    <div class="mb-3 form-group">
+      <%= f.text_field :firstname, required: true, class: 'form-control' %>
+    </div>
+
+    <div class="mb-3 form-group">
+      <%= f.text_field :lastname, required: true, class: 'form-control' %>
+    </div>
+
+    <div class="mb-3 form-group">
+      <%= f.text_field :mail, required: true, class: 'form-control' %>
+    </div>
+
+    <%= labelled_fields_for :pref, @user.pref do |pref_fields| %>
+      <div class="mb-3 form-group form-check form-switch">
+        <%= pref_fields.check_box :hide_mail, class: 'form-check-input' %>
+      </div>
+    <% end %>
+
+    <% unless @user.force_default_language? %>
+      <div class="mb-3 form-group">
+        <%= f.select :language, lang_options_for_select, {}, class: 'form-select' %>
+      </div>
+    <% end %>
+
+    <% if Setting.openid? %>
+      <div class="mb-3 form-group">
+        <%= f.text_field :identity_url, class: 'form-control' %>
+      </div>
+    <% end %>
+
+    <% @user.custom_field_values.select {|v| (Setting.show_custom_fields_on_registration? && v.editable?) || v.required?}.each do |value| %>
+      <div class="mb-3 form-group">
+        <%= custom_field_tag_with_label :user, value, class: 'form-control' %>
+      </div>
+    <% end %>
+
+    <div class="mb-3 d-grid gap-2">
+      <%= submit_tag l(:button_submit), class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+<% end %>

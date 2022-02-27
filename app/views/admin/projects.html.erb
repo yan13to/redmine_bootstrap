@@ -18,25 +18,24 @@
 </div>
 
 <% if @projects.any? %>
-  <div class="card">
-    <div class="card-body">
-      <table class="table table-hover table-sm">
-        <thead>
-          <tr>
-            <th><%= l(:label_project) %></th>
-            <th><%= l(:field_is_public) %></th>
-            <th><%= l(:field_created_on) %></th>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% project_tree(@projects, init_level: true) do |project, level| %>
-            <%= render 'projects/admin', project: project, level: level %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <%= page_card do %>
+    <table class="table table-hover table-sm">
+      <thead>
+        <tr>
+          <th><%= l(:label_project) %></th>
+          <th><%= l(:field_is_public) %></th>
+          <th><%= l(:field_created_on) %></th>
+          <th>&nbsp;</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% project_tree(@projects, init_level: true) do |project, level| %>
+          <%= render 'projects/admin', project: project, level: level %>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+
   <span class="pagination"><%= pagination_links_full @project_pages, @project_count %></span>
 <% else %>
   <%= render 'application/no_data' %>

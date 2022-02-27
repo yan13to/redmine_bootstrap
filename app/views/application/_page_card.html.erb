@@ -1,0 +1,5 @@
+<div class="card<%= " #{html_class}" if html_class %>">
+  <div class="card-body">
+    <%= content if block_given? && defined?(content) %>
+  </div>
+</div>

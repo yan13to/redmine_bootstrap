@@ -3,7 +3,7 @@
 <% if @project.nil? %>
   <div class="mb-3">
     <label><%= l(:field_project) %> <span class="required">*</span></label>
-    <%= select_tag :project_id, options_for_select(project_tree_options_for_select(Project.allowed_to(:manage_news).to_a), Project.allowed_to(:manage_news).first), { required: true }, class: 'form-select' %>
+    <%= f.select :project_id, options_for_select(project_tree_options_for_select(Project.allowed_to(:manage_news).to_a), Project.allowed_to(:manage_news).first), { required: true }, class: 'form-select' %>
     <%= hidden_field_tag :cross_project, 1, id: nil %>
   </div>
 <% end %>

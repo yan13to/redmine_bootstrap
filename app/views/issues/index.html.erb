@@ -1,9 +1,9 @@
-<% html_title(@query.new_record? ? l(:label_issue_plural) : @query.name) %>
+<% title = @query.new_record? ? l(:label_issue_plural) : @query.name %>
+<% html_title(title) %>
 
-<div class="d-flex justify-content-between mt-3">
-  <h2><%= @query.new_record? ? l(:label_issue_plural) : @query.name %></h2>
+<%= page_title content_tag(:h2, title) do %>
   <%= render 'actions' %>
-</div>
+<% end %>
 
 <%= form_tag(_project_issues_path(@project), method: :get, id: 'query_form') do %>
   <%= render 'queries/query_form' %>
