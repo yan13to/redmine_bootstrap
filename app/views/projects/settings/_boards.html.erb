@@ -1,5 +1,5 @@
-<% if User.current.allowed_to?(:manage_boards, @project) %>
-<p><%= link_to l(:label_board_new), new_project_board_path(@project), :class => 'icon icon-add' %></p>
+<%= page_title content_tag(:h3, label), html_class: 'd-flex justify-content-between mb-3' do %>
+  <%= link_to l(:label_board_new), new_project_board_path(@project) if User.current.allowed_to?(:manage_boards, @project) %>
 <% end %>
 
 <% if @project.boards.any? %>

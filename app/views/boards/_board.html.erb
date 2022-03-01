@@ -1,0 +1,24 @@
+<% tr_class = level.positive? ? "board idnt idnt-#{level}" : 'board' %>
+<% td_class = level.positive? ? "ps-#{level + 2}" : 'ps-2' %>
+
+<tr class="<%= tr_class %>">
+  <td class="<%= td_class %>">
+    <%= link_to board.name, project_board_path(board.project, board), class: 'board text-decoration-none' %>
+    <p class="small text-success"><%= board.description %></p>
+  </td>
+  <td>
+    <%= board.topics_count %>
+  </td>
+  <td>
+    <%= board.messages_count %>
+  </td>
+  <td>
+    <% if board.last_message %>
+      <div class="small">
+        <%= authoring(board.last_message.created_on, board.last_message.author) %>
+        <br />
+        <%= link_to_message board.last_message, {}, class: 'text-decoration-none' %>
+      </div>
+    <% end %>
+  </td>
+</tr>

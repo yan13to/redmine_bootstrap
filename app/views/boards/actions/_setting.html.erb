@@ -1,0 +1,10 @@
+<% project ||= @project %>
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-gear') if icon %>
+<% html << content_tag(:span, l(:label_settings)) if text %>
+
+<%= link_to settings_project_path(project, tab: :boards), class: 'btn btn-success', title: l(:label_settings) do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

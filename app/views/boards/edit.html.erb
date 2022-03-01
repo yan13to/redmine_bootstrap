@@ -1,6 +1,5 @@
-<h2><%= l(:label_board) %></h2>
+<%= page_title content_tag(:h2, l(:label_board)) %>
 
-<%= labelled_form_for @board, :url => project_board_path(@project, @board) do |f| %>
-  <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_save) %>
+<%= page_card do %>
+  <%= render 'form', url: project_board_path(@project, @board), action_button: :button_save %>
 <% end %>

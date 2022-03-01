@@ -1,5 +1,38 @@
-<h2><%=l(:label_settings)%></h2>
-
-<%= render_tabs project_settings_tabs %>
-
 <% html_title(l(:label_settings)) -%>
+
+<%= page_title content_tag(:h2, l(:label_settings)) %>
+
+<% tabs = project_settings_tabs %>
+<% selected_tab = params[:tab] || 'info' %>
+
+<ul class="nav nav-tabs nav-paginator" id="nav-tab" role="tablist">
+  <% tabs.each do |tab| %>
+    <li class="nav-item">
+      <% selected = (tab[:name] == selected_tab) %>
+      <button class="nav-link<%= ' active' if selected %>"
+        id="nav-<%= tab[:name] %>-tab"
+        data-bs-toggle="tab"
+        data-bs-target="#<%= tab[:name] %>"
+        type="button"
+        role="tab"
+        aria-controls="nav-<%= tab[:name] %>"
+        aria-selected="true">
+        <%= l(tab[:label]) %>
+      </button>
+    </li>
+  <% end %>
+</ul>
+
+<div class="tab-content" id="nav-tabContent">
+  <% tabs.each do |tab| %>
+    <% selected = (tab[:name] == selected_tab) %>
+    <div class="tab-pane<%= ' show active' if selected %>"
+      id="<%= tab[:name] %>"
+      role="tabpanel"
+      aria-labelledby="nav-<%= tab[:name] %>-tab">
+      <%= page_card class: 'border-top-0' do %>
+        <%= render tab[:partial], label: l(tab[:label]) %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

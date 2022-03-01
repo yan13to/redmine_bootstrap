@@ -5,7 +5,7 @@
     <%= t(:sign_in) %>
   </h3>
 
-  <%= form_tag(signin_path, onsubmit: 'return keepAnchorOnSignIn(this);') do %>
+  <%= form_tag(signin_path) do %>
     <%= back_url_hidden_field_tag %>
 
     <div class="mb-3 form-group">

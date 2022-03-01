@@ -6,19 +6,11 @@
   <p>
     <strong><%= Redmine::Info.versioned_name %></strong>
   </p>
-  <table class="table">
+  <table class="table table-hover">
     <% @checklist.each do |label, result| %>
-      <tr>
-        <td>
-          <%= label.is_a?(Symbol) ? l(label) : label %>
-        </td>
-        <td>
-          <span class="icon-only <%= (result ? 'icon-ok' : 'icon-error') %>"></span>
-        </td>
-      </tr>
+      <%= render 'info', label: label, result: result %>
     <% end %>
   </table>
-  <br />
   <div>
     <pre><%= Redmine::Info.environment %></pre>
   </div>

@@ -1,3 +1,5 @@
+<% options[:class] ||= 'btn btn-primary' %>
+
 <div class="mb-3 form-action">
-  <%= f.submit t(method), class: 'btn btn-secondary' %>
+  <%= f.submit l(method), options %>
 </div>

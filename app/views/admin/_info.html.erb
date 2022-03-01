@@ -1,0 +1,8 @@
+<tr>
+  <td>
+    <%= label.is_a?(Symbol) ? l(label) : label %>
+  </td>
+  <td>
+    <span class="h3 bi <%= (result ? 'bi-check' : 'bi-exclamation') %>"></span>
+  </td>
+</tr>

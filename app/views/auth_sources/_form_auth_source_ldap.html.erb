@@ -1,38 +1,46 @@
-<%= error_messages_for 'auth_source' %>
+<% url ||= auth_sources_path %>
 
-<%= f.text_form_group :name, required: true %>
-<%= f.text_form_group :host, required: true %>
+<%= form_for @auth_source, as: :auth_source, url: auth_sources_path, builder: BootstrapFormBuilder do |f| %>
+  <%= hidden_field_tag 'type', @auth_source.type %>
 
-<div class="mb-3 form-group">
-  <%= f.label :port, required: true %>
-  <div class="row">
-    <div class="col-auto">
-      <%= f.text_field :port, required: true, size: 6, class: 'form-control' %>
+  <%= error_messages_for 'auth_source' %>
+
+  <%= f.text_form_group :name, required: true %>
+  <%= f.text_form_group :host, required: true %>
+
+  <div class="mb-3 form-group">
+    <%= f.label :port, required: true %>
+    <div class="row">
+      <div class="col-auto">
+        <%= f.text_field :port, required: true, size: 6, class: 'form-control' %>
+      </div>
+      <div class="col">
+        <%= f.select :ldap_mode, AuthSourceLdap::LDAP_MODES.map { |m| [l("label_#{m}"), m] }, { no_label: true }, class: 'form-select' %>
+      </div>
     </div>
-    <div class="col">
-      <%= f.select :ldap_mode, AuthSourceLdap::LDAP_MODES.map { |m| [l("label_#{m}"), m] }, { no_label: true }, class: 'form-select' %>
-    </div>
+    <%= f.hint :ldap_mode, l(:label_ldaps_warning) %>
   </div>
-  <em class="small text-muted"><%= l("label_ldaps_warning") %></em>
-</div>
 
-<%= f.text_form_group :account %>
-<%= f.password_form_group :account_password,
-                          required: true,
-                          label: l(:field_password),
-                          name: 'dummy_password',
-                          value: ((@auth_source.new_record? || @auth_source.account_password.blank?) ? '' : ('x'*15)) %>
+  <%= f.text_form_group :account %>
+  <%= f.password_form_group :account_password,
+                            required: true,
+                            label: l(:field_password),
+                            name: 'dummy_password',
+                            value: ((@auth_source.new_record? || @auth_source.account_password.blank?) ? '' : ('x'*15)) %>
 
 
-<%= f.text_form_group :base_dn, required: true, size: 60 %>
-<%= f.text_area_form_group :filter, size: 60, label: l(:field_auth_source_ldap_filter) %>
-<%= f.text_form_group :timeout, size: 4 %>
-<%= f.check_box_form_group :onthefly_register, label: l(:field_onthefly), group_class: 'form-switch' %>
+  <%= f.text_form_group :base_dn, required: true, size: 60 %>
+  <%= f.text_area_form_group :filter, size: 60, label: l(:field_auth_source_ldap_filter) %>
+  <%= f.text_form_group :timeout, size: 4 %>
+  <%= f.check_box_form_group :onthefly_register, label: l(:field_onthefly), group_class: 'form-switch' %>
 
-<h3><%=l(:label_attribute_plural)%></h3>
-<div id="attributes">
-  <%= f.text_form_group :attr_login, required: true, size: 20 %>
-  <%= f.text_form_group :attr_firstname, size: 20 %>
-  <%= f.text_form_group :attr_lastname, size: 20 %>
-  <%= f.text_form_group :attr_mail, size: 20 %>
-</div>
+  <h3><%=l(:label_attribute_plural)%></h3>
+  <div id="attributes">
+    <%= f.text_form_group :attr_login, required: true, size: 20 %>
+    <%= f.text_form_group :attr_firstname, size: 20 %>
+    <%= f.text_form_group :attr_lastname, size: 20 %>
+    <%= f.text_form_group :attr_mail, size: 20 %>
+  </div>
+
+  <%= f.action_form_group :button_create %>
+<% end %>

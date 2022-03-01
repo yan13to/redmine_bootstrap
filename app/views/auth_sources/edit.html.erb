@@ -1,8 +1,5 @@
-<%= title [l(:label_auth_source_plural), auth_sources_path], @auth_source.name %>
+<% html_title = title [l(:label_auth_source_plural), auth_sources_path], @auth_source.name %>
 
-<%= labelled_form_for @auth_source, :as => :auth_source, :url => auth_source_path(@auth_source), :html => {:id => 'auth_source_form'} do |f| %>
-  <%= render auth_source_partial_name(@auth_source), f: f %>
-  <div class="mb-3">
-    <%= submit_tag l(:button_save) %>
-  </div>
-<% end %>
+<%= page_title html_title %>
+
+<%= render 'form_auth_source_ldap', url: auth_source_path(@auth_source) %>

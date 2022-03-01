@@ -1,0 +1,20 @@
+<tr id="auth-source-<%= source.id %>">
+  <td>
+    <%= render 'auth_sources/actions/edit', source: source, icon: false, text: true %>
+  </td>
+  <td>
+    <%= source.auth_method_name %>
+  </td>
+  <td>
+    <%= source.host %>
+  </td>
+  <td>
+    <%= source.users.count %>
+  </td>
+  <td>
+    <div class="btn-group btn-group-sm">
+      <%= render 'auth_sources/actions/test', source: source %>
+      <%= render 'auth_sources/actions/delete', source: source %>
+    </div>
+  </td>
+</tr>

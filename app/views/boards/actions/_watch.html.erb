@@ -1,8 +1,8 @@
 <% icon ||= true %>
 <% text ||= false %>
-<% project ||= @project %>
+<% board ||= @board %>
 <% user ||= User.current  %>
-<% objects ||= project.enabled_module('news') %>
+<% objects ||= board %>
 <% objects = Array.wrap(objects) %>
 
 <% if user&.logged? && objects.any? %>
@@ -13,7 +13,8 @@
   <% html << content_tag(:i, nil, class: (watched ? 'bi bi-pin-fill' : 'bi bi-pin')) if icon %>
   <% html << content_tag(:span, (watched ? l(:button_unwatch) : l(:button_watch))) if text %>
 
-  <%= link_to url, method: method, class: 'btn btn-primary' do %>
+  <%= link_to url, method: method, class: 'btn btn-secondary' do %>
     <%= html.compact.join('&nbsp;').html_safe %>
   <% end %>
+  <%#= watcher_link(@board, User.current) %>
 <% end %>

@@ -2,9 +2,4 @@
 
 <%= page_title html_title %>
 
-<%= form_for @auth_source, as: :auth_source, url: auth_sources_path, builder: BootstrapFormBuilder do |f| %>
-  <%= hidden_field_tag 'type', @auth_source.type %>
-  <%#= render auth_source_partial_name(@auth_source), f: f %>
-  <%= render 'form_auth_source_ldap', f: f %>
-  <%= submit_tag l(:button_create), class: 'btn btn-primary' %>
-<% end %>
+<%= render 'form_auth_source_ldap' %>

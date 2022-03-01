@@ -10,7 +10,7 @@
 
 <div class="<%= group_class %>">
   <%= f.label method, label, { class: label_class } if show_label %>
-  <%= f.check_box method, options %>
+  <%= f.check_box method, options, checked_value, unchecked_value %>
   <%= f.invalid_feedback method %>
   <%= f.valid_feedback method %>
 </div>

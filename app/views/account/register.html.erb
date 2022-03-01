@@ -3,13 +3,11 @@
     <%= l(:label_register)%> <%=link_to l(:label_login_with_open_id_option), signin_url if Setting.openid? %>
   </h3>
 
-  <%= labelled_form_for @user, url: register_path do |f| %>
+  <%= form_for @user, url: register_path, builder: BootstrapFormBuilder do |f| %>
     <%= render_alert 'danger', error_messages_for('user') %>
 
     <% if @user.auth_source_id.nil? %>
-      <div class="mb-3 form-group">
-        <%= f.text_field :login, size: 25, required: true, class: 'form-control' %>
-      </div>
+      <%= f.text_field_form_group :login, size: 25, required: true %>
 
       <div class="mb-3 form-group">
         <%= f.password_field :password, size: 25, required: true, class: 'form-control' %>

@@ -1,0 +1,11 @@
+<% board ||= @board %>
+
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
+<% html << content_tag(:span, l(:label_message_new)) if text %>
+
+<%= link_to new_board_message_path(board), title: l(:label_message_new), class: 'btn btn-primary' do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

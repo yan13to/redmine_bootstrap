@@ -2,7 +2,7 @@
 
 <% if @plugins.any? %>
   <%= page_card do %>
-    <table class="table">
+    <table class="table table-hover">
       <%= render partial: 'admin/plugin', collection: @plugins %>
     </table>
   <% end %>

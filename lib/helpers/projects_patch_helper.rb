@@ -33,26 +33,6 @@ module Helpers
       options << project_tree_options_for_select(project.allowed_parents.compact, selected: selected)
       content_tag('select', options.html_safe, name: 'project[parent_id]', id: 'project_parent_id', class: 'form-select')
     end
-
-    def bookmark_link(project, user = User.current)
-      return '' unless user && user.logged?
-
-      @jump_box ||= Redmine::ProjectJumpBox.new user
-      bookmarked = @jump_box.bookmark?(project)
-      css = +"icon bookmarking btn btn-primary "
-
-      if bookmarked
-        css << "icon-bookmark"
-        method = "delete"
-        text = l(:button_project_bookmark_delete)
-      else
-        css << "icon-bookmark-off"
-        method = "post"
-        text = l(:button_project_bookmark)
-      end
-
-      render 'bookmark_link', project: project, text: text, method: method, class: css
-    end
   end
 end
 

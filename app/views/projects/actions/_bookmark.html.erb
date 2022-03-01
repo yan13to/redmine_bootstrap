@@ -1,0 +1,18 @@
+<% @jump_box ||= Redmine::ProjectJumpBox.new user %>
+<% bookmarked = @jump_box.bookmark?(project) %>
+
+<% method = bookmarked ? :delete : :post %>
+<% icon_class = bookmarked ? 'bi bi-bookmark-fill' : 'bi bi-bookmark' %>
+<% button_text = bookmarked  ? l(:button_project_bookmark_delete) : l(:button_project_bookmark) %>
+
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: icon_class) if icon %>
+<% html << content_tag(:span, button_text) if text %>
+
+<%= form_tag bookmark_project_path(project), method: method do %>
+  <button type="submit" class="btn btn-success">
+    <%= html.compact.join('&nbsp;').html_safe %>
+  </button>
+<% end %>

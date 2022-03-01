@@ -1,6 +1,7 @@
 <% html_title(l(:label_overview)) -%>
 
 <%= page_title content_tag(:h2, l(:label_overview)) do %>
+  <%= render 'projects/actions/bookmark', project: @project, user: User.current, text: true if User.current.logged? %>
   <%= render 'actions' %>
 <% end %>
 
