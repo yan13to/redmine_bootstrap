@@ -1,0 +1,20 @@
+<tr id="message-<%= topic.id %>" class="message <%= topic.sticky? ? 'sticky' : '' %> <%= topic.locked? ? 'locked' : '' %>">
+  <td class="subject icon <%= 'icon-sticky' if topic.sticky? %> <%= 'icon-locked' if topic.locked? %>">
+    <%= link_to topic.subject, board_message_path(@board, topic), class: 'text-decoration-none' %>
+  </td>
+  <td>
+    <%= link_to_user(topic.author) %>
+  </td>
+  <td>
+    <%= format_time(topic.created_on) %>
+  </td>
+  <td>
+    <%= topic.replies_count %>
+  </td>
+  <td>
+    <% if topic.last_reply %>
+      <%= authoring topic.last_reply.created_on, topic.last_reply.author %><br />
+      <%= link_to_message topic.last_reply %>
+    <% end %>
+  </td>
+</tr>

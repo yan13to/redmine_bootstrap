@@ -2,4 +2,6 @@
 
 <%= page_title html_title %>
 
-<%= render 'form_auth_source_ldap', url: auth_source_path(@auth_source) %>
+<%= page_card do %>
+  <%= render 'form_auth_source_ldap', url: auth_source_path(@auth_source) %>
+<% end %>

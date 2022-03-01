@@ -18,45 +18,26 @@
   <% end %>
 </div>
 
-<% if @topics.any? %>
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th><%= l(:field_subject) %></th>
-      <th><%= l(:field_author) %></th>
-      <%= sort_header_tag('created_on', caption: l(:field_created_on)) %>
-      <%= sort_header_tag('replies', caption: l(:label_reply_plural)) %>
-      <%= sort_header_tag('updated_on', caption: l(:label_message_last)) %>
-    </tr>
-  </thead>
-  <tbody>
-  <% @topics.each do |topic| %>
-    <tr id="message-<%= topic.id %>" class="message <%= topic.sticky? ? 'sticky' : '' %> <%= topic.locked? ? 'locked' : '' %>">
-      <td class="subject icon <%= 'icon-sticky' if topic.sticky? %> <%= 'icon-locked' if topic.locked? %>">
-        <%= link_to topic.subject, board_message_path(@board, topic) %>
-      </td>
-      <td class="author">
-        <%= link_to_user(topic.author) %>
-      </td>
-      <td class="created_on">
-        <%= format_time(topic.created_on) %>
-      </td>
-      <td class="reply-count">
-        <%= topic.replies_count %>
-      </td>
-      <td class="last_message">
-        <% if topic.last_reply %>
-          <%= authoring topic.last_reply.created_on, topic.last_reply.author %><br />
-          <%= link_to_message topic.last_reply %>
-        <% end %>
-      </td>
-    </tr>
+<%= page_card do %>
+  <% if @topics.any? %>
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th><%= l(:field_subject) %></th>
+          <th><%= l(:field_author) %></th>
+          <%= sort_header_tag('created_on', caption: l(:field_created_on)) %>
+          <%= sort_header_tag('replies', caption: l(:label_reply_plural)) %>
+          <%= sort_header_tag('updated_on', caption: l(:label_message_last)) %>
+        </tr>
+      </thead>
+      <tbody>
+        <%= render partial: 'boards/topic', collection: @topics %>
+      </tbody>
+    </table>
+    <span class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></span>
+  <% else %>
+    <%= render 'no_data' %>
   <% end %>
-  </tbody>
-</table>
-<span class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></span>
-<% else %>
-  <%= render 'no_data' %>
 <% end %>
 
 <% other_formats_links do |f| %>

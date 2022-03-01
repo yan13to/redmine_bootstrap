@@ -5,21 +5,23 @@
   <%= render 'boards/actions/setting', project: @project, text: true if User.current.allowed_to?(:manage_boards, @project) %>
 <% end %>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th><%= l(:label_board) %></th>
-      <th><%= l(:label_topic_plural) %></th>
-      <th><%= l(:label_message_plural) %></th>
-      <th><%= l(:label_message_last) %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% Board.board_tree(@boards) do |board, level| %>
-      <%= render 'board', board: board, level: level %>
-    <% end %>
-  </tbody>
-</table>
+<%= page_card do %>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th><%= l(:label_board) %></th>
+        <th><%= l(:label_topic_plural) %></th>
+        <th><%= l(:label_message_plural) %></th>
+        <th><%= l(:label_message_last) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Board.board_tree(@boards) do |board, level| %>
+        <%= render 'board', board: board, level: level %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
 
 <% other_formats_links do |f| %>
   <%= f.link_to 'Atom', url: { controller: 'activities', action: 'index', id: @project, show_messages: 1, key: User.current.rss_key } %>

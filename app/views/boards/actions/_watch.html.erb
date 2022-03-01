@@ -13,8 +13,9 @@
   <% html << content_tag(:i, nil, class: (watched ? 'bi bi-pin-fill' : 'bi bi-pin')) if icon %>
   <% html << content_tag(:span, (watched ? l(:button_unwatch) : l(:button_watch))) if text %>
 
-  <%= link_to url, method: method, class: 'btn btn-secondary' do %>
-    <%= html.compact.join('&nbsp;').html_safe %>
+  <%= form_tag url, method: method do %>
+    <button type="submit" class="btn btn-secondary">
+      <%= html.compact.join('&nbsp;').html_safe %>
+    </button>
   <% end %>
-  <%#= watcher_link(@board, User.current) %>
 <% end %>
