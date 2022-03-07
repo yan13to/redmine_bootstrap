@@ -1,11 +1,15 @@
-<%= error_messages_for 'issue_status' %>
+<% button_action ||= :button_create %>
 
-<div class="box tabular">
-<p><%= f.text_field :name, :required => true %></p>
-<% if Issue.use_status_for_done_ratio? %>
-  <p><%= f.select :default_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), :include_blank => true, :label => :field_done_ratio %></p>
+<%= form_for @issue_status, builder: BootstrapFormBuilder do |f| %>
+  <%= error_messages_for 'issue_status' %>
+
+  <%= f.text_field_form_group :name, required: true %>
+  <% if Issue.use_status_for_done_ratio? %>
+    <%= f.select_form_group :default_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), { include_blank: true }, label: l(:field_done_ratio) %>
+  <% end %>
+  <%= f.check_box_form_group :is_closed %>
+
+  <%= call_hook(:view_issue_statuses_form, issue_status: @issue_status) %>
+
+  <%= f.action_form_group :button_create %>
 <% end %>
-<p><%= f.check_box :is_closed %></p>
-
-<%= call_hook(:view_issue_statuses_form, :issue_status => @issue_status) %>
-</div>

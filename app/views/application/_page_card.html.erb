@@ -1,5 +1,5 @@
 <div class="card<%= " #{html_class}" if html_class %>">
-  <div class="card-body">
-    <%= content if block_given? && defined?(content) %>
-  </div>
+  <%= content_tag(:div, header, class: 'card-header') if defined?(header) && header.present? %>
+  <%= content_tag(:div, content, class: 'card-body') if block_given? && defined?(content) %>
+  <%= content_tag(:div, footer, class: 'card-footer') if defined?(footer) && footer.present? %>
 </div>

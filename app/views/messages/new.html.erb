@@ -1,6 +1,8 @@
-<h2><%= link_to @board.name, :controller => 'boards', :action => 'show', :project_id => @project, :id => @board %> &#187; <%= l(:label_message_new) %></h2>
+<% label = [link_to(@board.name, { controller: 'boards', action: 'show', project_id: @project, id: @board }, class: 'text-decoration-none'), l(:label_message_new)].join(' &#187; ').html_safe %>
 
-<%= form_for @message, :url => {:action => 'new'}, :html => {:multipart => true, :id => 'message-form'} do |f| %>
-  <%= render :partial => 'form', :locals => {:f => f} %>
+<%= page_title content_tag(:h2, label) %>
+
+<%= form_for @message, url: { action: 'new' }, html: { multipart: true }, builder: BootstrapFormBuilder do |f| %>
+  <%= render 'form', f: f %>
   <%= submit_tag l(:button_create) %>
 <% end %>

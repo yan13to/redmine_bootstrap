@@ -3,7 +3,8 @@
 <% html = [] %>
 <% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
 <% html << content_tag(:span, l(:label_project_new)) if text %>
+<% btn_class = 'btn btn-success' %>
 
-<%= link_to new_project_path, class: 'btn btn-success', 'data-bs-toggle': 'tooltip', title: l(:label_project_new) do %>
+<%= link_to new_project_path, class: btn_class, 'data-bs-toggle': 'tooltip', title: l(:label_project_new) do %>
   <%= html.compact.join('&nbsp;').html_safe %>
 <% end %>

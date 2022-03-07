@@ -1,0 +1,12 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% btn_label = l(:label_issue_status_new) %>
+<% btn_class = 'btn btn-success' %>
+<% icon_class = 'bi bi-plus' %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: icon_class) if icon %>
+<% html << content_tag(:span, btn_label) if text %>
+
+<%= link_to new_issue_status_path, title: btn_label, class: btn_class do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

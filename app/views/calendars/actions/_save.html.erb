@@ -1,0 +1,1 @@
+<%= link_to_function l(:button_save), "$('#query_form').attr('action', '#{ @project ? new_project_query_path(@project) : new_query_path }').submit();", class: 'btn btn-primary' %>

@@ -1,9 +1,13 @@
-<%= custom_field_title @custom_field %>
+<%= page_title custom_field_title(@custom_field) %>
 
-<%= labelled_form_for :custom_field, @custom_field, :url => custom_fields_path, :html => {:id => 'custom_field_form'} do |f| %>
-<%= render :partial => 'form', :locals => { :f => f } %>
-<%= hidden_field_tag 'type', @custom_field.type %>
-<%= hidden_field_tag 'copy', @copy_from.id if @copy_from %>
+<%= page_card do %>
+
+  <%= form_with scope: :custom_field, model: @custom_field, url: custom_fields_path, builder: BootstrapFormBuilder do |f| %>
+    <%= render 'form', f: f %>
+    <%= hidden_field_tag 'type', @custom_field.type %>
+    <%= hidden_field_tag 'copy', @copy_from.id if @copy_from %>
+  <% end %>
+
 <% end %>
 
 <%= javascript_tag do %>

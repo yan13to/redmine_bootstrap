@@ -1,6 +1,5 @@
-<%= title [l(:label_issue_status_plural), issue_statuses_path], @issue_status.name %>
+<%= page_title title([l(:label_issue_status_plural), issue_statuses_path], @issue_status.name) %>
 
-<%= labelled_form_for @issue_status do |f| %>
-  <%= render :partial => 'form', :locals => {:f => f} %>
-  <%= submit_tag l(:button_save) %>
+<%= page_card do %>
+  <%= render 'form', button_action: :button_save %>
 <% end %>

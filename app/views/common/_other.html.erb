@@ -3,21 +3,17 @@
 <% path = nil unless defined? path %>
 
 <% if path.present? %>
-
   <% if kind == 'video' %>
     <%= content_tag :video, class: 'filecontent', src: path, controls: true do %>
-      <%= render partial: 'common/no_preview', locals: { download_link: download_link } %>
+      <%= render 'common/no_preview', download_link: download_link %>
     <% end %>
   <% elsif kind == 'audio' %>
     <%= content_tag :audio, class: 'filecontent', src: path, controls: true do %>
-      <%= render partial: 'common/no_preview', locals: { download_link: download_link } %>
+      <%= render 'common/no_preview', download_link: download_link %>
     <% end %>
   <% else %>
-    <%= render partial: 'common/no_preview', locals: { download_link: download_link } %>
+    <%= render 'common/no_preview', download_link: download_link %>
    <% end %>
-
 <% else %>
-
-  <%= render partial: 'common/no_preview', locals: { download_link: download_link } %>
-
+  <%= render 'common/no_preview', download_link: download_link %>
 <% end %>

@@ -1,9 +1,16 @@
 <p>
   <label for="custom_field_min_length"><%=l(:label_min_max_length)%></label>
-  <%= f.text_field :min_length, :size => 5, :no_label => true %> - 
-  <%= f.text_field :max_length, :size => 5, :no_label => true %>
+  <div class="row align-items-center">
+    <div class="col-auto">
+      <%= f.text_field_form_group :min_length, size: 5, label: false %>
+    </div>
+    <div class="col-auto">
+      - 
+    </div>
+    <div class="col-auto">
+      <%= f.text_field_form_group :max_length, size: 5, label: false %>
+    </div>
+  </div>
 </p>
-<p>
-  <%= f.text_field :regexp, :size => 50 %>
-  <em class="info"><%= l(:text_regexp_info) %></em>
-</p>
+
+<%= f.text_field_form_group :regexp, size: 50, hint: l(:text_regexp_info) %>

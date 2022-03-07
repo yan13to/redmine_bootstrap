@@ -1,5 +1,9 @@
-<fieldset class="box"><legend><%= toggle_checkboxes_link("#custom_field_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %></legend>
-  <p><%= f.check_box :is_for_all, :data => {:disables => '#custom_field_project_ids input'} %></p>
+<fieldset class="box">
+  <legend>
+    <%= toggle_checkboxes_link("#custom_field_project_ids input[type=checkbox]:enabled") %><%= l(:label_project_plural) %>
+  </legend>
+
+  <%= f.check_box :is_for_all, data: { disables: '#custom_field_project_ids input' } %>
 
   <div id="custom_field_project_ids">
     <% project_ids = @custom_field.project_ids.to_a %>

@@ -1,3 +1,4 @@
-<p><%= f.select :default_value, [[]]+@custom_field.possible_values_options %></p>
-<p><%= f.text_field :url_pattern, :size => 50, :label => :label_link_values_to %></p>
-<p><%= edit_tag_style_tag f, :include_radio => true %></p>
+<%= f.select_form_group :default_value, [[]]+@custom_field.possible_values_options %>
+<%= f.text_field_form_group :url_pattern, size: 50, label: l(:label_link_values_to) %>
+
+<%= edit_tag_style_tag f, include_radio: true %>

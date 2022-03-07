@@ -10,7 +10,7 @@
 
 <div class="<%= group_class %>">
   <%= f.label method, label, { class: label_class } if show_label %>
-  <%= f.password_field method, options %>
+  <%= f.date_field method, options %>
   <%= f.hint method, options[:hint] if options[:hint] %>
   <%= f.invalid_feedback method %>
   <%= f.valid_feedback method %>

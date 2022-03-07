@@ -1,0 +1,18 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+<% btn_label = l(:label_update_issue_done_ratios) %>
+<% btn_class = 'btn btn-secondary' %>
+<% icon_class = 'bi bi-circle' %>
+<% html = [] %>
+<% html << content_tag(:i, nil, class: icon_class) if icon %>
+<% html << content_tag(:span, btn_label) if text %>
+
+<%#= link_to update_issue_done_ratio_issue_statuses_path, title: l(:label_update_issue_done_ratios), class: btn_class, method: :post, data: { confirm: l(:text_are_you_sure) } do %>
+  <%#= html.compact.join('&nbsp;').html_safe %>
+<%# end %>
+
+<%= form_tag update_issue_done_ratio_issue_statuses_path, method: :post do %>
+  <button type="submit" class="<%= btn_class %>">
+    <%= html.compact.join('&nbsp;').html_safe %>
+  </button>
+<% end %>

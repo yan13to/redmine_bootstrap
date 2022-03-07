@@ -1,0 +1,24 @@
+<tr>
+  <td class="align-middle">
+    <%= link_to issue_status.name, edit_issue_status_path(issue_status), class: 'text-decoration-none' %>
+  </td>
+  <% if Issue.use_status_for_done_ratio? %>
+    <td class="align-middle">
+      <%= issue_status.default_done_ratio %>
+    </td>
+  <% end %>
+  <td class="align-middle">
+    <%= content_tag(:i, nil, class: 'bi bi-check h4') if issue_status.is_closed? %>
+  </td>
+  <td class="align-middle">
+    <% unless WorkflowTransition.where('old_status_id = ? OR new_status_id = ?', issue_status.id, issue_status.id).exists? %>
+      <span class="icon icon-warning">
+        <%= l(:text_status_no_workflow) %> (<%= link_to l(:button_edit), workflows_edit_path(used_statuses_only: 0) %>)
+      </span>
+    <% end %>
+  </td>
+  <td class="align-middle">
+    <%= reorder_handle(issue_status) %>
+    <%= render 'issue_statuses/actions/delete', issue_status: issue_status %>
+  </td>
+</tr>

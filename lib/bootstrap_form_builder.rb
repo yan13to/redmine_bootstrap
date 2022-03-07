@@ -26,6 +26,15 @@ class BootstrapFormBuilder < ActionView::Helpers::FormBuilder
     @template.render renderer, f: self, method: method, options: options, checked_value: checked_value, unchecked_value: unchecked_value
   end
 
+  def date_field_form_group(method, options = {})
+    renderer = options[:renderer] || 'form_builder/date_field_form_group'
+    options[:class] = "#{options[:class]} #{form_control_class(method)}"
+    options[:show_label] = show_label(options)
+    options[:label] = show_required_label(method, options) if options[:required]
+
+    @template.render renderer, f: self, method: method, options: options
+  end
+
   def email_field_form_group(method, options = {})
     renderer = options[:renderer] || 'form_builder/email_field_form_group'
     options[:class] = "#{options[:class]} #{form_control_class(method)}"
