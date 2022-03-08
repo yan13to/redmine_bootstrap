@@ -1,49 +1,51 @@
-<%= error_messages_for 'custom_field' %>
+<% url ||= custom_fields_path %>
+<% builder ||= BootstrapFormBuilder %>
+<% model ||= @custom_field %>
+<% method ||= :post %>
 
-  <%= f.select_form_group :field_format, custom_field_formats_for_select(@custom_field), {}, disabled: !@custom_field.new_record? %>
+<%= form_with scope: :custom_field, model: model, url: url, builder: builder, method: method do |f| %>
+  <%= error_messages_for 'custom_field' %>
+  <%= f.select_form_group :field_format, custom_field_formats_for_select(model), {}, disabled: !model.new_record? %>
   <%= f.text_field_form_group :name, size: 50, required: true %>
   <%= f.text_area_form_group :description, rows: 7 %>
-  <% if @custom_field.format.multiple_supported %>
-    <%= f.check_box_form_group :multiple, hint: (!@custom_field.new_record? && @custom_field.multiple ? l(:text_turning_multiple_off) : nil) %>
+  <% if model.format.multiple_supported %>
+    <%= f.check_box_form_group :multiple, hint: (!model.new_record? && model.multiple ? l(:text_turning_multiple_off) : nil) %>
   <% end %>
-  <%= render_custom_field_format_partial f, @custom_field %>
-  <%= call_hook(:view_custom_fields_form_upper_box, custom_field: @custom_field, form: f) %>
+  <%= render_custom_field_format_partial f, model %>
+  <%= call_hook(:view_custom_fields_form_upper_box, custom_field: model, form: f) %>
   <%= f.check_box_form_group :is_required %>
-
-  <% if %w(UserCustomField).include?(@custom_field.class.name) %>
+  <% if %w(UserCustomField).include?(model.class.name) %>
     <%= f.check_box_form_group :visible %>
   <% end %>
-
-  <% if @custom_field.is_a?(UserCustomField) %>
+  <% if model.is_a?(UserCustomField) %>
     <%= f.check_box_form_group :editable %>
   <% end %>
-
-  <% if %w(IssueCustomField UserCustomField ProjectCustomField VersionCustomField GroupCustomField TimeEntryCustomField).include?(@custom_field.class.name) && @custom_field.format.is_filter_supported %>
+  <% if %w(IssueCustomField UserCustomField ProjectCustomField VersionCustomField GroupCustomField TimeEntryCustomField).include?(model.class.name) && model.format.is_filter_supported %>
     <%= f.check_box_form_group :is_filter %>
   <% end %>
-
-  <% if %w(IssueCustomField ProjectCustomField).include?(@custom_field.class.name) && @custom_field.format.searchable_supported %>
+  <% if %w(IssueCustomField ProjectCustomField).include?(model.class.name) && model.format.searchable_supported %>
     <%= f.check_box_form_group :searchable %>
   <% end %>
-  <%= call_hook(:"view_custom_fields_form_#{@custom_field.type.to_s.underscore}", custom_field: @custom_field, form: f) %>
-
-  <% if %w(IssueCustomField TimeEntryCustomField ProjectCustomField VersionCustomField).include?(@custom_field.class.name) %>
+  <%= call_hook(:"view_custom_fields_form_#{model.type.to_s.underscore}", custom_field: model, form: f) %>
+  <% if %w(IssueCustomField TimeEntryCustomField ProjectCustomField VersionCustomField).include?(model.class.name) %>
     <%= render 'visibility_by_role_selector', f: f %>
   <% end %>
-
-  <% if @custom_field.is_a?(IssueCustomField) %>
+  <% if model.is_a?(IssueCustomField) %>
     <%= render 'visibility_by_tracker_selector', f: f %>
-
     <%= render 'visibility_by_project_selector', f: f %>
   <% end %>
-
   <p>
-    <% if @custom_field.new_record? %>
+    <% if model.new_record? %>
       <%= submit_tag l(:button_create) %>
       <%= submit_tag l(:button_create_and_continue), name: 'continue' %>
     <% else %>
       <%= submit_tag l(:button_save) %>
     <% end %>
   </p>
+  <% include_calendar_headers_tags %>
 
-<% include_calendar_headers_tags %>
+  <% if model.new_record? %>
+    <%= hidden_field_tag 'type', model.type %>
+    <%= hidden_field_tag 'copy', @copy_from.id if @copy_from %>
+  <% end %>
+<% end %>

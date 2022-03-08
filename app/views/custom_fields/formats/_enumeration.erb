@@ -3,15 +3,12 @@
     <label><%= l(:field_possible_values) %></label>
     <%= link_to l(:button_edit), custom_field_enumerations_path(@custom_field) %>
   </p>
+
   <% if @custom_field.enumerations.active.any? %>
-    <p><%= f.select :default_value, @custom_field.enumerations.active.map{|v| [v.name, v.id.to_s]}, include_blank: true %></p>
+    <%= f.select_form_group :default_value, @custom_field.enumerations.active.map{|v| [v.name, v.id.to_s]}, include_blank: true %>
   <% end %>
 <% end %>
 
-<p>
-  <%= f.text_field :url_pattern, size: 50, label: :label_link_values_to %>
-</p>
+<%= f.text_field_form_group :url_pattern, size: 50, label: l(:label_link_values_to) %>
 
-<p>
-  <%= edit_tag_style_tag f %>
-</p>
+<%= edit_tag_style_tag f %>

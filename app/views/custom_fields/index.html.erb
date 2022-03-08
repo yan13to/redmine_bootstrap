@@ -3,11 +3,7 @@
 <% end %>
 
 <% if @custom_fields_by_type.present? %>
-  <%= render_custom_fields_tabs(@custom_fields_by_type.keys) %>
+  <%= render 'page_tab', tabs: CustomFieldsHelper::CUSTOM_FIELDS_TABS.select { |h| @custom_fields_by_type.keys.include?(h[:name]) }, default_tab: 'IssueCustomField' %>
 <% else %>
   <%= render 'no_data' %>
-<% end %>
-
-<%= javascript_tag do %>
-  $(function() { $("table.custom_fields tbody").positionedItems(); });
 <% end %>

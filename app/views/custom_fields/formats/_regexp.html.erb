@@ -2,13 +2,13 @@
   <label for="custom_field_min_length"><%=l(:label_min_max_length)%></label>
   <div class="row align-items-center">
     <div class="col-auto">
-      <%= f.text_field_form_group :min_length, size: 5, label: false %>
+      <%= f.text_field_form_group :min_length, size: 5, label: false, placeholder: 'Min' %>
     </div>
     <div class="col-auto">
       - 
     </div>
     <div class="col-auto">
-      <%= f.text_field_form_group :max_length, size: 5, label: false %>
+      <%= f.text_field_form_group :max_length, size: 5, label: false, placeholder: 'Max' %>
     </div>
   </div>
 </p>
