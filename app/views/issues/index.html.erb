@@ -2,7 +2,19 @@
 <% html_title(title) %>
 
 <%= page_title content_tag(:h2, title) do %>
-  <%= render 'actions' %>
+  <%= render 'issues/actions/add' if User.current.allowed_to?(:add_issues, @project, global: true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
+
+  <%= page_dropdown nil, dark: true do %>
+    <% if @project %>
+      <li><%= render 'issues/actions/summary', project: @project %></li>
+    <% end %>
+    <% if User.current.allowed_to?(:import_issues, @project, global: true) %>
+      <li><%= render 'issues/actions/import', project: @project %></li>
+    <% end %>
+    <% if User.current.allowed_to?(:manage_categories, @project) %>
+      <li><%= render 'issues/actions/setting', project: @project %></li>
+    <% end %>
+  <% end %>
 <% end %>
 
 <%= form_tag(_project_issues_path(@project), method: :get, id: 'query_form') do %>
@@ -12,7 +24,7 @@
 <% if @query.valid? %>
 
   <% if @issues.empty? %>
-    <p class="nodata"><%= l(:label_no_data) %></p>
+    <%= render 'no_data' %>
   <% else %>
     <%= render_query_totals(@query) %>
     <%= render 'issues/list', issues: @issues, query: @query %>

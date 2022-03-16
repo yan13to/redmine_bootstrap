@@ -1,0 +1,3 @@
+<% btn_class ||= 'btn' %>
+
+<%= link_to l(:button_delete), issue_path(@issue), data: { confirm: issues_destroy_confirmation_message(@issue) }, method: :delete, class: btn_class %>

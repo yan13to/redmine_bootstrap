@@ -1,60 +1,45 @@
-<%= error_messages_for 'tracker' %>
+<%= form_with model: @tracker, builder: BootstrapFormBuilder do |f| %>
+  <%= error_messages_for 'tracker' %>
 
-<div class="splitcontent">
-<div class="splitcontentleft">
-<div class="box tabular">
-<!--[form:tracker]-->
-<p><%= f.text_field :name, :required => true %></p>
-<p><%= f.select :default_status_id,
-        IssueStatus.sorted.map {|s| [s.name, s.id]},
-        :include_blank => @tracker.default_status.nil?,
-        :required => true %>
-</p>
-<p><%= f.check_box :is_in_roadmap %></p>
-<p><%= f.text_area :description, :rows => 4 %></p>
-<p>
-  <label><%= l(:field_core_fields) %></label>
-  <% Tracker::CORE_FIELDS.each do |field| %>
-  <label class="block">
-    <%= check_box_tag 'tracker[core_fields][]', field, @tracker.core_fields.include?(field), :id => nil %>
-    <%= l("field_#{field}".sub(/_id$/, '')) %>
-  </label>
+  <%= f.text_field_form_group :name, required: true %>
+  <%= f.select_form_group :default_status_id, IssueStatus.sorted.map {|s| [s.name, s.id]}, include_blank: @tracker.default_status.nil?, required: true %>
+  <%= f.check_box_form_group :is_in_roadmap %>
+  <%= f.text_area_form_group :description, rows: 4 %>
+  <div>
+    <label class="mb-3"><%= l(:field_core_fields) %></label>
+    <% Tracker::CORE_FIELDS.each do |field| %>
+      <%= f.check_box_form_group :core_fields, { name: 'tracker[core_fields][]', label: l("field_#{field}".sub(/_id$/, '')), checked: @tracker.core_fields.include?(field) }, field %>
+    <% end %>
+  </div>
+  <%= hidden_field_tag 'tracker[core_fields][]', '' %>
+
+  <% @issue_custom_fields = IssueCustomField.sorted %>
+  <% if @issue_custom_fields.present? %>
+    <div>
+      <label class="mb-3"><%= l(:label_custom_field_plural) %></label>
+      <% @issue_custom_fields.each do |field| %>
+        <%= f.check_box_form_group :custom_field_ids, { name: 'tracker[custom_field_ids][]', label: field.name, checked: @tracker.custom_fields.to_a.include?(field) }, field.id %>
+      <% end %>
+    </div>
+    <%= hidden_field_tag 'tracker[custom_field_ids][]', '' %>
   <% end %>
-</p>
-<%= hidden_field_tag 'tracker[core_fields][]', '' %>
 
-<% @issue_custom_fields = IssueCustomField.sorted %>
-<% if @issue_custom_fields.present? %>
-<p>
-  <label><%= l(:label_custom_field_plural) %></label>
-  <% @issue_custom_fields.each do |field| %>
-    <label class="block">
-      <%= check_box_tag 'tracker[custom_field_ids][]',field.id, @tracker.custom_fields.to_a.include?(field), :id => nil %>
-      <%= field.name %>
-    </label>
+  <% if @tracker.new_record? && @trackers.any? %>
+    <%= f.select_form_group :copy_workflow_from,
+          content_tag('option') + options_from_collection_for_select(@trackers, :id, :name, params[:copy_workflow_from] || @copy_from.try(:id)), 
+          { label: l(:label_copy_workflow_from) }, name: :copy_workflow_from %>
   <% end %>
-</p>
-<%= hidden_field_tag 'tracker[custom_field_ids][]', '' %>
-<% end %>
 
-<% if @tracker.new_record? && @trackers.any? %>
-<p><label for="copy_workflow_from"><%= l(:label_copy_workflow_from) %></label>
-<%= select_tag(:copy_workflow_from, content_tag("option") + options_from_collection_for_select(@trackers, :id, :name, params[:copy_workflow_from] || @copy_from.try(:id))) %></p>
-<% end %>
-<!--[eoform:tracker]-->
-</div>
-<%= submit_tag l(@tracker.new_record? ? :button_create : :button_save) %>
-</div>
+  <% if @projects.any? %>
+    <fieldset class="box" id="tracker_project_ids">
+      <legend><%= toggle_checkboxes_link("#tracker_project_ids input[type=checkbox]") %><%= l(:label_project_plural) %></legend>
+      <% project_ids = @tracker.project_ids.to_a %>
+      <%= render_project_nested_lists(@projects) do |p|
+        content_tag('label', check_box_tag('tracker[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + h(p))
+      end %>
+      <%= hidden_field_tag('tracker[project_ids][]', '', :id => nil) %>
+    </fieldset>
+  <% end %>
 
-<div class="splitcontentright">
-<% if @projects.any? %>
-<fieldset class="box" id="tracker_project_ids"><legend><%= toggle_checkboxes_link("#tracker_project_ids input[type=checkbox]") %><%= l(:label_project_plural) %></legend>
-<% project_ids = @tracker.project_ids.to_a %>
-<%= render_project_nested_lists(@projects) do |p|
-  content_tag('label', check_box_tag('tracker[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + h(p))
-end %>
-<%= hidden_field_tag('tracker[project_ids][]', '', :id => nil) %>
-</fieldset>
+  <%= f.action_form_group @tracker.new_record? ? :button_create : :button_save %>
 <% end %>
-</div>
-</div>

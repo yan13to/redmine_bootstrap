@@ -1,0 +1,16 @@
+<% html_class ||= 'table table-hover' %>
+<% head ||= [] %>
+
+<table class="<%= html_class %>">
+  <% if head.present? %>
+    <thead>
+      <tr>
+        <% head.each do |th| %>
+          <%= content_tag :th, th.html_safe %>
+        <% end %>
+      </tr>
+    </thead>
+  <% end %>
+  <%= content_tag(:tbody, body.html_safe) if block_given? && defined?(body) %>
+  <%= content_tag(:tfoot, foot.html_safe) if defined?(foot) %>
+</table>

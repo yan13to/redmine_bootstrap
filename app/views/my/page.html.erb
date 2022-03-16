@@ -1,5 +1,6 @@
-<div class="d-flex align-items-center justify-content-between mt-3">
-  <h2><%=l(:label_my_page)%></h2>
+<% html_title(l(:label_my_page)) -%>
+
+<%= page_title content_tag(:h2, l(:label_my_page)) do %>
   <%= form_tag({action: 'add_block'}, remote: true, id: 'block-form', authenticity_token: true) do %>
     <div class="row align-items-center">
       <div class="col-auto">
@@ -14,7 +15,7 @@
       </div>
     </div>
   <% end %>
-</div>
+<% end %>
 
 <div id="my-page" class="splitcontent">
   <% @groups.each do |group| %>
@@ -25,5 +26,3 @@
 </div>
 
 <%= context_menu %>
-
-<% html_title(l(:label_my_page)) -%>

@@ -1,0 +1,12 @@
+<% title ||= nil %>
+<% dark ||= false %>
+<% dropdown_menu_class = dark ? 'dropdown-menu dropdown-menu-dark' : 'dropdown-menu' %>
+
+<div class="dropdown">
+  <button class="btn btn-outline-success dropdown-toggle" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false"><%= title %></button>
+  <%= content_tag :ul, class: dropdown_menu_class, 'aria-labelledby': 'dropdownMenu' do %>
+    <% if block_given? && defined?(listing) %>
+      <%= listing %>
+    <% end %>
+  <% end %>
+</div>

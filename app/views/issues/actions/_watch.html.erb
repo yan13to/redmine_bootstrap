@@ -1,15 +1,15 @@
 <% icon = defined?(icon) ? icon : true %>
 <% text = defined?(text) ? text : false %>
-<% project ||= @project %>
+<% issue ||= @issue %>
 <% user ||= User.current  %>
-<% objects ||= project.enabled_module('news') %>
+<% objects ||= @issue %>
 <% objects = Array.wrap(objects) %>
 
 <% if user&.logged? && objects.any? %>
   <% watched = Watcher.any_watched?(objects, user) %>
   <% url = watch_path(object_type: objects.first.class.to_s.underscore, object_id: (objects.size == 1 ? objects.first.id : objects.map(&:id).sort)) %>
   <% method = watched ? 'delete' : 'post' %>
-  <% btn_class ||= 'btn btn-primary' %>
+  <% btn_class ||= 'btn' %>
   <% btn_icon ||= watched ? 'bi bi-pin-fill' : 'bi bi-pin' %>
   <% btn_text ||= watched ? l(:button_unwatch) : l(:button_watch) %>
   <% html = [] %>

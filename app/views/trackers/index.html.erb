@@ -1,48 +1,12 @@
 <% html_title(l(:label_tracker_plural)) -%>
 
-<div class="d-flex justify-content-between my-3">
-  <h2><%= l(:label_tracker_plural) %></h2>
-  <div class="d-flex align-items-center gap-1" role="group" aria-label="Trackers actions">
-    <%= link_to l(:label_tracker_new), new_tracker_path, :class => 'icon icon-add' %>
-    <%= link_to l(:field_summary), fields_trackers_path, :class => 'icon icon-summary' %>
-  </div>
-</div>
+<%= page_title content_tag(:h2, l(:label_tracker_plural)) do  %>
+  <%= link_to l(:label_tracker_new), new_tracker_path %>
+  <%= link_to l(:field_summary), fields_trackers_path %>
+<% end %>
 
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th><%= l(:label_tracker) %></th>
-      <th><%= l(:field_default_status) %></th>
-      <th><%= l(:field_description) %></th>
-      <th>&nbsp;</th>
-      <th>&nbsp;</th>
-    </tr>
-  </thead>
-  <tbody>
-  <% for tracker in @trackers %>
-    <tr>
-      <td>
-        <%= link_to tracker.name, edit_tracker_path(tracker) %>
-      </td>
-      <td>
-        <%= tracker.default_status.name %>
-      </td>
-      <td>
-        <%= tracker.description %>
-      </td>
-      <td>
-        <% unless tracker.workflow_rules.exists? %>
-          <span class="icon icon-warning">
-            <%= l(:text_tracker_no_workflow) %> (<%= link_to l(:button_edit), workflows_edit_path(tracker_id: tracker) %>)
-          </span>
-        <% end %>
-      </td>
-      <td class="buttons">
-        <%= reorder_handle(tracker) %>
-        <%= link_to l(:button_copy), new_tracker_path(copy: tracker), :class => 'icon icon-copy' %>
-        <%= delete_link tracker_path(tracker) %>
-      </td>
-    </tr>
+<%= page_card do %>
+  <%= page_table head: [l(:label_tracker), l(:field_default_status), l(:field_description), '&nbsp;', '&nbsp;'] do %>
+    <%= render @trackers %>
   <% end %>
-  </tbody>
-</table>
+<% end %>

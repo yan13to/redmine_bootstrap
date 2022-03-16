@@ -1,5 +1,5 @@
-<% icon ||= true %>
-<% text ||= false %>
+<% icon = defined?(icon) ? icon : true %>
+<% text = defined?(text) ? text : false %>
 <% html = [] %>
 <% html << content_tag(:i, nil, class: 'bi bi-trash') if icon %>
 <% html << content_tag(:span, l(:button_delete)) if text %>
