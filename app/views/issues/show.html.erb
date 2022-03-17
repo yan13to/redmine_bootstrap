@@ -159,7 +159,7 @@
   <% end %>
 
   <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
-    <%= page_card do %>
+    <%= page_card class: 'mb-3' do %>
       <%= render 'relations' %>
     <% end %>
   <% end %>
@@ -169,8 +169,9 @@
 <%= render 'action_menu_edit' if User.current.wants_comments_in_reverse_order? %>
 
 <div id="history">
-  <%= render_tabs issue_history_tabs, issue_history_default_tab %>
-  <%#= page_tab tabs: issue_history_tabs, default_tab: issue_history_default_tab %>
+  <%#= render_tabs issue_history_tabs, issue_history_default_tab %>
+  <% history_tab = issue_history_tabs.select { |tab| tab[:name] == 'history' }.first %>
+  <%= render 'issues/tabs/history', tab: history_tab if history_tab.present? %>
 </div>
 
 <%= render 'action_menu_edit' unless User.current.wants_comments_in_reverse_order? %>

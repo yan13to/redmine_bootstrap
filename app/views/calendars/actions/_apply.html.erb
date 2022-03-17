@@ -1,7 +1,7 @@
-<% icon = icon.nil? ? true : icon %>
-<% text = text.nil? ? false : text %>
+<% icon = defined?(icon) ? icon : true %>
+<% text = defined?(text) ? text : false %>
 <% btn_label = l(:button_apply) %>
-<% btn_class = 'btn btn-success' %>
+<% btn_class = 'btn' %>
 <% icon_class = 'bi bi-plus' %>
 <% html = [] %>
 <% html << content_tag(:i, nil, class: icon_class) if icon %>

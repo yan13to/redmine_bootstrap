@@ -2,7 +2,7 @@
 <% html_title(title) %>
 
 <%= page_title content_tag(:h2, title) do %>
-  <%= render 'issues/actions/add' if User.current.allowed_to?(:add_issues, @project, global: true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
+  <%= render 'issues/actions/add', project: @project, text: true, icon: true if User.current.allowed_to?(:add_issues, @project, global: true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
 
   <%= page_dropdown nil, dark: true do %>
     <% if @project %>

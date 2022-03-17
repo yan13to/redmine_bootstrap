@@ -2,8 +2,8 @@
 <% title = @query.new_record? ? l(:label_project_plural) : @query.name %>
 
 <%= page_title content_tag(:h2, title) do %>
-  <%= render 'projects/actions/add', text: true if User.current.allowed_to?(:add_project, nil, global: true) %>
-  <%= render 'projects/actions/administration', text: true if User.current.admin? %>
+  <%= render 'projects/actions/add', text: true, icon: true if User.current.allowed_to?(:add_project, nil, global: true) %>
+  <%= render 'projects/actions/administration', text: true, icon: true if User.current.admin? %>
 <% end %>
 
 <%= form_tag(projects_path(@project, nil), method: :get, id: 'query_form') do %>

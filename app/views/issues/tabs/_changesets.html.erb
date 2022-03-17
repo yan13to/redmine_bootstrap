@@ -1,7 +1,7 @@
 <% @changesets.each do |changeset| %>
   <div id="changeset-<%= changeset.id %>" class="changeset journal">
     <h4>
-      <%= avatar(changeset.user, :size => "24") %>
+      <%= avatar(changeset.user, size: 24) %>
       <%= authoring changeset.committed_on, changeset.author, label: :label_added_time_by %>
     </h4>
     <p>
@@ -10,10 +10,10 @@
         (<%= link_to(l(:label_diff), controller: 'repositories', action: 'diff', id: changeset.project, repository_id: changeset.repository.identifier_param, path: "", rev: changeset.identifier) %>)
       <% end %>
     </p>
-
     <div class="wiki changeset-comments">
       <%= format_changeset_comments changeset %>
     </div>
   </div>
+
   <%= call_hook(:view_issues_history_changeset_bottom, { changeset: changeset }) %>
 <% end %>
