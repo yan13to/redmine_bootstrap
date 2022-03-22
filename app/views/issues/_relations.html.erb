@@ -1,15 +1,17 @@
-<div class="d-flex justify-content-between">
-  <p><strong><%=l(:label_related_issues)%></strong></p>
+<%= page_simple_accordion_button l(:label_related_issues), '#issue-relations' do %>
   <% if User.current.allowed_to?(:manage_issue_relations, @project) %>
-    <%= toggle_link l(:button_add), 'new-relation-form', {:focus => 'relation_issue_to_id'} %>
-  <% end %>
-</div>
-
-<% if @relations.present? %>
-  <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
-    <%= render_issue_relations(@issue, @relations) %>
+    <div class="col text-end">
+      <%= toggle_link l(:button_add), 'new-relation-form', { focus: 'relation_issue_to_id' } %>
+    </div>
   <% end %>
 <% end %>
+<div class="collapse show" id="issue-relations">
+  <% if @relations.present? %>
+    <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
+      <%= render_issue_relations(@issue, @relations) %>
+    <% end %>
+  <% end %>
+</div>
 
 <%= form_for @relation, { as: :relation, remote: true, url: issue_relations_path(@issue), method: :post, html: { style: 'display: none;' } } do |f| %>
   <%= render 'issue_relations/form', f: f %>

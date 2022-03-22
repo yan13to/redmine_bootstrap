@@ -34,107 +34,43 @@
     </div>
     <% if @prev_issue_id || @next_issue_id %>
       <div class="col-auto fw-light">
-        <%= link_to_if @prev_issue_id, "\xc2\xab #{l(:label_previous)}", (@prev_issue_id ? issue_path(@prev_issue_id) : nil), title: "##{@prev_issue_id}", accesskey: accesskey(:previous) %> |
+        <%= link_to_if @prev_issue_id, "\xc2\xab #{l(:label_previous)}", (@prev_issue_id ? issue_path(@prev_issue_id) : nil), title: "##{@prev_issue_id}", accesskey: accesskey(:previous), class: 'text-decoration-none' %> |
         <% if @issue_position && @issue_count %>
           <span class="position">
-            <%= link_to_if @query_path, l(:label_item_position, position: @issue_position, count: @issue_count), @query_path %>
+            <%= link_to_if @query_path, l(:label_item_position, position: @issue_position, count: @issue_count), @query_path, class: 'text-decoration-none' %>
           </span> |
         <% end %>
-        <%= link_to_if @next_issue_id, "#{l(:label_next)} \xc2\xbb", (@next_issue_id ? issue_path(@next_issue_id) : nil), title: "##{@next_issue_id}", accesskey: accesskey(:next) %>
+        <%= link_to_if @next_issue_id, "#{l(:label_next)} \xc2\xbb", (@next_issue_id ? issue_path(@next_issue_id) : nil), title: "##{@next_issue_id}", accesskey: accesskey(:next), class: 'text-decoration-none' %>
       </div>
     <% end %>
   </div>
 
   <%= page_card class: 'mb-3 bg-success text-dark bg-opacity-25 shadow' do %>
-    <div class="hstack gap-1">
-      <label><%= l(:field_status) %>:</label>
-      <span class="badge bg-success shadow"><%= @issue.status.name %></span>
-      <a href="#" data-bs-toggle="tooltip" title="edit status"><i class="bi bi-pencil small"></i></a>
+    <%= page_simple_accordion_button 'General', '#general', class: 'bg-transparent' %>
+    <div class="mt-2 collapse show" id="general">
+      <%= render 'general', issue: @issue %>
     </div>
-
-    <div class="hstack gap-1">
-      <label><%= l(:field_priority) %>:</label>
-      <span class="badge bg-warning text-dark shadow"><%= @issue.priority.name %></span>
-    </div>
-
-    <% unless @issue.disabled_core_fields.include?('assigned_to_id') %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_assigned_to) %>:</label>
-        <div><%= @issue.assigned_to ? link_to_user(@issue.assigned_to) : "-" %></div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('category_id') || (@issue.category.nil? && @issue.project.issue_categories.none?) %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_category) %>:</label>
-        <div><%= @issue.category ? @issue.category.name : "-" %></div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('fixed_version_id') || (@issue.fixed_version.nil? && @issue.assignable_versions.none?) %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_fixed_version) %>:</label>
-        <div><%= @issue.fixed_version ? link_to_version(@issue.fixed_version) : "-" %></div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('start_date') %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_start_date) %>:</label>
-        <div><%= format_date(@issue.start_date) %></div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('due_date') %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_due_date) %>:</label>
-        <div><%= issue_due_date_details(@issue) %></div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('done_ratio') %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_done_ratio) %>:</label>
-        <div>
-          <%= progress_bar(@issue.done_ratio, :legend => "#{@issue.done_ratio}%") %>
-        </div>
-      </div>
-    <% end %>
-
-    <% unless @issue.disabled_core_fields.include?('estimated_hours') %>
-      <div class="hstack gap-1">
-        <label><%= l(:field_estimated_hours) %>:</label>
-        <div><%= issue_estimated_hours_details(@issue) %></div>
-      </div>
-    <% end %>
-
-    <% if User.current.allowed_to?(:view_time_entries, @project) && @issue.total_spent_hours > 0 %>
-      <div class="hstack gap-1">
-        <label><%= l(:label_spent_time) %>:</label>
-        <div><%= issue_spent_hours_details(@issue) %></div>
-      </div>
-    <% end %>
-
-    <%= render_half_width_custom_fields_rows(@issue) %>
-    <%= call_hook(:view_issues_show_details_bottom, issue: @issue) %>
-
   <% end %>
 
   <% if @issue.description? %>
     <%= page_card class: 'mb-3' do %>
-      <div class="d-flex justify-content-between">
-        <p><strong><%=l(:field_description)%></strong></p>
-        <%= link_to l(:button_quote), quoted_issue_path(@issue), remote: true, method: 'post', class: 'icon icon-comment' if @issue.notes_addable? %>
+      <%= page_simple_accordion_button l(:field_description), '#description' do %>
+        <div class="col text-end">
+          <%= link_to l(:button_quote), quoted_issue_path(@issue), remote: true, method: 'post', class: 'badge rounded-pill bg-primary text-decoration-none' if @issue.notes_addable? %>
+        </div>
+      <% end %>
+      <div class="collapse show" id="description">
+        <%= textilizable @issue, :description, attachments: @issue.attachments %>
       </div>
-
-      <%= textilizable @issue, :description, attachments: @issue.attachments %>
     <% end %>
   <% end %>
 
   <% if @issue.attachments.any? %>
     <%= page_card class: 'mb-3' do %>
-      <p><strong><%=l(:label_attachment_plural)%></strong></p>
-      <%= link_to_attachments @issue, thumbnails: true %>
+      <%= page_simple_accordion_button l(:label_attachment_plural), '#attachment' %>
+      <div class="collapse show" id="attachment">
+        <%= link_to_attachments @issue, thumbnails: true %>
+      </div>
     <% end %>
   <% end %>
 
@@ -144,17 +80,26 @@
 
   <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
     <%= page_card class: 'mb-3' do %>
-      <div class="d-flex justify-content-between">
-        <p>
-          <strong><%= l(:label_subtask_plural) %></strong>
-          <%= render_descendants_stats(@issue) unless @issue.leaf? %>
-        </p>
-        <%= link_to_new_subtask(@issue) if User.current.allowed_to?(:manage_subtasks, @project) %>
-      </div>
-
-      <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
-        <%= render_descendants_tree(@issue) unless @issue.leaf? %>
+      <%= page_simple_accordion_button l(:label_subtask_plural), '#subtasks' do %>
+        <% unless @issue.leaf? %>
+          <div class="col">
+            <div class="small text-muted">
+              <%= render_descendants_stats(@issue) %>
+            </div>
+          </div>
+        <% end %>
+        <% if User.current.allowed_to?(:manage_subtasks, @project) %>
+          <div class="col text-end">
+            <%= link_to_new_subtask(@issue) %>
+          </div>
+        <% end %>
       <% end %>
+
+      <div class="collapse show" id="subtasks">
+        <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
+          <%= render_descendants_tree(@issue) unless @issue.leaf? %>
+        <% end %>
+      </div>
     <% end %>
   <% end %>
 

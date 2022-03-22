@@ -1,34 +1,36 @@
-<h2>
-  <%= safe_join([link_to_attachment_container(@container), l(:label_edit_attachments)].compact, ' » ') %>
-</h2>
+<%= page_title content_tag(:h2, safe_join([link_to_attachment_container(@container), l(:label_edit_attachments)].compact, ' » ')) %>
 
 <%= error_messages_for *@attachments %>
 
-<%= form_tag(container_attachments_path(@container), method: 'patch') do %>
-  <%= back_url_hidden_field_tag %>
+<%= page_card do %>
 
-  <table class="table">
-    <% @attachments.each do |attachment| %>
-      <tr>
-        <td colspan="2">
-          <span><%= attachment.filename_was %></span>
-          <span>(<%= number_to_human_size attachment.filesize %>)</span>
-          <span><%= attachment.author %>, <%= format_time(attachment.created_on) %></span>
-        </td>
-      </tr>
-      <tr id="attachment-<%= attachment.id %>">
-        <td>
-          <%= text_field_tag "attachments[#{attachment.id}][filename]", attachment.filename, size: 40 %>
-        </td>
-        <td>
-          <%= text_field_tag "attachments[#{attachment.id}][description]", attachment.description, size: 80, placeholder: l(:label_optional_description) %>
-        </td>
-      </tr>
+  <%= form_tag(container_attachments_path(@container), method: 'patch') do %>
+    <%= back_url_hidden_field_tag %>
+
+    <%= page_table do %>
+      <% @attachments.each do |attachment| %>
+        <tr>
+          <td colspan="2">
+            <span><%= attachment.filename_was %></span>
+            <span>(<%= number_to_human_size attachment.filesize %>)</span>
+            <span><%= attachment.author %>, <%= format_time(attachment.created_on) %></span>
+          </td>
+        </tr>
+        <tr id="attachment-<%= attachment.id %>">
+          <td>
+            <%= text_field_tag "attachments[#{attachment.id}][filename]", attachment.filename, size: 40, class: 'form-control' %>
+          </td>
+          <td>
+            <%= text_field_tag "attachments[#{attachment.id}][description]", attachment.description, size: 80, placeholder: l(:label_optional_description), class: 'form-control' %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
-  </table>
 
-  <div class="mb-3">
-    <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
-    <%= link_to l(:button_cancel), back_url, class: 'btn btn-secondary' if back_url.present? %>
-  </div>
+    <div class="mb-3">
+      <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
+      <%= link_to l(:button_cancel), back_url, class: 'btn btn-secondary' if back_url.present? %>
+    </div>
+  <% end %>
+
 <% end %>

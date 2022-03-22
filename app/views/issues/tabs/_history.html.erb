@@ -6,13 +6,13 @@
   <%= page_card class: 'mb-3' do %>
     <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
       <div id="note-<%= journal.indice %>">
-        <div class="d-flex justify-content-between">
-          <div>
+        <div class="row align-items-center">
+          <div class="col-auto">
             <%= avatar(journal.user) %>
             <strong class="small text-muted"><%= authoring journal.created_on, journal.user, label: :label_updated_time_by %></strong>
             <%= render_private_notes_indicator(journal) %>
           </div>
-          <div class="small text-muted">
+          <div class="col text-end">
             <%= render_journal_actions(issue, journal, reply_links: reply_links) %>
             <a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
           </div>
