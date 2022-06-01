@@ -2,7 +2,7 @@
   <button class="btn btn-info dropdown-toggle" type="button" id="projectJumpBox" data-bs-toggle="dropdown" aria-expanded="false">
     <%= @project && @project.persisted? ? @project.name_was : l(:label_jump_to_a_project) %>
   </button>
-  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="projectJumpBox">
+  <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index:1021;" aria-labelledby="projectJumpBox">
     <li class="px-2">
       <%= text_field_tag('q', params[:q], class: 'form-control', data: { automcomplete_url: autocomplete_projects_path(format: 'js', jump: current_menu_item) }, autocomplete: 'off') %>
     </li>
