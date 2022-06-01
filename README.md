@@ -5,5 +5,5 @@ Bootstrap theme for redmine, using views customization, instead of regular css t
 ## Installation
 
 ```
-$ git clone git@github.com:yan13to/redmine_bootstrap.git /path/to/redmine/plugins/
+$ git clone git@github.com:yan13to/redmine_bootstrap.git /path/to/your/redmine/plugins/
 ```
