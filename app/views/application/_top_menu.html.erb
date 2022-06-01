@@ -6,7 +6,7 @@
         <%= link_to url, class: "nav-link dropdown-toggle#{' active' if selected}", 'data-bs-toggle': 'dropdown', 'data-name': node.name do %>
           <%= render_icon(node.name, class: 'pe-2') %><%= caption %>
         <% end %>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu shadow">
           <% menu_items_for(:admin_menu) do |n| %>
             <% caption, url, selected = extract_node_details(n) %>
             <li>
