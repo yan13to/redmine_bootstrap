@@ -9,7 +9,7 @@ require 'controllers/projects_patch_controller'
 Redmine::Plugin.register :redmine_bootstrap do
   name 'Bootstrap plugin'
   author 'yan13to'
-  description 'Plugin theme for Redmine'
+  description 'Bootstrap theme for Redmine'
   version '0.0.1'
   url 'https://github.com/yan13to/redmine_bootstrap'
   author_url 'https://github.com/yan13to'
