@@ -1,12 +1,9 @@
 <% html_title(l(:label_user_plural)) -%>
 
-<div class="d-flex justify-content-between my-3">
-  <h2><%= l(:label_user_plural) %></h2>
-  <div class="d-flex align-items-center gap-1" role="group" aria-label="Users actions">
-    <%= render 'users/actions/add' %>
-    <%= render 'users/actions/index' %>
-  </div>
-</div>
+<%= page_title content_tag(:h2, l(:label_user_plural)) do %>
+  <%= render 'users/actions/add' %>
+  <%= render 'users/actions/index' %>
+<% end %>
 
 <div class="accordion my-3" id="accordionPanelsStayOpenExample">
   <div class="accordion-item">

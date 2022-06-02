@@ -1,12 +1,19 @@
-<p>
-  <%= link_to_project(news.project) + ': ' unless @project %>
-  <%= link_to news.title, news_path(news) %>
-  <% if news.comments_count > 0 %>
-    <span class="comments">(<%= l(:label_x_comments, :count => news.comments_count) %>)</span>
-  <% end %>
-  <br />
-  <% unless news.summary.blank? %>
-    <span class="summary"><%= news.summary %></span><br />
-  <% end %>
-  <span class="author"><%= authoring news.created_on, news.author %></span>
-</p>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="mb-3">
+      <%= link_to_project(news.project) + ': ' unless @project %>
+      <%= link_to news.title, news_path(news) %>
+    </div>
+    <% if news.comments_count > 0 %>
+      <span class="comments">(<%= l(:label_x_comments, :count => news.comments_count) %>)</span>
+    <% end %>
+    <% unless news.summary.blank? %>
+      <div class="mb-3 summary">
+        <%= news.summary %>
+      </div>
+    <% end %>
+    <div class="author small text-muted">
+      <%= authoring news.created_on, news.author %>
+    </div>
+  </div>
+</div>
