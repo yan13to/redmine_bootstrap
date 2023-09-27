@@ -27,3 +27,7 @@ yan13to@remote:~/www/bukaproject/current/plugins$ ln -s ../../../redmine_bootstr
 ### Sign in
 ![alt text](https://github.com/yan13to/assets/blob/main/images/redmine_bootstrap/login-box.png?raw=true)
 
+### Administration -> Users
+![alt text](https://github.com/yan13to/assets/blob/main/images/redmine_bootstrap/users-page.png?raw=true)
+
+
