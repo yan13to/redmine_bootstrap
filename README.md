@@ -22,6 +22,8 @@ yan13to@remote:~$ cd www/bukaproject/current/plugins/
 yan13to@remote:~/www/bukaproject/current/plugins$ ln -s ../../../redmine_bootstrap redmine_bootstrap
 ```
 
-## Demo
+## Screenshots
 
-<https://bukaproject.herokuapp.com/>
+### Sign in
+![alt text](https://github.com/yan13to/assets/blob/main/images/redmine_bootstrap/login-box.png?raw=true)
+
