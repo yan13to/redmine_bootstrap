@@ -1,0 +1,19 @@
+<% options ||= {} %>
+
+<% current = options.delete :current %>
+<% disabled = options.delete :disabled %>
+
+<% tag_class = ['page-item'] %>
+<% tag_class << options[:class] if options[:class].present? %>
+
+<% if current %>
+  <% tag_class << 'active' %>
+  <% options['aria-current'] = 'page' %>
+<% end %>
+
+<% tag_class << 'disabled' if disabled %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :li, content, options %>

@@ -1,0 +1,13 @@
+<% options ||= {} %>
+
+<% centered = options.delete(:centered) || false %>
+
+<% tag_class = [] %>
+<% tag_class << 'modal-dialog' %>
+<% tag_class << 'modal-dialog-centered' if centered %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :div, content, to_html_options(options) %>

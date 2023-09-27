@@ -1,16 +1,22 @@
-<h2><%=l(:label_attachment_new)%></h2>
+<%= page_title title(l(:label_attachment_new)) %>
 
-<%= error_messages_for 'attachment' %>
-<%= form_tag(project_files_path(@project), :multipart => true, :class => "tabular") do %>
-<div class="box">
-
-<% if @versions.any? %>
-<p><label for="version_id"><%=l(:field_version)%></label>
-<%= select_tag "version_id", content_tag('option', '') +
-                             options_from_collection_for_select(@versions, "id", "name") %></p>
-<% end %>
-
-<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
-</div>
-<%= submit_tag l(:button_add) %>
+<%= page_card do %>
+  <%= error_messages_for 'attachment' %>
+  <%= form_tag(project_files_path(@project), multipart: true) do %>
+    <% if @versions.any? %>
+      <p>
+        <label for="version_id"><%= l(:field_version) %></label>
+        <%= select_tag "version_id", content_tag('option', '') + options_from_collection_for_select(@versions, "id", "name") %>
+      </p>
+    <% end %>
+    <%= page_paragraph do %>
+      <label>
+        <%= l(:label_attachment_plural) %>
+      </label>
+      <%= render partial: 'attachments/form' %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= page_submit_tag l(:button_add) %>
+    <% end %>
+  <% end %>
 <% end %>

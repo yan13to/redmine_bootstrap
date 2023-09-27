@@ -1,0 +1,24 @@
+<% options ||= {} %>
+
+<% value = options.delete :value %>
+<% checked = options.delete :checked %>
+<% label = options.delete(:label) || {} %>
+<% invalid = options.delete(:invalid) || {} %>
+<% switch = options.delete :switch %>
+<% label_content = label || label[:content] %>
+<% label_options = {} %>
+<% label_options[:class] = [label_options[:class], 'form-check-label'].compact.join(' ') %>
+<% invalid_content = invalid || invalid[:content] %>
+<% invalid_options = { class: 'invalid-feedback' } %>
+<% container_class = ['form-check'] %>
+<% container_class << 'form-switch' if switch.present? %>
+<% input_class = ['form-check-input'] %>
+<% input_class << options[:class] if options[:class].present? %>
+<% input_class << 'is-invalid' if invalid.present? %>
+<% options[:class] = input_class.compact.join(' ') %>
+
+<%= content_tag :div, class: container_class.compact.join(' ') do %>
+  <%= radio_button_tag content, value, checked, options %>
+  <%= content_tag :label, label_content, label_options if label.present? %>
+  <%= content_tag :div, invalid_content, invalid_options if invalid.present? %>
+<% end %>

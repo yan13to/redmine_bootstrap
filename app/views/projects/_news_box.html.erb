@@ -1,11 +1,8 @@
-<div class="card">
-  <div class="news box card-body">
-    <h3 class="icon icon-news">
-      <%= l(:label_news_latest) %>
-    </h3>
-    <%= render partial: 'news/news', collection: @news %>
-    <p>
-      <%= link_to l(:label_news_view_all), project_news_index_path(@project) %>
-    </p>
-  </div>
-</div>
+<h3>
+  <%= page_icon(:newspaper, class: 'small me-1') %>
+  <%= l(:label_news_latest) %>
+</h3>
+<%= render partial: 'news/news', collection: @news %>
+<p>
+  <%= link_to l(:label_news_view_all), project_news_index_path(@project) %>
+</p>

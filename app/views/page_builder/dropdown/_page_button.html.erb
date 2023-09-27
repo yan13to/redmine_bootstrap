@@ -1,0 +1,44 @@
+<% options ||= {} %>
+
+<% tag = options.delete :tag || :button %>
+<% active = options.delete :active %>
+<% icon = options.delete :icon %>
+<% mode = options.delete :mode %>
+<% url = options.delete :url %>
+<% href = options.delete :href %>
+<% split = options.delete :split %>
+
+<% tag_class = [] %>
+<% tag_class << 'btn' if tag == :button %>
+<% tag_class << 'nav-link' if tag == :a %>
+<% tag_class << 'dropdown-toggle' unless mode == :no_icon %>
+<% tag_class << 'dropdown-toggle-split' if split %>
+<% tag_class << 'active' if active %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+<% options[:type] = 'button' if tag == :button %>
+<% options['data-bs-toggle'] = 'dropdown' %>
+<% options['aria-expanded'] = 'false' unless tag == :a %>
+
+<% tag_label = [] %>
+<% tag_label << page_icon(icon) if icon.present? %>
+<% tag_label << content_tag(:span, content) if content.present? %>
+<% content = tag_label.compact.join('&nbsp;').html_safe %>
+
+<% if tag == :a %>
+  <% if split %>
+    <%= link_to content, (url || href), to_html_options(class: 'nav-link') %>
+    <%= link_to content_tag(:span, 'Toggle Dropdown', class: 'visually-hidden'), url, to_html_options(options) %>
+  <% else %>
+    <%= link_to content, url, to_html_options(options) %>
+  <% end %>
+<% else %>
+  <% if split %>
+    <%= content_tag tag, content, to_html_options(class: 'btn') %>
+    <%= content_tag tag, content_tag(:span, 'Toggle Dropdown', class: 'visually-hidden'), url, to_html_options(options) %>
+  <% else %>
+    <%= content_tag tag, content, to_html_options(options) %>
+  <% end %>
+<% end %>

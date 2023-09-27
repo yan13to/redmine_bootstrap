@@ -1,0 +1,34 @@
+<% options ||= {} %>
+
+<% invalid = options.delete(:invalid) %>
+<% invalid = false if invalid.nil? %>
+<% label = options.delete(:label) || {} %>
+<% hint = options.delete(:hint) || {} %>
+
+<% wrapper_class = [] %>
+<% wrapper_class << 'form_check' %>
+<% wrapper_class = wrapper_class.join(' ') %>
+
+<% wrapper_options = {} %>
+<% wrapper_options[:class] = wrapper_class %>
+
+<% tag_class = [] %>
+<% tag_class << 'form-check-input' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'is-invalid' if invalid || f.object.errors[method].present? %>
+
+<% label = { content: label } if label.is_a?(String) %>
+<% label_content = label[:content] %>
+<% label_options = label[:options] || {} %>
+
+<% hint = { content: hint } if hint.is_a?(String) %>
+<% hint_content = hint[:content] %>
+<% hint_options = hint[:options] || {} %>
+
+<% options[:class] = tag_class.compact.join(' ') %>
+
+<%= content_tag :div, to_html_options(wrapper_options) do %>
+  <%= f.check_box method, to_html_options(options), checked_value, unchecked_value %>
+  <%= f.page_label method, label_content, to_html_options(label_options) %>
+  <%= f.page_feedback method, :invalid if invalid %>
+<% end %>

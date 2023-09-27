@@ -1,0 +1,32 @@
+<% options ||= {} %>
+
+<% icon = options.delete :icon %>
+<% url = options.delete :url %>
+<% active = options.delete :active %>
+<% disabled = options.delete :disabled %>
+<% text = options.delete :text %>
+<% bold = options.delete :bold %>
+
+<% tag_class = [] %>
+<% tag_class << 'dropdown-item' unless text %>
+<% tag_class << 'dropdown-item-text' if text %>
+<% tag_class << 'd-flex' if icon.present? %>
+<% tag_class << 'gap-2' if icon.present? %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'active' if active.present? %>
+<% tag_class << 'disabled' if disabled.present? %>
+<% tag_class << 'fw-bold' if bold.present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% tag_label = [] %>
+<% tag_label << page_icon(icon) if icon.present? %>
+<% tag_label << content_tag(:span, content) if content.present? %>
+<% tag_label = tag_label.join.html_safe %>
+
+<% if text %>
+  <%= content_tag :span, tag_label, to_html_options(options) %>
+<% else  %>
+  <%= link_to tag_label, url, to_html_options(options) %>
+<% end %>

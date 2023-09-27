@@ -1,0 +1,65 @@
+<%= page_accordion do %>
+  <%= page_accordion_item do %>
+    <%= page_accordion_header page_accordion_button(l(:label_roadmap), id: 'roadmap-filter', show: true) %>
+    <%= page_accordion_body id: 'roadmap-filter', show: true do %>
+      <%= form_tag({}, method: :get) do %>
+        <%= page_list do %>
+          <% @trackers.each do |tracker| %>
+            <%= page_list_item do %>
+              <div class="form-check">
+                <%= check_box_tag("tracker_ids[]", tracker.id, (@selected_tracker_ids.include? tracker.id.to_s), id: nil, class: 'form-check-input') %>
+                <label class="form-check-label">
+                  <%= tracker.name %>
+                </label>
+              </div>
+            <% end %>
+          <% end %>
+          <%= page_list_item do %>
+            <div class="form-check">
+              <%= check_box_tag "completed", 1, params[:completed], class: 'form-check-input' %>
+              <label class="form-check-label">
+                <%= l(:label_show_completed_versions) %>
+              </label>
+            </div>
+          <% end %>
+          <% if @project.descendants.active.any? %>
+            <%= page_list_item do %>
+              <%= hidden_field_tag 'with_subprojects', 0, id: nil %>
+              <div class="form-check">
+                <%= check_box_tag 'with_subprojects', 1, @with_subprojects, class: 'form-check-input' %>
+                <label class="form-check-label">
+                  <%= l(:label_subproject_plural) %>
+                </label>
+              </div>
+            <% end %>
+          <% end %>
+        <% end %>
+        <div class="mb-3">
+          <%= submit_tag l(:button_apply), class: 'btn btn-primary', name: nil %>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= page_accordion_item do %>
+    <%= page_accordion_header page_accordion_button(l(:label_version_plural), id: 'version-listing', show: true) %>
+    <%= page_accordion_body id: 'version-listing', show: true do %>
+      <%= page_list do %>
+        <% @versions.each do |version| %>
+          <%= page_list_item do %>
+            <%= page_link_to format_version_name(version), "##{version_anchor(version)}" %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if @completed_versions.present? %>
+        <%= page_link_to l(:label_completed_versions), '#' %>
+        <%= page_list do %>
+          <% @completed_versions.each do |version| %>
+            <%= page_list_item do %>
+              <%= link_to_version version %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

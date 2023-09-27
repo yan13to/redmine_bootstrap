@@ -1,0 +1,32 @@
+<% options ||= {} %>
+
+<% tag = options.delete(:tag) || :div %>
+
+<% button = options.delete :button %>
+<% button = { content: button } if button.is_a?(String) || button.nil? %>
+<% button[:options] ||= {} %>
+<% button[:options][:tag] ||= :button %>
+
+<% menu = options.delete :menu %>
+<% menu = { content: menu } if menu.is_a?(String) || menu.nil? %>
+<% menu[:options] ||= {} %>
+<% menu[:options][:tag] ||= :ul %>
+
+<% tag_class = [] %>
+<% tag_class << 'dropdown' unless button[:options][:split] %>
+<% tag_class << 'btn-group' if button[:options][:split] %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag tag, to_html_options(options) do %>
+  <%= page_dropdown_button button[:content], button[:options] %>
+  <%= page_dropdown_menu menu[:options] do %>
+    <% if content.is_a?(Array) %>
+      <%= page_dropdown_item content %>
+    <% else %>
+      <%= content %>
+    <% end %>
+  <% end %>
+<% end %>

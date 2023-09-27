@@ -1,14 +1,15 @@
 <% icon = icon.nil? ? true : icon %>
 <% text = text.nil? ? false : text %>
+
 <% btn_label = l(:button_delete) %>
-<% btn_class = 'btn btn-danger' %>
-<% icon_class = 'bi bi-trash' %>
+<% btn_class ||= 'btn' %>
+
 <% html = [] %>
-<% html << content_tag(:i, nil, class: icon_class) if icon %>
+<% html << page_icon(:trash) if icon %>
 <% html << content_tag(:span, btn_label) if text %>
 
 <%= form_tag project_path(project), method: :delete do %>
-  <button type="submit" class="<%= btn_class %>">
+  <button type="submit" class="<%= btn_class %>" data-bs-toggle="tooltip" title="<%= btn_label %>">
     <%= html.compact.join('&nbsp;').html_safe %>
   </button>
 <% end %>

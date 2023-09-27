@@ -1,6 +1,0 @@
-<% btn_class ||= 'btn' %>
-<% url = issue_url(@issue, only_path: false) %>
-
-<%#= copy_object_url_link(issue_url(@issue, only_path: false)) %>
-
-<%= link_to_function(l(:button_copy_link), 'copyTextToClipboard(this);', class: btn_class, data: {'clipboard-text': url}) %>

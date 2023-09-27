@@ -1,35 +1,37 @@
-<%= title [l(:label_workflow), workflows_edit_path], l(:field_summary) %>
+<% html_title [l(:field_summary), l(:label_workflow)] %>
 
-<% if @roles.empty? || @trackers.empty? %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% else %>
-<div class="autoscroll">
-<table class="list">
-<thead>
-    <tr>
-    <th></th>
-    <% @roles.each do |role| %>
-    <th>
-        <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
-    </th>
+<%= page_title page_breadcrumb([{content: page_link_to(l(:label_workflow), workflows_edit_path, icon: :infinity)}, {content: l(:field_summary)}], class: 'h2') %>
+
+<%= page_card do %>
+  <% if @roles.empty? || @trackers.empty? %>
+    <%= page_empty %>
+  <% else %>
+    <%= page_table do %>
+      <%= page_table_thead do %>
+        <%= page_table_tr do %>
+          <%= page_table_th %>
+          <% @roles.each do |role| %>
+            <%= page_table_th do %>
+              <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= page_table_tbody do %>
+        <% @trackers.each do |tracker| -%>
+          <%= page_table_tr do %>
+            <%= page_table_td do %>
+              <%= tracker.name %>
+            <% end %>
+            <% @roles.each do |role| -%>
+              <% count = @workflow_counts[[tracker.id, role.id]] || 0 %>
+              <%= page_table_td do %>
+                <%= page_link_to((count > 0 ? count : content_tag(:span, nil)), { action: 'edit', role_id: role, tracker_id: tracker }, title: l(:button_edit)) %>
+              <% end %>
+            <% end -%>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
-    </tr>
-</thead>
-<tbody>
-<% @trackers.each do |tracker| -%>
-<tr>
-  <td class="name"><%= tracker.name %></td>
-  <% @roles.each do |role| -%>
-  <% count = @workflow_counts[[tracker.id, role.id]] || 0 %>
-    <td>
-      <%= link_to((count > 0 ? count : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
-                  {:action => 'edit', :role_id => role, :tracker_id => tracker},
-                  :title => l(:button_edit)) %>
-    </td>
-  <% end -%>
-</tr>
-<% end -%>
-</tbody>
-</table>
-</div>
+  <% end %>
 <% end %>

@@ -1,9 +1,13 @@
 <% icon = icon.nil? ? true : icon %>
 <% text = text.nil? ? false : text %>
-<% html = [] %>
-<% html << content_tag(:i, nil, class: 'bi bi-back') if icon %>
-<% html << content_tag(:span, l(:button_copy)) if text %>
 
-<%= link_to copy_project_path(project), class: 'btn btn-warning', title: l(:button_copy) do %>
+<% btn_class ||= 'btn' %>
+<% btn_label ||= l(:button_copy) %>
+
+<% html = [] %>
+<% html << page_icon(:back) if icon %>
+<% html << content_tag(:span, btn_label) if text %>
+
+<%= link_to copy_project_path(project), class: btn_class, 'data-bs-toggle': 'tooltip', title: l(:button_copy) do %>
   <%= html.compact.join('&nbsp;').html_safe %>
 <% end %>

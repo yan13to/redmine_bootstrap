@@ -1,6 +1,5 @@
-<h2><%= link_to l(:label_report_plural), project_issues_report_path(@project) %> »</h2>
+<%= page_title content_tag(:h2, page_icon('pie-chart') + '&nbsp;'.html_safe + page_link_to(l(:label_report_plural), project_issues_report_path(@project)) + '&raquo;'.html_safe) %>
 
 <h3><%=@report_title%></h3>
-<%= render :partial => 'details', :locals => { :data => @data, :field_name => @field, :rows => @rows } %>
-<br />
+<%= render 'details', data: @data, field_name: @field, rows: @rows %>
 <%= link_to l(:button_back), project_issues_report_path(@project) %>

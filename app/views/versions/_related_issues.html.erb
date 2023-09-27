@@ -1,0 +1,23 @@
+<%= page_heading :h3, l(:label_related_issues) %>
+<%= page_card do %>
+  <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do -%>
+    <%= page_table do %>
+      <% issues.each do |issue| -%>
+        <%= page_table_tr class: issue.css_classes do %>
+          <%= page_table_td do %>
+            <%= check_box_tag 'ids[]', issue.id, false, id: nil %>
+          <% end %>
+          <%= page_table_td do %>
+            <%= assignee_avatar(issue.assigned_to, size: 16) %>
+          <% end %>
+          <%= page_table_td do %>
+            <%= link_to_issue(issue, project: (@project != issue.project)) %>
+          <% end %>
+          <%= page_table_td do %>
+            <%= link_to_context_menu %>
+          <% end %>
+        <% end %>
+      <% end -%>
+    <% end %>
+  <% end %>
+<% end %>

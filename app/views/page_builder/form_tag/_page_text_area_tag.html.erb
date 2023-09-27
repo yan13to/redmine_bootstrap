@@ -1,0 +1,26 @@
+<% options ||= {} %>
+
+<% tag_content = options.delete :content %>
+<% invalid = options.delete :invalid %>
+
+<% tag_class = ['form-control'] # default input class %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'is-invalid' if invalid.present? %>
+
+<% label = options.delete(:label) || {} %>
+<% label = { content: label } if label.is_a?(String) %>
+<% label_content = label[:content] %>
+<% label_options = label[:options] || {} %>
+<% label_options[:class] = ['form-label', label_options[:class]].compact.join(' ') %>
+
+<% hint = options.delete(:hint) || {} %>
+<% hint = { content: hint } if hint.is_a?(String) %>
+<% hint_content = hint[:content] %>
+<% hint_options = hint[:options] || {} %>
+<% hint_options[:class] = ['small', 'text-muted', hint_options[:class]].compact.join(' ') %>
+
+<% options[:class] = tag_class.compact.join(' ') %>
+
+<%= content_tag :label, label_content, to_html_options(label_options) if label.present? %>
+<%= text_area_tag content, tag_content, to_html_options(options) %>
+<%= content_tag :div, hint_content, hint_options if hint.present? %>

@@ -1,0 +1,5 @@
+<% options ||= {} %>
+
+<% content = page_table_tr page_table_th(content) if content.is_a?(Array) %>
+
+<%= content_tag :thead, content, to_html_options(options) %>

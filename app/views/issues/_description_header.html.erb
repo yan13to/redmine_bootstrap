@@ -1,0 +1,6 @@
+<%= page_row do %>
+  <%= page_col l(:field_description) %>
+  <%= page_col do %>
+    <%= page_link_to l(:button_quote), quoted_issue_path(@issue), remote: true, method: 'post' if @issue.notes_addable? %>
+  <% end %>
+<% end %>

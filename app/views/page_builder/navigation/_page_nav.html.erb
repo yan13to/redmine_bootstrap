@@ -1,0 +1,24 @@
+<% options ||= {} %>
+
+<% mode = options.delete :mode %>
+<% mode = mode.to_s %>
+
+<% tag_class = [] %>
+<% tag_class << 'nav' unless mode == 'navbar' %>
+<% tag_class << 'nav-pills' if mode == 'pills' %>
+<% tag_class << 'nav-tabs' if mode == 'tabs' %>
+<% tag_class << 'navbar-nav' if mode == 'navbar' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :ul, to_html_options(options) do %>
+  <% if content.is_a?(Array) %>
+    <% content.each do |item| %>
+      <%= page_nav_item page_nav_link(item[:name], item[:url], item[:options]) %>
+    <% end %>
+  <% else %>
+    <%= content %>
+  <% end %>
+<% end %>

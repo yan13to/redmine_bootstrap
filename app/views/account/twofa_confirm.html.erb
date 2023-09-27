@@ -1,16 +1,11 @@
 <%= page_card class: 'mx-auto w-25 shadow' do %>
-  <div class="card-title text-center">
-    <h3><%= l(:setting_twofa) %></h3>
-    <p><%= l('twofa_label_enter_otp') %></p>
-  </div>
-
-  <%= form_tag({ action: 'twofa' }, { id: 'twofa_form', onsubmit: 'return keepAnchorOnSignIn(this);' }) do -%>
-    <label for="twofa_code">
-      <%=l 'twofa_label_code' -%>
-      <%= link_to l('twofa_resend_code'), { controller: 'account', action: 'twofa_resend' }, method: :post, class: 'lost_password' if @twofa_view[:resendable] -%>
-    </label>
-    <%= text_field_tag :twofa_code, nil, tabindex: '1', autocomplete: 'off', autofocus: true -%>
-
-    <%= submit_tag l(:button_login), tabindex: '2', id: 'login-submit', name: :submit_otp -%>
+  <%= image_tag '/plugin_assets/redmine_bootstrap/images/logo.png', class: 'mx-auto d-block', style: 'height:62px !important;' %>
+  <%= page_heading :h3, l(:setting_twofa), class: 'text-center' %>
+  <%= page_paragraph l('twofa_label_enter_otp'), class: 'text-center' %>
+  <%= page_form_tag { action: 'twofa' } do -%>
+    <% labels = [l('twofa_label_code')] %>
+    <% labels << page_link_to(l('twofa_resend_code'), { controller: 'account', action: 'twofa_resend' }, method: :post) if @twofa_view[:resendable] %>
+    <%= page_text_field_tag :twofa_code, nil, tabindex: '1', autocomplete: 'off', autofocus: true, label: labels.compact.join(' ') -%>
+    <%= page_submit_tag l(:button_login), tabindex: '2', name: :submit_otp -%>
   <% end %>
 <% end %>

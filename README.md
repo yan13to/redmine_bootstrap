@@ -12,15 +12,6 @@ or as submodule
 ```
 $ git submodule add git@github.com:yan13to/redmine_bootstrap.git plugins/redmine_bootstrap
 ```
-or symlink it (recormended) easier than methods above
-
-```
-$ cd /path/to/redmine/plugins
-```
-
-```
-$ ln -s /path/to/your/redmine_bootstrap redmine_bootstrap
-```
 
 ## Demo
 

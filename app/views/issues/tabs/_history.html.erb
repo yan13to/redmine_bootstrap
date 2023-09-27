@@ -3,7 +3,7 @@
 <% reply_links = issue.notes_addable? -%>
 
 <% for journal in journals %>
-  <%= page_card class: 'mb-3' do %>
+  <%= page_card do %>
     <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
       <div id="note-<%= journal.indice %>">
         <div class="row align-items-center">

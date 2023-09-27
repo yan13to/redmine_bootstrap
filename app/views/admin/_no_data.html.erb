@@ -1,12 +1,9 @@
-<%= form_tag({action: 'default_configuration'}) do %>
+<%= page_form_tag({action: 'default_configuration'}) do %>
   <%= simple_format(l(:text_no_configuration_data)) %>
-
-  <div class="mb-3">
-    <label><%= l(:field_language) %></label>
-    <%= select_tag 'lang', options_for_select(lang_options_for_select(false), current_language.to_s), class: 'form-select' %>
-  </div>
-
-  <div class="mb-3">
-    <%= submit_tag l(:text_load_default_configuration) %>
-  </div>
+  <%= page_paragraph do %>
+    <%= page_select_tag 'lang', options_for_select(lang_options_for_select(false), current_language.to_s), label: l(:field_language) %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= page_submit_tag l(:text_load_default_configuration) %>
+  <% end %>
 <% end %>

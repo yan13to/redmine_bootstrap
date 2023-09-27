@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="<%= current_language %>">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title><%= html_title %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="<%= Redmine::Info.app_name %>" />
+  <meta name="keywords" content="issue,bug,tracker" />
+  <%= csrf_meta_tag %>
+  <%= favicon %>
+  <%= stylesheet_link_tag 'application', media: :all, plugin: :redmine_bootstrap %>
+  <%= javascript_include_tag 'application', plugin: :redmine_bootstrap, type: :module %>
+  <%= heads_for_theme %>
+  <%= heads_for_auto_complete(@project) %>
+  <%= call_hook :view_layouts_base_html_head %>
+  <!-- page specific tags -->
+  <%= yield :header_tags -%>
+</head>
+<body class="<%= body_css_classes %>">
+  <%= page_paragraph class: 'text-center' do %>
+    <h1>BukaProject</h1>
+  <% end %>
+  <div class="container">
+    <%= yield %>
+    <div class="text-center small text-muted mt-3">
+      <em>Powered by <%= link_to Redmine::Info.app_name, Redmine::Info.url %> &copy; 2006-2021 Jean-Philippe Lang</em>
+    </div>
+  </div>
+</body>
+</html>

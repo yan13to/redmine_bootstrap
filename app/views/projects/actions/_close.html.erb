@@ -1,0 +1,24 @@
+<% icon = defined?(icon) ? icon : true %>
+<% text = defined?(text) ? text : false %>
+
+<% btn_class ||= 'btn' %>
+<% html = [] %>
+<% project ||= @project %>
+
+<% if project.active? %>
+  <% btn_label = l(:button_close) %>
+  <% html << page_icon(:lock) if icon %>
+  <% html << content_tag(:span, btn_label) if text %>
+
+  <%= link_to close_project_path(project), data: {confirm: l(:text_are_you_sure)}, method: :post, class: btn_class, 'data-bs-toggle': 'tooltip', title: btn_label do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% else %>
+  <% btn_label = l(:button_reopen) %>
+  <% html << page_icon(:unlock) if icon %>
+  <% html << content_tag(:span, btn_label) if text %>
+
+  <%= link_to reopen_project_path(project), data: {confirm: l(:text_are_you_sure)}, method: :post, class: btn_class, 'data-bs-toggle': 'tooltip', title: btn_label do %>
+    <%= html.compact.join('&nbsp;').html_safe %>
+  <% end %>
+<% end %>

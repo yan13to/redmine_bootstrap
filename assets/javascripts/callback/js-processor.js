@@ -1,8 +1,8 @@
 export default function JsProcessor() {
-  const elements = [].slice.call(document.querySelectorAll('[data-processor]'));
+  const elements = [].slice.call(document.querySelectorAll('[data-bs-processor]'));
 
   for(const element of elements) {
-    const processor = element.getAttribute('data-processor');
+    const processor = element.getAttribute('data-bs-processor');
 
     if (!processor) return;
 

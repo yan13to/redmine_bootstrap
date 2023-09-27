@@ -1,4 +1,2 @@
-<div class="contextual">
-<%= link_to l(:button_copy), {:action => 'copy'}, :class => 'icon icon-copy' %>
-<%= link_to l(:field_summary), {:action => 'index'}, :class => 'icon icon-summary' %>
-</div>
+<%= page_link_to l(:button_copy), { action: 'copy' }, icon: :clipboard %>
+<%= page_link_to l(:field_summary), { action: 'index' }, icon: :overview %>

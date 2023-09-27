@@ -1,30 +1,30 @@
 <% url ||= custom_fields_path %>
-<% builder ||= BootstrapFormBuilder %>
+<% builder ||= PageFormBuilder %>
 <% model ||= @custom_field %>
 <% method ||= :post %>
 
 <%= form_with scope: :custom_field, model: model, url: url, builder: builder, method: method do |f| %>
   <%= error_messages_for 'custom_field' %>
-  <%= f.select_form_group :field_format, custom_field_formats_for_select(model), {}, disabled: !model.new_record? %>
-  <%= f.text_field_form_group :name, size: 50, required: true %>
-  <%= f.text_area_form_group :description, rows: 7 %>
+  <%= f.page_selectd_format, custom_field_formats_for_select(model), {}, disabled: !model.new_record? %>
+  <%= f.page_text_field :name, size: 50, required: true %>
+  <%= f.page_text_area :description, rows: 7 %>
   <% if model.format.multiple_supported %>
-    <%= f.check_box_form_group :multiple, hint: (!model.new_record? && model.multiple ? l(:text_turning_multiple_off) : nil) %>
+    <%= f.page_check_box :multiple, hint: (!model.new_record? && model.multiple ? l(:text_turning_multiple_off) : nil) %>
   <% end %>
   <%= render_custom_field_format_partial f, model %>
   <%= call_hook(:view_custom_fields_form_upper_box, custom_field: model, form: f) %>
-  <%= f.check_box_form_group :is_required %>
+  <%= f.page_check_box :is_required %>
   <% if %w(UserCustomField).include?(model.class.name) %>
-    <%= f.check_box_form_group :visible %>
+    <%= f.page_check_box :visible %>
   <% end %>
   <% if model.is_a?(UserCustomField) %>
-    <%= f.check_box_form_group :editable %>
+    <%= f.page_check_box :editable %>
   <% end %>
   <% if %w(IssueCustomField UserCustomField ProjectCustomField VersionCustomField GroupCustomField TimeEntryCustomField).include?(model.class.name) && model.format.is_filter_supported %>
-    <%= f.check_box_form_group :is_filter %>
+    <%= f.page_check_box :is_filter %>
   <% end %>
   <% if %w(IssueCustomField ProjectCustomField).include?(model.class.name) && model.format.searchable_supported %>
-    <%= f.check_box_form_group :searchable %>
+    <%= f.page_check_box :searchable %>
   <% end %>
   <%= call_hook(:"view_custom_fields_form_#{model.type.to_s.underscore}", custom_field: model, form: f) %>
   <% if %w(IssueCustomField TimeEntryCustomField ProjectCustomField VersionCustomField).include?(model.class.name) %>
@@ -36,10 +36,10 @@
   <% end %>
   <p>
     <% if model.new_record? %>
-      <%= submit_tag l(:button_create) %>
-      <%= submit_tag l(:button_create_and_continue), name: 'continue' %>
+      <%= page_submit_tag l(:button_create) %>
+      <%= page_submit_tag l(:button_create_and_continue), name: 'continue' %>
     <% else %>
-      <%= submit_tag l(:button_save) %>
+      <%= page_submit_tag l(:button_save) %>
     <% end %>
   </p>
   <% include_calendar_headers_tags %>

@@ -1,0 +1,20 @@
+<% options ||= {} %>
+
+<% dark = options.delete(:dark) || false %>
+<% shadow = options.delete(:shadow) || false %>
+<% tag = options.delete(:tag) || :ul %>
+<% menu_end = options.delete(:menu_end) || false %>
+<% text = options.delete(:text) %>
+
+<% tag_class = [] %>
+<% tag_class << 'dropdown-menu' %>
+<% tag_class << 'dropdown-menu-dark' if dark %>
+<% tag_class << 'shadow' if shadow %>
+<% tag_class << 'dropdown-menu-end' if menu_end %>
+<% tag_class << 'p-4' if text %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+<% options['aria-labelledby'] = 'dropdownMenu' %>
+
+<%= content_tag tag, content, to_html_options(options) %>

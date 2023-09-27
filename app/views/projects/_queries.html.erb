@@ -1,0 +1,18 @@
+<% queries ||= [] %>
+<% selected_query ||= @query %>
+<% project ||= @project %>
+
+<ul class="list-group list-group-flush">
+  <% queries.collect do |query| %>
+    <li class="list-group-item list-group-item-action d-flex justify-content-between<%= ' active bg-dark' if query == @query %>">
+      <%= link_to query.name, {}.merge(query_id: query), class: "text-decoration-none#{' text-white' if query == selected_query}" %>
+      <%= link_to content_tag(:i, nil, class: 'bi bi-x'),
+                  {
+                    set_filter: 1,
+                    sort: '',
+                    project_id: project
+                  },
+                  class: 'btn badge bg-danger', title: l(:button_clear) if query == selected_query %>
+    </li>
+  <% end %>
+</ul>

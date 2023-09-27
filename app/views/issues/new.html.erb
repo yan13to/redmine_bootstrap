@@ -1,47 +1,36 @@
-<%= page_title title(l(:label_issue_new)) %>
+<% html_title(l(:label_issue_new)) %>
 
-<%= call_hook(:view_issues_new_top, { issue: @issue }) %>
+<%= page_title page_heading(:h2, page_icon(:book) + '&nbsp;'.html_safe + l(:label_issue_new)) %>
 
-<%= form_with model: @issue, url: _project_issues_path(@project), html: { multipart: true }, builder: BootstrapFormBuilder do |f| %>
-  <%= error_messages_for 'issue' %>
-  <%= hidden_field_tag 'copy_from', params[:copy_from] if params[:copy_from] %>
-
-  <%= render 'issues/form', f: f %>
-
-  <% if @copy_from && Setting.link_copied_issue == 'ask' %>
-    <p>
-      <label for="link_copy"><%= l(:label_link_copied_issue) %></label>
-      <%= check_box_tag 'link_copy', '1', @link_copy %>
-    </p>
+<%= page_card do %>
+  <%= call_hook(:view_issues_new_top, { issue: @issue }) %>
+  <%= form_with model: @issue, url: _project_issues_path(@project), html: { multipart: true }, builder: PageFormBuilder do |f| %>
+    <%= error_messages_for 'issue' %>
+    <%= hidden_field_tag 'copy_from', params[:copy_from] if params[:copy_from] %>
+    <%= render 'issues/form', f: f %>
+    <%= page_paragraph do %>
+      <%= page_check_box_tag 'link_copy', '1', @link_copy, label: l(:label_link_copied_issue) %>
+    <% end if @copy_from && Setting.link_copied_issue == 'ask' %>
+    <%= page_paragraph do %>
+      <%= page_check_box_tag 'copy_attachments', '1', @copy_attachments, label: l(:label_copy_attachments) %>
+    <% end if @copy_from && @copy_from.attachments.any? %>
+    <%= page_paragraph do %>
+      <%= page_check_box_tag 'copy_subtasks', '1', @copy_subtasks, label: l(:label_copy_subtasks) %>
+    <% end if @copy_from && !@copy_from.leaf? %>
+    <%= page_paragraph do %>
+      <label><%= l(:label_attachment_plural) %></label>
+      <%= render 'attachments/form', container: @issue %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= render 'issues/watchers_form' %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= page_submit_tag l(:button_create) %>
+      <%= page_submit_tag l(:button_create_and_continue), name: 'continue' %>
+    <% end %>
   <% end %>
-
-  <% if @copy_from && @copy_from.attachments.any? %>
-    <p>
-      <label for="copy_attachments"><%= l(:label_copy_attachments) %></label>
-      <%= check_box_tag 'copy_attachments', '1', @copy_attachments %>
-    </p>
-  <% end %>
-
-  <% if @copy_from && !@copy_from.leaf? %>
-    <p>
-      <label for="copy_subtasks"><%= l(:label_copy_subtasks) %></label>
-      <%= check_box_tag 'copy_subtasks', '1', @copy_subtasks %>
-    </p>
-  <% end %>
-
-  <p id="attachments_form">
-    <label><%= l(:label_attachment_plural) %></label>
-    <%= render 'attachments/form', container: @issue %>
-  </p>
-
-  <div id="watchers_form_container">
-    <%= render 'issues/watchers_form' %>
-  </div>
-
-  <%= submit_tag l(:button_create) %>
-  <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
 <% end %>
 
 <% content_for :header_tags do %>
-    <%= robot_exclusion_tag %>
+  <%= robot_exclusion_tag %>
 <% end %>

@@ -1,9 +1,0 @@
-<% icon = icon.nil? ? true : icon %>
-<% text = text.nil? ? false : text %>
-<% html = [] %>
-<% html << content_tag(:i, nil, class: 'bi bi-plus') if icon %>
-<% html << content_tag(:span, l(:label_auth_source_new)) if text %>
-
-<%= link_to new_auth_source_path, class: 'btn btn-success', title: l(:label_auth_source_new), 'data-bs-toggle': :tooltip do %>
-  <%= html.compact.join('&nbsp;').html_safe %>
-<% end %>

@@ -1,0 +1,22 @@
+<% options ||= {} %>
+
+<% tag_class = ['row'] # default class %>
+<% tag_class << 'row-cols-lg-auto' %>
+<% tag_class << 'g-3' %>
+<% tag_class << 'align-items-center' %>
+
+<% options[:class] = tag_class.join(' ') %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <% if content.is_a?(Array) %>
+    <% content.each do |col| %>
+      <% item = col %>
+      <% item = { content: item } if item.is_a?(String) %>
+      <% item_content = item[:content] %>
+      <% item_options = item[:options] || {} %>
+      <%= page_col item_content, to_html_options(item_options) %>
+    <% end %>
+  <% else %>
+    <%= content %>
+  <% end %>
+<% end %>

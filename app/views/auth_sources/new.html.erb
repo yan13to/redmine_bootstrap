@@ -1,6 +1,15 @@
 <% html_title = title [l(:label_auth_source_plural), auth_sources_path], "#{l(:label_auth_source_new)} (#{@auth_source.auth_method_name})" %>
 
-<%= page_title html_title %>
+<%= page_title content_tag(:h2, page_breadcrumb([
+  {
+    name: page_link_to(l(:label_auth_source_plural), auth_sources_path),
+    current: false
+  },
+  {
+    name: "#{l(:label_auth_source_new)} (#{@auth_source.auth_method_name})",
+    current: true
+  }
+])) %>
 
 <%= page_card do %>
   <%= render 'form_auth_source_ldap' %>

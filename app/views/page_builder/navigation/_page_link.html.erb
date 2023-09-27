@@ -1,0 +1,22 @@
+<% options ||= {} %>
+
+<% icon = options.delete :icon %>
+<% url = options.delete :url %>
+<% active = options.delete :active %>
+
+<% tag_class = [] %>
+<% tag_class << 'nav-link' %>
+<% tag_class << 'd-flex' if icon.present? %>
+<% tag_class << 'gap-2' if icon.present? %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'active' if active %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% tag_label = [] %>
+<% tag_label << page_icon(icon) if icon.present? %>
+<% tag_label << content_tag(:span, content) if content.present? %>
+<% tag_label = tag_label.join.html_safe %>
+
+<%= link_to tag_label, url, to_html_options(options) %>

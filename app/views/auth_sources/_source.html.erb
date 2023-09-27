@@ -1,20 +1,18 @@
-<tr id="auth-source-<%= source.id %>">
-  <td>
-    <%= render 'auth_sources/actions/edit', source: source, icon: false, text: true %>
-  </td>
-  <td>
+<%= page_table_tr id: "auth-source-#{source.id}" do %>
+  <%= page_table_td do %>
+    <%= page_link_to source.name, edit_auth_source_path(source) %>
+  <% end %>
+  <%= page_table_td do %>
     <%= source.auth_method_name %>
-  </td>
-  <td>
+  <% end %>
+  <%= page_table_td do %>
     <%= source.host %>
-  </td>
-  <td>
+  <% end %>
+  <%= page_table_td do %>
     <%= source.users.count %>
-  </td>
-  <td>
-    <div class="btn-group btn-group-sm">
-      <%= render 'auth_sources/actions/test', source: source %>
-      <%= render 'auth_sources/actions/delete', source: source %>
-    </div>
-  </td>
-</tr>
+  <% end %>
+  <%= page_table_td class: 'hstack gap-3' do %>
+    <%= page_link_to l(:button_test), try_connection_auth_source_path(source), icon: 'bullseye' %>
+    <%= page_link_to l(:button_delete), auth_source_path(source), icon: 'trash', method: :delete %>
+  <% end %>
+<% end %>

@@ -1,10 +1,15 @@
-<div class="card mb-3">
-  <div class="members box card-body">
-    <h3 class="icon icon-group"><%= l(:label_member_plural) %></h3>
+<h3>
+  <%= page_icon(:people, class: 'small me-1') %>
+  <%= l(:label_member_plural) %>
+</h3>
+
+<%= page_card class: 'mb-3' do %>
+  <ul class="list-unstyled">
     <% @principals_by_role.keys.sort.each do |role| %>
-      <p>
-        <span class="label"><%= role %>:</span> <%= @principals_by_role[role].sort.collect{|p| link_to_user p}.join(", ").html_safe %>
-      </p>
+      <li>
+        <span class="label"><%= role %>:</span>
+        <%= @principals_by_role[role].sort.collect{|p| link_to_user p}.join(", ").html_safe %>
+      </li>
     <% end %>
-  </div>
-</div>
+  </ul>
+<% end %>

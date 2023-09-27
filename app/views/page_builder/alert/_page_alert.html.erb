@@ -1,0 +1,31 @@
+<% options ||= {} %>
+
+<% type = options.delete(:type) || :danger %>
+
+<% heading = options.delete :heading %>
+<% heading = { content: heading } if heading.is_a?(String) || heading.nil? %>
+<% heading[:content] ||= t('messages.problem') %>
+<% heading[:options] ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'alert' %>
+<% tag_class << "alert-#{type}" %>
+<% tag_class << 'alert-dismissible' %>
+<% tag_class << 'fade' %>
+<% tag_class << 'show' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+<% options[:role] = 'alert' %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= page_alert_container do %>
+    <%= page_alert_icon %>
+    <div>
+      <%= page_alert_heading heading[:content], heading[:options] %>
+      <%= content %>
+    </div>
+  <% end %>
+  <%= page_alert_button %>
+<% end if content.present? %>

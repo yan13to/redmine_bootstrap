@@ -1,0 +1,29 @@
+<% options ||= {} %>
+
+<% align = options.delete :align %>
+<% size = options.delete :size %>
+
+<% tag_class = ['pagination'] %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << "justify-content-#{align.to_s}" if align.present? %>
+<% tag_class << "pagination-#{size.to_s}" if size.present? %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<nav aria-label="Page navigation">
+  <%= content_tag :ul, to_html_options(options) do %>
+    <% if content.is_a?(Array) %>
+      <% content.each do |item| %>
+        <% item_content = item[:content] %>
+        <% item_url = item[:url] %>
+        <% item_options = item[:options] || {} %>
+        <%= page_pagination_item disabled: item_options[:disabled], current: item_options[:current] do %>
+          <%= page_pagination_link item_content, item_url, item_options %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= content %>
+    <% end %>
+  <% end %>
+</nav>

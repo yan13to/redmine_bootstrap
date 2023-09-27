@@ -1,0 +1,18 @@
+<% options ||= {} %>
+
+<% mode = options.delete :mode %>
+
+<% my_class = options.delete :my %>
+<% my_class = "my-#{my_class}" if my_class.present?  %>
+
+<% tag_class = [] %>
+<% tag_class << ['container', mode].compact.join('-') %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << my_class if my_class.present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= content %>
+<% end %>

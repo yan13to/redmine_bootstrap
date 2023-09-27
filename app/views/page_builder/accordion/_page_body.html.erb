@@ -1,0 +1,26 @@
+<% options ||= {} %>
+
+<% show = options.delete :show %>
+<% mode = options.delete :mode %>
+
+<% tag_class = [] %>
+<% tag_class << 'accordion-collapse collapse' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'show' if show %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class %>
+<% options[:id] = options[:id] if options[:id].present? %>
+<% options['aria-labelledby'] = 'panelsStayOpen-heading' %>
+
+<% body_options = {} %>
+
+<% body_class = [] %>
+<% body_class << 'accordion-body' unless mode.to_s == 'simple' %>
+<% body_class = body_class.join(' ') %>
+
+<% body_options[:class] = body_class if body_class.present? %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= content_tag :div, content, to_html_options(body_options) %>
+<% end %>

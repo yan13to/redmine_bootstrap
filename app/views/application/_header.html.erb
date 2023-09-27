@@ -1,33 +1,45 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <h1><%= page_header_title %></h1>
-    <div class="collapse navbar-collapse">
-      <% if User.current.logged? || !Setting.login_required? %>
-        <div class="d-flex gap-2 ms-auto">
-          <%= form_tag({controller: 'search', action: 'index', id: @project}, method: :get) do %>
-            <%= hidden_field_tag 'scope', default_search_project_scope, id: nil %>
-            <%= hidden_field_tag(controller.default_search_scope, 1, id: nil) if controller.default_search_scope %>
-            <div class="d-flex align-items-center">
-              <%= link_to l(:label_search), { controller: 'search', action: 'index', id: @project, scope: default_search_project_scope },
-                          accesskey: accesskey(:search), class: 'text-decoration-none me-1' %>
-              <%= text_field_tag 'q', @question, size: 20, class: 'small form-control', accesskey: accesskey(:quick_search), data: { auto_complete: true } %>
-            </div>
+<%= page_container my: 3 do %>
+  <%= page_flex align_items: :center do %>
+    <div>
+      <%= page_header_title %>
+    </div>
+    <% if User.current.logged? || !Setting.login_required? %>
+      <%= page_flex gap: 2, ms: :auto do %>
+        <%= page_form_tag({controller: 'search', action: 'index', id: @project}, method: :get) do %>
+          <%= hidden_field_tag 'scope', default_search_project_scope, id: nil %>
+          <%= hidden_field_tag(controller.default_search_scope, 1, id: nil) if controller.default_search_scope %>
+          <%= page_flex align_items: :center, gap: 2 do %>
+            <%= page_link_to l(:label_search), { controller: 'search', action: 'index', id: @project, scope: default_search_project_scope }, accesskey: accesskey(:search) %>
+            <%= page_text_field_tag 'q', @question, size: 20, accesskey: accesskey(:quick_search), data: { auto_complete: true } %>
           <% end %>
-          <%= render_project_jump_box %>
-        </div>
+        <% end %>
+        <%= render_project_jump_box %>
       <% end %>
-    </div>
-  </div>
-</nav>
-
+    <% end %>
+  <% end %>
+<% end %>
 <% if display_main_menu?(@project) %>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-      <%= render 'main_menu', project: @project %>
-      <div class="tabs-buttons" style="display:none;">
-        <button class="tab-left" onclick="moveTabLeft(this); return false;"></button>
-        <button class="tab-right" onclick="moveTabRight(this); return false;"></button>
-      </div>
-    </div>
-  </nav>
+  <%= page_container do %>
+    <% if menu_name = controller.current_menu(@project) %>
+      <%= page_nav mode: :tabs, 'data-menu-name': menu_name do %>
+        <% menu_items_for(menu_name, @project) do |node| %>
+          <% if allowed_node?(node, User.current, @project) %>
+            <% caption, url, selected = extract_node_details(node, @project) %>
+            <% if node.children.present? || !node.child_menus.nil? %>
+              <%= page_dropdown tag: :li, class: 'nav-item', button: { content: caption, options: { tag: :a, url: url, active: selected, mode: :no_icon, 'data-name': node.name } } do %>
+                <% node.children.each do |n|%>
+                  <% if allowed_node?(n, User.current, @project) %>
+                    <% caption, url, selected = extract_node_details(n, @project) %>
+                    <%= page_dropdown_item page_dropdown_link(caption, url, active: selected, icon: n.name, 'data-name': n.name) %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <%= page_nav_item page_nav_link(caption, url, icon: node.name, active: selected, 'data-name': node.name) %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

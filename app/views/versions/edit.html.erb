@@ -1,7 +1,5 @@
-<h2><%=l(:label_version)%></h2>
+<%= page_heading :h2, l(:label_version) %>
 
-<%= labelled_form_for @version, :html => {:multipart => true} do |f| %>
-<%= render :partial => 'form', :locals => { :f => f } %>
-<%= submit_tag l(:button_save) %>
+<%= page_card do %>
+  <%= render 'form', url: version_path(@version), action_button: :button_save %>
 <% end %>
-

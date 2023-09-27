@@ -1,0 +1,15 @@
+<% options ||= {} %>
+
+<% type = options.delete :type || :feedback %>
+<% type = [:feedback, :tooltip].include?(type.to_sym) ? type.to_sym : :feedback %>
+
+<% tag_class = [] %>
+<% tag_class << "invalid-#{type.to_s}" %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% content ||= f.object.errors[method].join(', ') %>
+
+<%= content_tag :div, content, to_html_options(options) %>

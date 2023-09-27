@@ -1,9 +1,0 @@
-<% icon = icon.nil? ? true : icon %>
-<% text = text.nil? ? false : text %>
-<% html = [] %>
-<% html << content_tag(:i, nil, class: 'bi bi-bullseye') if icon %>
-<% html << content_tag(:span, l(:button_test)) if text %>
-
-<%= link_to try_connection_auth_source_path(source), class: 'btn btn-dark', title: l(:button_test) do %>
-  <%= html.compact.join('&nbsp;').html_safe %>
-<% end %>

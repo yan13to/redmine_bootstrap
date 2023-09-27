@@ -1,40 +1,48 @@
-<div class="contextual">
-  <%= link_to l(:label_edit_attachments), container_attachments_edit_path(container), title: l(:label_edit_attachments) if options[:editable] %>
-  <%= link_to l(:label_download_all_attachments), container_attachments_download_path(container), title: l(:label_download_all_attachments) if attachments.size > 1 %>
-</div>
+<%= page_paragraph do %>
+  <%= page_stack align: :end, gap: 3 do %>
+    <%= page_link_to l(:label_edit_attachments), container_attachments_edit_path(container), title: l(:label_edit_attachments), icon: :edit if options[:editable] %>
+    <%= page_link_to l(:label_download_all_attachments), container_attachments_download_path(container), title: l(:label_download_all_attachments), icon: :download if attachments.size > 1 %>
+  <% end %>
+<% end %>
 
 <%= page_table do %>
   <% for attachment in attachments %>
-    <tr>
-      <td>
-        <%= link_to_attachment attachment, class: 'icon icon-attachment' -%>
-        <span class="size">(<%= number_to_human_size attachment.filesize %>)</span>
-        <%= link_to_attachment attachment, class: 'icon-only icon-download', title: l(:button_download), download: true -%>
-      </td>
-      <td>
+    <%= page_table_tr do %>
+      <%= page_table_td do %>
+        <%= link_to_attachment attachment, icon: :attachment -%>
+      <% end %>
+      <%= page_table_td do %>
+        (<%= number_to_human_size attachment.filesize %>)
+      <% end %>
+      <%= page_table_td do %>
         <%= attachment.description unless attachment.description.blank? %>
-      </td>
-      <td>
+      <% end %>
+      <%= page_table_td do %>
         <% if options[:author] %>
           <span class="text-muted small"><%= attachment.author %>, <%= format_time(attachment.created_on) %></span>
         <% end %>
-      </td>
-      <td>
-        <% if options[:deletable] %>
-          <%= link_to l(:button_delete), attachment_path(attachment), data: { confirm: l(:text_are_you_sure) }, method: :delete, title: l(:button_delete), class: 'btn' %>
+      <% end %>
+      <%= page_table_td do %>
+        <%= page_stack gap: 3 do %>
+          <%= link_to_attachment attachment, icon: :download, title: l(:button_download), download: true, label: false -%>
+          <% if options[:deletable] %>
+            <%= page_link_to l(:button_delete), attachment_path(attachment), data: { confirm: l(:text_are_you_sure) }, method: :delete, title: l(:button_delete), icon: :delete, label: false %>
+          <% end %>
         <% end %>
-      </td>
-    </tr>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>
 
 <% if defined?(thumbnails) && thumbnails %>
   <% images = attachments.select(&:thumbnailable?) %>
   <% if images.any? %>
-  <div class="thumbnails">
-    <% images.each do |attachment| %>
-      <div><%= thumbnail_tag(attachment) %></div>
-    <% end %>
-  </div>
+    <div class="hstack gap-3">
+      <% images.each do |attachment| %>
+        <div class="rounded img-thumbnail">
+          <%= thumbnail_tag(attachment) %>
+        </div>
+      <% end %>
+    </div>
   <% end %>
 <% end %>

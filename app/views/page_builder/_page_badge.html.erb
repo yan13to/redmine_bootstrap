@@ -1,0 +1,9 @@
+<% type = options.delete(:type) || 'secondary'%>
+
+<% html_class = ['badge'] %>
+<% html_class << "bg-#{type}" %>
+<% html_class << options[:class] if options[:class].present? %>
+
+<% options[:class] = html_class.join(' ') %>
+
+<%= content_tag :div, content, to_html_options(options) %>

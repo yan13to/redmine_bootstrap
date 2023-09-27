@@ -1,0 +1,18 @@
+<% options ||= {} %>
+
+<% url = options.delete 'href' %>
+<% icon = options.delete 'icon' %>
+<% active = options.delete 'active' %>
+
+<% tag_class = [] %>
+<% tag_class << 'list-group-item' %>
+<% tag_class << 'list-group-item-action' %>
+<% tag_class << 'active' if active %>
+<% tag_class << options[:class] if options[:class].present? %>
+
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:icon] = icon if icon.present? %>
+<% options[:class] = tag_class %>
+
+<%= page_link_to content, url, options %>

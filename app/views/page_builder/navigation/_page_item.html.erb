@@ -1,0 +1,12 @@
+<% options ||= {} %>
+
+<% tag = options.delete(:tag) || :li %>
+
+<% tag_class = [] %>
+<% tag_class << 'nav-item' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag tag, content, to_html_options(options) %>

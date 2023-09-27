@@ -1,0 +1,46 @@
+<% options ||= {} %>
+
+<% mode = options.delete :mode %>
+
+<% tag_class = [] %>
+<% tag_class << 'accordion' unless mode.to_s == 'simple' %>
+<% tag_class << 'accordion-flush' if mode == :flush  %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <% if content.is_a?(Array) %>
+    <% content.each do |item| %>
+      <% show = item.delete :show %>
+      <% item_id = item[:id].to_s.strip.downcase.gsub(' ', '-') %>
+      <% header_id = ['header', item_id].join('-')%>
+      <% body_id = ['body', item_id].join('-')%>
+      <% target = "##{body_id}" %>
+
+      <% item[:header] = { content: item[:header] } if item[:header].is_a?(String) || item[:header].nil? %>
+
+      <% header_content = item[:header][:content] %>
+      <% header_options = item[:header][:options] || {}  %>
+      <% header_options[:id] = header_id %>
+      <% header_options[:target] = target %>
+      <% header_options[:show] = show %>
+      <% header_options[:mode] = mode %>
+
+      <% item[:body] = { content: item[:body] } if item[:body].is_a?(String) || item[:header].nil? %>
+
+      <% body_content = item[:body][:content] %>
+      <% body_options = item[:body][:options] || {} %>
+      <% body_options[:id] = body_id %>
+      <% body_options[:show] = show %>
+      <% body_options[:mode] = mode %>
+
+      <%= page_accordion_item mode: mode do %>
+        <%= page_accordion_header page_accordion_button(header_content, header_options) %>
+        <%= page_accordion_body body_content, body_options %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%= content %>
+  <% end %>
+<% end %>

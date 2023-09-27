@@ -1,0 +1,18 @@
+<% options ||= {} %>
+
+<% option_tags = options.delete :option_tags %>
+
+<% tag_class = ['form-select'] %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% label = options.delete(:label) || {} %>
+<% label = { content: label } if label.is_a?(String) %>
+<% label_content = label[:content] %>
+<% label_options = label[:options] || {} %>
+<% label_options[:class] = ['form-label', label_options[:class]].compact.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+
+<%= content_tag :label, label_content, to_html_options(label_options) if label.present? %>
+<%= select_tag content, option_tags, options %>

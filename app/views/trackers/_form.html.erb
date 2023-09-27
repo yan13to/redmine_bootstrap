@@ -1,35 +1,37 @@
-<%= form_with model: @tracker, builder: BootstrapFormBuilder do |f| %>
+<%= form_with model: @tracker, builder: PageFormBuilder do |f| %>
   <%= error_messages_for 'tracker' %>
-
-  <%= f.text_field_form_group :name, required: true %>
-  <%= f.select_form_group :default_status_id, IssueStatus.sorted.map {|s| [s.name, s.id]}, include_blank: @tracker.default_status.nil?, required: true %>
-  <%= f.check_box_form_group :is_in_roadmap %>
-  <%= f.text_area_form_group :description, rows: 4 %>
-  <div>
-    <label class="mb-3"><%= l(:field_core_fields) %></label>
-    <% Tracker::CORE_FIELDS.each do |field| %>
-      <%= f.check_box_form_group :core_fields, { name: 'tracker[core_fields][]', label: l("field_#{field}".sub(/_id$/, '')), checked: @tracker.core_fields.include?(field) }, field %>
+  <%= page_paragraph do %>
+    <%= f.page_text_field :name, required: true %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= f.page_select :default_status_id, IssueStatus.sorted.map {|s| [s.name, s.id]}, include_blank: @tracker.default_status.nil?, required: true %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= f.page_check_box :is_in_roadmap %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= f.page_text_area :description, rows: 4 %>
+  <% end %>
+  <label class="mb-3"><%= l(:field_core_fields) %></label>
+  <% Tracker::CORE_FIELDS.each do |field| %>
+    <%= page_paragraph do %>
+      <%= f.page_check_box :core_fields, { name: 'tracker[core_fields][]', label: l("field_#{field}".sub(/_id$/, '')), checked: @tracker.core_fields.include?(field) }, field %>
     <% end %>
-  </div>
+  <% end %>
   <%= hidden_field_tag 'tracker[core_fields][]', '' %>
-
   <% @issue_custom_fields = IssueCustomField.sorted %>
   <% if @issue_custom_fields.present? %>
     <div>
       <label class="mb-3"><%= l(:label_custom_field_plural) %></label>
       <% @issue_custom_fields.each do |field| %>
-        <%= f.check_box_form_group :custom_field_ids, { name: 'tracker[custom_field_ids][]', label: field.name, checked: @tracker.custom_fields.to_a.include?(field) }, field.id %>
+        <%= f.page_check_box :custom_field_ids, { name: 'tracker[custom_field_ids][]', label: field.name, checked: @tracker.custom_fields.to_a.include?(field) }, field.id %>
       <% end %>
     </div>
     <%= hidden_field_tag 'tracker[custom_field_ids][]', '' %>
   <% end %>
-
   <% if @tracker.new_record? && @trackers.any? %>
-    <%= f.select_form_group :copy_workflow_from,
-          content_tag('option') + options_from_collection_for_select(@trackers, :id, :name, params[:copy_workflow_from] || @copy_from.try(:id)), 
-          { label: l(:label_copy_workflow_from) }, name: :copy_workflow_from %>
+    <%= f.page_select :copy_workflow_from, content_tag('option') + options_from_collection_for_select(@trackers, :id, :name, params[:copy_workflow_from] || @copy_from.try(:id)), { label: l(:label_copy_workflow_from) }, name: :copy_workflow_from %>
   <% end %>
-
   <% if @projects.any? %>
     <fieldset class="box" id="tracker_project_ids">
       <legend><%= toggle_checkboxes_link("#tracker_project_ids input[type=checkbox]") %><%= l(:label_project_plural) %></legend>
@@ -40,6 +42,7 @@
       <%= hidden_field_tag('tracker[project_ids][]', '', :id => nil) %>
     </fieldset>
   <% end %>
-
-  <%= f.action_form_group @tracker.new_record? ? :button_create : :button_save %>
+  <%= page_paragraph do %>
+    <%= page_submit_tag l(@tracker.new_record? ? :button_create : :button_save) %>
+  <% end %>
 <% end %>

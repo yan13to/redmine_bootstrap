@@ -1,8 +1,29 @@
 <% html_title(l(:label_overview)) -%>
 
-<%= page_title content_tag(:h2, l(:label_overview)) do %>
+<%= page_title content_tag(:h2, page_icon('card-heading') + '&nbsp;'.html_safe + l(:label_overview)) do %>
   <%= render 'projects/actions/bookmark', project: @project, user: User.current, text: true, icon: true if User.current.logged? %>
-  <%= render 'actions' %>
+  <%= page_dropdown nil, shadow: true, menu_end: true do %>
+    <% if User.current.allowed_to?(:add_subprojects, @project) %>
+      <li>
+        <%= render 'projects/actions/add_sub_project', btn_class: 'dropdown-item', text: true, icon: true, project: @project %>
+      </li>
+    <% end %>
+    <% if User.current.allowed_to?(:close_project, @project) %>
+      <li>
+        <%= render 'projects/actions/close', btn_class: 'dropdown-item', text: true, icon: true, project: @project %>
+      </li>
+    <% end %>
+    <% if @project.deletable? %>
+      <li>
+        <%= render 'projects/actions/delete', btn_class: 'dropdown-item', text: true, icon: true, project: @project %>
+      </li>
+    <% end %>
+    <% if User.current.allowed_to?(:edit_project, @project) %>
+      <li>
+        <%= render 'projects/actions/settings', btn_class: 'dropdown-item', text: true, icon: true, project: @project %>
+      </li>
+    <% end %>
+  <% end %>
 <% end %>
 
 <% unless @project.active? %>
@@ -11,39 +32,44 @@
   </div>
 <% end %>
 
-<div class="splitcontent">
-  <div class="splitcontentleft">
+<div class="row">
+  <div class="col">
     <% if @project.description.present? %>
-      <div class="wiki">
+      <%= page_card class: 'mb-3' do %>
         <%= textilizable @project.description %>
-      </div>
+      <% end %>
     <% end %>
 
     <% if @project.homepage.present? || @project.visible_custom_field_values.any? { |o| o.value.present? } %>
-      <ul>
-        <% unless @project.homepage.blank? %>
-          <li>
-            <span class="label"><%= l(:field_homepage) %>:</span> <%= link_to_if uri_with_safe_scheme?(@project.homepage), @project.homepage, @project.homepage %>
-          </li>
-        <% end %>
-        <% render_custom_field_values(@project) do |custom_field, formatted| %>
-          <li class="<%= custom_field.css_classes %>">
-            <span class="label"><%= custom_field.name %>:</span> <%= formatted %>
-          </li>
-        <% end %>
-      </ul>
+      <%= page_card class: 'mb-3' do %>
+        <ul class="list-unstyled">
+          <% unless @project.homepage.blank? %>
+            <li>
+              <span class="label"><%= l(:field_homepage) %>:</span>
+              <%= link_to_if uri_with_safe_scheme?(@project.homepage), @project.homepage, @project.homepage %>
+            </li>
+          <% end %>
+          <% render_custom_field_values(@project) do |custom_field, formatted| %>
+            <li class="<%= custom_field.css_classes %>">
+              <span class="label"><%= custom_field.name %>:</span> <%= formatted %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
     <% end %>
     <%= render 'issues_box' if User.current.allowed_to?(:view_issues, @project) %>
     <%= render 'spent_time_box' if User.current.allowed_to?(:view_time_entries, @project) %>
     <%= call_hook(:view_projects_show_left, project: @project) %>
   </div>
 
-  <div class="splitcontentright">
-    <%= render 'news_box' if @news.any? && authorize_for('news', 'index') %>
-    <%= render 'members_box' if @principals_by_role.any? %>
-    <%= render 'sub_projects_box' if @subprojects.any? %>
-    <%= call_hook(:view_projects_show_right, project: @project) %>
-  </div>
+  <% if (@news.any? && authorize_for('news', 'index')) || @principals_by_role.any? || @subprojects.any? %>
+    <div class="col-4">
+      <%= render 'news_box' if @news.any? && authorize_for('news', 'index') %>
+      <%= render 'members_box' if @principals_by_role.any? %>
+      <%= render 'sub_projects_box' if @subprojects.any? %>
+      <%= call_hook(:view_projects_show_right, project: @project) %>
+    </div>
+  <% end %>
 </div>
 
 <% content_for :sidebar do %>

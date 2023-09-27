@@ -1,0 +1,6 @@
+<%= page_row do %>
+  <%= page_col l(:label_related_issues) %>
+  <%= page_col do %>
+    <%= toggle_link l(:button_add), 'new-relation-form', { focus: 'relation_issue_to_id' } %>
+  <% end if User.current.allowed_to?(:manage_issue_relations, @project) %>
+<% end %>

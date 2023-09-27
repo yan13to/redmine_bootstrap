@@ -5,8 +5,7 @@
 // require("@rails/activestorage").start();
 // require("channels");
 
-import '../bootstrap/js/bootstrap.bundle.min.js';
-
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import TabCallback from './callback/tab.js';
 import JsProcessor from './callback/js-processor.js';
 

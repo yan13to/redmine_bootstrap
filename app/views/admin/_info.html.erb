@@ -1,8 +1,8 @@
-<tr>
-  <td>
+<%= page_table_tr do %>
+  <%= page_table_td do %>
     <%= label.is_a?(Symbol) ? l(label) : label %>
-  </td>
-  <td>
-    <span class="h3 bi <%= (result ? 'bi-check' : 'bi-exclamation') %>"></span>
-  </td>
-</tr>
+  <% end %>
+  <%= page_table_td do %>
+    <%= page_icon (result ? 'check' : 'exclamation'), class: 'h3' %>
+  <% end %>
+<% end %>

@@ -1,0 +1,13 @@
+<% options ||= {} %>
+
+<% size = options.delete :size %>
+<% width = options.delete :width %>
+
+<% col_size = ['col', size, width].compact.join('-') %>
+
+<% tag_class = [col_size] %>
+<% tag_class << options[:class] if options[:class].present? %>
+
+<% options[:class] = tag_class.join(' ') %>
+
+<%= content_tag :div, content, to_html_options(options) %>

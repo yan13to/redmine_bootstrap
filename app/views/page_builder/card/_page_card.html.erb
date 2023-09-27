@@ -1,0 +1,25 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'card' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% header = options.delete(:header) || {} %>
+<% header_content = header[:content] %>
+<% header_options = header[:options] || {} %>
+
+<% body = options.delete(:body) || {} %>
+<% body_options = body[:options] %>
+
+<% footer = options.delete(:footer) || {} %>
+<% footer_content = footer[:content] %>
+<% footer_options = footer[:options] || {} %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= page_card_header header_content, header_options if header.present? %>
+  <%= page_card_body content, body_options if content.present? %>
+  <%= page_card_footer footer_content, footer_options if footer.present? %>
+<% end %>

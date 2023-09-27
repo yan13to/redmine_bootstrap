@@ -1,96 +1,84 @@
 <% title = @query.new_record? ? l(:label_issue_plural) : @query.name %>
 <% html_title(title) %>
 
-<%= page_title content_tag(:h2, title) do %>
-  <%= render 'issues/actions/add', project: @project, text: true, icon: true if User.current.allowed_to?(:add_issues, @project, global: true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
-
-  <%= page_dropdown nil, dark: true do %>
-    <% if @project %>
-      <li><%= render 'issues/actions/summary', project: @project %></li>
-    <% end %>
-    <% if User.current.allowed_to?(:import_issues, @project, global: true) %>
-      <li><%= render 'issues/actions/import', project: @project %></li>
-    <% end %>
-    <% if User.current.allowed_to?(:manage_categories, @project) %>
-      <li><%= render 'issues/actions/setting', project: @project %></li>
-    <% end %>
+<%= page_title page_heading(:h2, page_icon(:book) + '&nbsp;'.html_safe + title) do %>
+  <% if User.current.allowed_to?(:add_issues, @project, global: true) && (@project.nil? || Issue.allowed_target_trackers(@project).any?) %>
+    <%= page_link_to l(:label_issue_new), _new_project_issue_path(@project), icon: :plus %>
+  <% end %>
+  <%= page_dropdown button: { content: page_icon('three-dots', title: l(:button_actions)), options: { mode: :no_icon } } do %>
+    <%= page_dropdown_item do %>
+      <%= page_dropdown_link l(:field_summary), project_issues_report_path(@project), icon: :overview %>
+    <% end if @project %>
+    <%= page_dropdown_item do %>
+      <%= page_dropdown_link l(:button_import), new_issues_import_path(project_id: @project), icon: :import %>
+    <% end if User.current.allowed_to?(:import_issues, @project, global: true) %>
+    <%= page_dropdown_item do %>
+      <%= link_to_if_authorized l(:label_settings), {controller: 'projects', action: 'settings', id: @project, tab: 'issues'}, icon: :settings, class: 'dropdown-item' %>
+    <% end if User.current.allowed_to?(:manage_categories, @project) %>
   <% end %>
 <% end %>
-
-<%= form_tag(_project_issues_path(@project), method: :get, id: 'query_form') do %>
+<%= page_form_tag(_project_issues_path(@project), method: :get) do %>
   <%= render 'queries/query_form' %>
 <% end %>
-
 <% if @query.valid? %>
-
   <% if @issues.empty? %>
-    <%= render 'no_data' %>
+    <%= page_empty %>
   <% else %>
     <%= render_query_totals(@query) %>
     <%= render 'issues/list', issues: @issues, query: @query %>
-    <span class="pagination">
+    <%= page_flex do %>
       <%= pagination_links_full @issue_pages, @issue_count %>
-    </span>
-  <% end %>
-
-  <% other_formats_links do |f| %>
-    <%= f.link_to_with_query_parameters 'Atom', key: User.current.rss_key %>
-    <%= f.link_to_with_query_parameters 'CSV', {}, onclick: "showModal('csv-export-options', '350px'); return false;" %>
-    <%= f.link_to_with_query_parameters 'PDF' %>
-  <% end %>
-
-  <div id="csv-export-options" style="display:none;">
-    <h3 class="title">
-      <%= l(:label_export_options, export_format: 'CSV') %>
-    </h3>
-
-    <%= form_tag(_project_issues_path(@project, format: 'csv'), method: :get, id: 'csv-export-form') do %>
-      <%= query_as_hidden_field_tags(@query) %>
-
-      <p>
-        <label><%= radio_button_tag 'c[]', '', true %> <%= l(:description_selected_columns) %></label>
-        <br />
-        <label><%= radio_button_tag 'c[]', 'all_inline' %> <%= l(:description_all_columns) %></label>
-      </p>
-
-      <% if @query.available_block_columns.any? %>
-        <fieldset id="csv-export-block-columns">
-          <legend>
-            <%= toggle_checkboxes_link('#csv-export-block-columns input[type=checkbox]') %>
-          </legend>
-          <% @query.available_block_columns.each do |column| %>
-            <label><%= check_box_tag 'c[]', column.name, @query.has_column?(column), id: nil %> <%= column.caption %></label>
-          <% end %>
-        </fieldset>
-      <% end %>
-
-      <%= export_csv_encoding_select_tag %>
-
-      <% if @issue_count > Setting.issues_export_limit.to_i %>
-        <p class="icon icon-warning">
-          <%= l(:setting_issues_export_limit) %>: <%= Setting.issues_export_limit.to_i %>
-        </p>
-      <% end %>
-
-      <p class="buttons">
-        <%= submit_tag l(:button_export), name: nil, onclick: "hideModal(this);", data: { disable_with: false } %>
-        <%= link_to_function l(:button_cancel), "hideModal(this);" %>
-      </p>
-
+      <div class="ms-auto">
+        <% other_formats_links do |f| %>
+          <%= f.link_to_with_query_parameters 'Atom', key: User.current.rss_key %>
+          <%= f.link_to_with_query_parameters 'CSV', {}, 'data-bs-toggle': 'modal', 'data-bs-target': '#csv-export-options' %>
+          <%= f.link_to_with_query_parameters 'PDF' %>
+        <% end %>
+      </div>
     <% end %>
-  </div>
-
+  <% end %>
+  <%= page_modal id: 'csv-export-options' do %>
+    <%= page_form_tag(_project_issues_path(@project, format: 'csv'), method: :get, id: 'csv-export-form') do %>
+      <%= page_modal_header page_modal_title(l(:label_export_options, export_format: 'CSV')) %>
+      <%= page_modal_body do %>
+        <%= query_as_hidden_field_tags(@query) %>
+        <%= page_paragraph do %>
+          <%= page_radio_button_tag 'c[]', '', true, label: l(:description_selected_columns) %>
+          <%= page_radio_button_tag 'c[]', 'all_inline', {}, label: l(:description_all_columns) %>
+        <% end %>
+        <% if @query.available_block_columns.any? %>
+          <%= link_to page_icon('check'), '#' %>
+          <%= toggle_checkboxes_link('#csv-export-block-columns input[type=checkbox]') %>
+          <%= page_paragraph do %>
+            <% @query.available_block_columns.each do |column| %>
+              <%= page_check_box_tag 'c[]', column.name, @query.has_column?(column), id: nil, label: column.caption %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= export_csv_encoding_select_tag %>
+        <% if @issue_count > Setting.issues_export_limit.to_i %>
+          <%= page_paragraph do %>
+            <p class="icon icon-warning">
+              <%= l(:setting_issues_export_limit) %>: <%= Setting.issues_export_limit.to_i %>
+            </p>
+          <% end %>
+        <% end %>
+      <% end %>
+      <%= page_modal_footer do %>
+        <%= page_submit_tag l(:button_export), name: nil, data: { disable_with: false } %>
+        <%= page_submit_tag(l(:button_cancel), name: nil, type: 'button', color: 'link', 'data-bs-dismiss': 'modal') %>
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>
 
 <%= call_hook(:view_issues_index_bottom, { issues: @issues, project: @project, query: @query }) %>
 
 <% content_for :sidebar do %>
-  <%= render 'issues/sidebar' %>
+  <%#= render 'issues/sidebar' %>
 <% end %>
 
 <% content_for :header_tags do %>
   <%= auto_discovery_link_tag(:atom, { query_id: @query, format: 'atom', page: nil, key: User.current.rss_key }, title: l(:label_issue_plural)) %>
   <%= auto_discovery_link_tag(:atom, { controller: 'journals', action: 'index', query_id: @query, format: 'atom', page: nil, key: User.current.rss_key}, title: l(:label_changes_details)) %>
 <% end %>
-
-<%= context_menu %>

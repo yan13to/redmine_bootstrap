@@ -1,0 +1,11 @@
+<% align = options.delete :align %>
+<% size = options.delete :size %>
+
+<% html_class = ['mb-3'] %>
+<% html_class << options[:class] if options[:class].present? %>
+<% html_class << "text-#{align.to_s}" if align.present? %>
+<% html_class << size.to_s if size.present? %>
+
+<% options[:class] = html_class.join(' ') %>
+
+<%= content_tag :div, content, to_html_options(options) %>

@@ -1,36 +1,31 @@
-<%= page_title content_tag(:h2, safe_join([link_to_attachment_container(@container), l(:label_edit_attachments)].compact, ' » ')) %>
-
+<%= page_title page_heading(:h2, safe_join([link_to_attachment_container(@container), l(:label_edit_attachments)].compact, ' » ')) %>
 <%= error_messages_for *@attachments %>
-
-<%= page_card do %>
-
-  <%= form_tag(container_attachments_path(@container), method: 'patch') do %>
-    <%= back_url_hidden_field_tag %>
-
-    <%= page_table do %>
-      <% @attachments.each do |attachment| %>
-        <tr>
-          <td colspan="2">
-            <span><%= attachment.filename_was %></span>
-            <span>(<%= number_to_human_size attachment.filesize %>)</span>
-            <span><%= attachment.author %>, <%= format_time(attachment.created_on) %></span>
-          </td>
-        </tr>
-        <tr id="attachment-<%= attachment.id %>">
-          <td>
-            <%= text_field_tag "attachments[#{attachment.id}][filename]", attachment.filename, size: 40, class: 'form-control' %>
-          </td>
-          <td>
-            <%= text_field_tag "attachments[#{attachment.id}][description]", attachment.description, size: 80, placeholder: l(:label_optional_description), class: 'form-control' %>
-          </td>
-        </tr>
+<%= form_tag(container_attachments_path(@container), method: 'patch') do %>
+  <%= back_url_hidden_field_tag %>
+  <%= page_table do %>
+    <% @attachments.each do |attachment| %>
+      <%= page_table_tr do %>
+        <%= page_table_td colspan: 2 do %>
+          <%= page_icon :attachment %>
+          <%= page_text attachment.filename_was, small: true %>
+          (<%= page_text number_to_human_size(attachment.filesize), small: true, muted: true %>)
+          <%= page_text attachment.author, small: true, muted: true %>, <%= page_text format_time(attachment.created_on), small: true, muted: true %>
+        <% end %>
+      <% end %>
+      <%= page_table_tr id: "attachment-#{attachment.id}" do %>
+        <%= page_table_td do %>
+          <%= page_text_field_tag "attachments[#{attachment.id}][filename]", attachment.filename, size: 40 %>
+        <% end %>
+        <%= page_table_td do %>
+          <%= page_text_field_tag "attachments[#{attachment.id}][description]", attachment.description, size: 80, placeholder: l(:label_optional_description) %>
+        <% end %>
       <% end %>
     <% end %>
-
-    <div class="mb-3">
-      <%= submit_tag l(:button_save), class: 'btn btn-primary' %>
-      <%= link_to l(:button_cancel), back_url, class: 'btn btn-secondary' if back_url.present? %>
-    </div>
   <% end %>
-
+  <%= page_paragraph do %>
+    <%= page_stack gap: 3 do %>
+      <%= page_submit_tag l(:button_save), outline: true, color: :dark %>
+      <%= page_link_to l(:button_cancel), back_url if back_url.present? %>
+    <% end %>
+  <% end %>
 <% end %>

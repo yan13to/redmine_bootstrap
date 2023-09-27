@@ -1,23 +1,16 @@
-<div class="dropdown">
-  <button class="btn btn-info dropdown-toggle" type="button" id="projectJumpBox" data-bs-toggle="dropdown" aria-expanded="false">
-    <%= @project && @project.persisted? ? @project.name_was : l(:label_jump_to_a_project) %>
-  </button>
-  <ul class="dropdown-menu dropdown-menu-end shadow" style="z-index:1021;" aria-labelledby="projectJumpBox">
-    <li class="px-2">
-      <%= text_field_tag('q', params[:q], class: 'form-control', data: { automcomplete_url: autocomplete_projects_path(format: 'js', jump: current_menu_item) }, autocomplete: 'off') %>
-    </li>
-    <% links.each do |link| %>
-      <li>
-        <% if link[:level] == -1 %>
-          <span class="dropdown-item"><strong><%= link[:text] %></strong></span>
-        <% else %>
-          <%= link_to link[:text], link[:url], class: "dropdown-item#{' active' if link[:selected]}" %>
-        <% end %>
-      </li>
+<% button_label = @project && @project.persisted? ? @project.name_was : l(:label_jump_to_a_project) %>
+
+<%= page_dropdown menu: { options: { style: 'z-index:1021;', menu_end: true, shadow: true } }, button: button_label do %>
+  <%= page_dropdown_item px: 2 do %>
+    <%= page_text_field_tag('q', params[:q], data: { automcomplete_url: autocomplete_projects_path(format: 'js', jump: current_menu_item) }, autocomplete: 'off') %>
+  <% end %>
+  <% links.each do |link| %>
+    <%= page_dropdown_item do %>
+      <%= page_dropdown_link link[:text], link[:url], text: (link[:level] == -1), active: link[:selected], bold: (link[:level] == -1) %>
     <% end %>
-    <li><hr class="dropdown-divider"></li>
-    <li>
-      <%= link_to(l(:label_project_all), projects_path(jump: current_menu_item), class: (@project.nil? && controller.class.main_menu ? 'active dropdown-item' : 'dropdown-item')) %>
-    </li>
-  </ul>
-</div>
+  <% end %>
+  <%= page_dropdown_item page_dropdown_divider %>
+  <%= page_dropdown_item do %>
+    <%= page_dropdown_link l(:label_project_all), projects_path(jump: current_menu_item), active: (@project.nil? && controller.class.main_menu) %>
+  <% end %>
+<% end %>

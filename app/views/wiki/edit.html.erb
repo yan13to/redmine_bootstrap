@@ -1,73 +1,69 @@
+<% html_title @page.pretty_title %>
+
 <%= wiki_page_breadcrumb(@page) %>
+<%= page_title page_heading(:h2, @page.pretty_title) %>
 
-<h2><%= @page.pretty_title %></h2>
+<%= page_card do %>
+  <%= form_for @content,
+               as: :content,
+               url: { action: 'update', id: @page.title },
+               builder: PageFormBuilder,
+               html: { method: :put, multipart: true } do |f| %>
+    <%= f.hidden_field :version %>
+    <% if @section %>
+      <%= hidden_field_tag 'section', @section %>
+      <%= hidden_field_tag 'section_hash', @section_hash %>
+    <% end %>
+    <%#= error_messages_for 'content' %>
+    <%= f.page_error_messages %>
+    <%= page_paragraph do %>
+      <%= page_text_area_tag 'content[text]', @text, cols: 100, rows: 25, accesskey: accesskey(:edit), data: { auto_complete: true } %>
+    <% end %>
+    <% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
+      <%= fields_for :wiki_page, @page, builder: PageFormBuilder do |fp| %>
+        <%= page_paragraph do %>
+          <%= fp.page_select :parent_id,
+                             content_tag('option', '', value: '') + wiki_page_options_for_select(@wiki.pages.includes(:parent).to_a - @page.self_and_descendants, @page.parent),
+                             label: l(:field_parent_title) %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= f.page_text_field :comments, size: 120, maxlength: 1024, label: l(:field_comments) %>
+    <% end %>
 
-<%= form_for @content, :as => :content,
-            :url => {:action => 'update', :id => @page.title},
-            :html => {:method => :put, :multipart => true, :id => 'wiki_form'} do |f| %>
-<%= f.hidden_field :version %>
-<% if @section %>
-<%= hidden_field_tag 'section', @section %>
-<%= hidden_field_tag 'section_hash', @section_hash %>
-<% end %>
-<%= error_messages_for 'content' %>
+    <%= page_heading :h3, l(:label_attachment_plural) %>
+    <% if @page.attachments.any? && @page.safe_attribute?('deleted_attachment_ids') %>
+      <%= page_paragraph do %>
+        <%= page_stack do %>
+          <%#= @page.deleted_attachment_ids.blank? ? 'display:none;' : '' %>
+          <%= page_list id: "existing-attachments" do %>
+            <% @page.attachments.each do |attachment| %>
+              <%= page_list_item do %>
+                <%= text_field_tag '', attachment.filename, disabled: true %>
+                <%= check_box_tag 'wiki_page[deleted_attachment_ids][]', attachment.id, @page.deleted_attachment_ids.include?(attachment.id), id: nil %>
+                <%= l(:button_delete) %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <%= page_link_to l(:label_edit_attachments), '#', toggle: :collapse, target: '#existing-attachments', class: 'ms-auto' %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= render 'attachments/form' %>
+    <% end %>
 
-<div class="box tabular">
-<%= text_area_tag 'content[text]', @text, :cols => 100, :rows => 25, :accesskey => accesskey(:edit),
-                  :class => 'wiki-edit',
-                  :data => {
-                      :auto_complete => true
-                  }
-%>
-
-<% if @page.safe_attribute_names.include?('parent_id') && @wiki.pages.any? %>
-  <%= fields_for @page do |fp| %>
-    <p>
-      <label><%= l(:field_parent_title) %></label>
-      <%= fp.select :parent_id,
-                    content_tag('option', '', :value => '') +
-                       wiki_page_options_for_select(
-                         @wiki.pages.includes(:parent).to_a -
-                         @page.self_and_descendants, @page.parent) %>
-    </p>
+    <%= page_paragraph do %>
+      <%= page_stack gap: 3 do %>
+        <%= page_submit_tag l(:button_save), outline: true, color: :dark %>
+        <%= page_link_to l(:button_cancel), wiki_page_edit_cancel_path(@page) %>
+      <% end %>
+    <% end %>
+    <%= wikitoolbar_for 'content_text', preview_project_wiki_page_path(project_id: @project, id: @page.title) %>
   <% end %>
-<% end %>
-
-<p><label><%= l(:field_comments) %></label><%= f.text_field :comments, :size => 120, :maxlength => 1024 %></p>
-<fieldset>
-<legend><%=l(:label_attachment_plural)%></legend>
-<% if @page.attachments.any? && @page.safe_attribute?('deleted_attachment_ids') %>
-<div class="contextual"><%= link_to l(:label_edit_attachments), '#', :onclick => "$('#existing-attachments').toggle(); return false;" %></div>
-<div id="existing-attachments" style="<%= @page.deleted_attachment_ids.blank? ? 'display:none;' : '' %>">
-  <% @page.attachments.each do |attachment| %>
-  <span class="existing-attachment">
-    <%= text_field_tag '', attachment.filename, :class => "icon icon-attachment filename", :disabled => true %>
-    <label class='inline'>
-      <%= check_box_tag 'wiki_page[deleted_attachment_ids][]',
-                        attachment.id,
-                        @page.deleted_attachment_ids.include?(attachment.id),
-                        :id => nil, :class => "deleted_attachment" %> <%= l(:button_delete) %>
-    </label>
-  </span>
-  <% end %>
-  <hr />
-</div>
-<% end %>
-<div id="new-attachments" style="display:inline-block;">
-  <%= render :partial => 'attachments/form' %>
-</div>
-</fieldset>
-</div>
-
-<p>
-  <%= submit_tag l(:button_save) %>
-  <%= link_to l(:button_cancel), wiki_page_edit_cancel_path(@page) %>
- </p>
-<%= wikitoolbar_for 'content_text', preview_project_wiki_page_path(:project_id => @project, :id => @page.title) %>
 <% end %>
 
 <% content_for :header_tags do %>
   <%= robot_exclusion_tag %>
 <% end %>
-
-<% html_title @page.pretty_title %>

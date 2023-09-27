@@ -1,7 +1,8 @@
-<h2><%=l(:label_issue_category_new)%></h2>
+<%= page_heading :h2, l(:label_issue_category_new) %>
 
-<%= labelled_form_for @category, :as => :issue_category,
-                      :url => project_issue_categories_path(@project) do |f| %>
-<%= render :partial => 'issue_categories/form', :locals => { :f => f } %>
-<%= submit_tag l(:button_create) %>
+<%= page_card do %>
+  <%= labelled_form_for @category, as: :issue_category, url: project_issue_categories_path(@project) do |f| %>
+    <%= render 'issue_categories/form', f: f %>
+    <%= page_submit_tag l(:button_create) %>
+  <% end %>
 <% end %>

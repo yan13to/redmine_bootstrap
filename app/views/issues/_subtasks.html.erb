@@ -1,0 +1,3 @@
+<%= page_form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
+  <%= render_descendants_tree(@issue) unless @issue.leaf? %>
+<% end %>

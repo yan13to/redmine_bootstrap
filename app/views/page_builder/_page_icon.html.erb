@@ -1,0 +1,14 @@
+<% options ||= {} %>
+
+<% color = options.delete :color %>
+
+<% tag_class = [] %>
+<% tag_class << 'bi' %>
+<% tag_class << "bi-#{content}" %>
+<% tag_class << "text-#{color}" if color.present? %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :i, nil, to_html_options(options) %>

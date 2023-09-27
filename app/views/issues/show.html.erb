@@ -1,29 +1,22 @@
 <% html_title "#{@issue.tracker.name} ##{@issue.id}: #{@issue.subject}" %>
 
-<% title = [content_tag(:h2, issue_heading(@issue))] %>
-<% title << (@issue.status.is_closed? ? content_tag(:span, l(:label_closed_issues), class: 'badge bg-danger me-1 shadow') : content_tag(:span, l(:label_open_issues), class: 'badge bg-primary me-1 shadow')) %>
+<% title = [] %>
+<% title << page_heading(:h2, issue_heading(@issue)) %>
+<% title << content_tag(:span, l(:label_closed_issues), class: 'badge bg-danger') if @issue.status.is_closed? %>
+<% title << content_tag(:span, l(:label_open_issues), class: 'badge bg-primary') unless @issue.status.is_closed? %>
 <% title << content_tag(:span, l(:field_is_private), class: 'badge bg-danger shadow') if @issue.is_private? %>
 
-<%= page_title content_tag(:div, title.join.html_safe) do %>
-  <%= render 'issues/actions/edit', icon: false, text: true, issue: @issue if @issue.editable?  %>
-  <%= render 'issues/actions/log_time', issue: @issue if User.current.allowed_to?(:log_time, @project) %>
-  <%= render 'issues/actions/watch', icon: false, text: true, issue: @issue  %>
-  <%= render 'issues/actions/copy', issue: @issue if User.current.allowed_to?(:copy_issues, @project) && Issue.allowed_target_projects.any? %>
-  <%= page_dropdown nil, dark: true do %>
-    <li><%= render 'issues/actions/copy_url', issue: @issue, btn_class: 'dropdown-item' %></li>
-    <% if @issue.deletable? %>
-      <li><%= render 'issues/actions/delete', issue: @issue, btn_class: 'dropdown-item' %></li>
-    <% end %>
-  <% end %>
+<%= page_title page_flex(title.join.html_safe, gap: 2, align_items: :start) do %>
+  <%= render 'action_menu' %>
 <% end %>
 
 <div class="<%= @issue.css_classes %> details">
-  <div class="row">
-    <div class="col-auto">
+  <%= page_flex do %>
+    <%= page_col width: 'auto' do %>
       <%= author_avatar(@issue.author, size: 50) %>
       <%= assignee_avatar(@issue.assigned_to, size: 22, class: 'gravatar-child') if @issue.assigned_to %>
-    </div>
-    <div class="col">
+    <% end %>
+    <%= page_col do %>
       <%= render_issue_subject_with_tree(@issue) %>
       <div class="text-muted small fw-light">
         <%= authoring @issue.created_on, @issue.author %>.
@@ -31,7 +24,7 @@
           <%= l(:label_updated_time, time_tag(@issue.updated_on)).html_safe %>.
         <% end %>
       </div>
-    </div>
+    <% end %>
     <% if @prev_issue_id || @next_issue_id %>
       <div class="col-auto fw-light">
         <%= link_to_if @prev_issue_id, "\xc2\xab #{l(:label_previous)}", (@prev_issue_id ? issue_path(@prev_issue_id) : nil), title: "##{@prev_issue_id}", accesskey: accesskey(:previous), class: 'text-decoration-none' %> |
@@ -43,83 +36,62 @@
         <%= link_to_if @next_issue_id, "#{l(:label_next)} \xc2\xbb", (@next_issue_id ? issue_path(@next_issue_id) : nil), title: "##{@next_issue_id}", accesskey: accesskey(:next), class: 'text-decoration-none' %>
       </div>
     <% end %>
-  </div>
-
-  <%= page_card class: 'mb-3 bg-success text-dark bg-opacity-25 shadow' do %>
-    <%= page_simple_accordion_button 'General', '#general', class: 'bg-transparent' %>
-    <div class="mt-2 collapse show" id="general">
-      <%= render 'general', issue: @issue %>
-    </div>
   <% end %>
-
-  <% if @issue.description? %>
-    <%= page_card class: 'mb-3' do %>
-      <%= page_simple_accordion_button l(:field_description), '#description' do %>
-        <div class="col text-end">
-          <%= link_to l(:button_quote), quoted_issue_path(@issue), remote: true, method: 'post', class: 'badge rounded-pill bg-primary text-decoration-none' if @issue.notes_addable? %>
-        </div>
-      <% end %>
-      <div class="collapse show" id="description">
-        <%= textilizable @issue, :description, attachments: @issue.attachments %>
-      </div>
-    <% end %>
+  <%= page_paragraph do %>
+    <%= page_accordion [{
+      id: 'issues_show_general',
+      show: true,
+      header: l(:label_general),
+      body: render('general', issue: @issue)
+    }] %>
   <% end %>
-
-  <% if @issue.attachments.any? %>
-    <%= page_card class: 'mb-3' do %>
-      <%= page_simple_accordion_button l(:label_attachment_plural), '#attachment' %>
-      <div class="collapse show" id="attachment">
-        <%= link_to_attachments @issue, thumbnails: true %>
-      </div>
-    <% end %>
-  <% end %>
-
+  <%= page_paragraph do %>
+    <%= page_accordion [{
+      id: 'issues_show_description',
+      show: true,
+      header: render('issues/description_header'),
+      body: render('issues/description')
+    }] %>
+  <% end if @issue.description? %>
+  <%= page_paragraph do %>
+    <%= page_accordion [{
+      id: 'issues_show_attachment',
+      show: true,
+      header: l(:label_attachment_plural),
+      body: link_to_attachments(@issue, thumbnails: true)
+    }] %>
+  <% end if @issue.attachments.any? %>
   <%= render_full_width_custom_fields_rows(@issue) %>
-
   <%= call_hook(:view_issues_show_description_bottom, issue: @issue) %>
-
-  <% if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
-    <%= page_card class: 'mb-3' do %>
-      <%= page_simple_accordion_button l(:label_subtask_plural), '#subtasks' do %>
-        <% unless @issue.leaf? %>
-          <div class="col">
-            <div class="small text-muted">
-              <%= render_descendants_stats(@issue) %>
-            </div>
-          </div>
-        <% end %>
-        <% if User.current.allowed_to?(:manage_subtasks, @project) %>
-          <div class="col text-end">
-            <%= link_to_new_subtask(@issue) %>
-          </div>
-        <% end %>
-      <% end %>
-
-      <div class="collapse show" id="subtasks">
-        <%= form_tag({}, data: { cm_url: issues_context_menu_path }) do %>
-          <%= render_descendants_tree(@issue) unless @issue.leaf? %>
-        <% end %>
-      </div>
-    <% end %>
-  <% end %>
-
-  <% if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
-    <%= page_card class: 'mb-3' do %>
-      <%= render 'relations' %>
-    <% end %>
-  <% end %>
-
+  <%= page_paragraph do %>
+    <%= page_accordion [{
+      id: 'issues_show_subtasks',
+      header: render('issues/subtasks_header'),
+      body: render('issues/subtasks')
+    }] %>
+  <% end if !@issue.leaf? || User.current.allowed_to?(:manage_subtasks, @project) %>
+  <%= page_paragraph do %>
+    <%= page_accordion [{
+      id: 'issues_show_relations',
+      header: render('issues/relations_header'),
+      body: render('issues/relations')
+    }] %>
+  <% end if @relations.present? || User.current.allowed_to?(:manage_issue_relations, @project) %>
 </div>
 
-<%= render 'action_menu_edit' if User.current.wants_comments_in_reverse_order? %>
+<%= page_paragraph do %>
+  <%= render 'action_menu_edit' %>
+<% end if User.current.wants_comments_in_reverse_order? %>
 
-<div id="history">
+<%= page_paragraph do %>
   <%#= render_tabs issue_history_tabs, issue_history_default_tab %>
   <% history_tab = issue_history_tabs.select { |tab| tab[:name] == 'history' }.first %>
-  <%= render 'issues/tabs/history', tab: history_tab if history_tab.present? %>
-</div>
+  <%#= render 'issues/tabs/history', tab: history_tab if history_tab.present? %>
+<% end %>
 
-<%= render 'action_menu_edit' unless User.current.wants_comments_in_reverse_order? %>
+<%= page_paragraph do %>
+  <%= render 'action_menu_edit' %>
+<% end if User.current.wants_comments_in_reverse_order? %>
 
 <% other_formats_links do |f| %>
   <%= f.link_to 'Atom', url: { key: User.current.rss_key } %>
@@ -128,16 +100,11 @@
 
 <% content_for :sidebar do %>
   <%= render 'issues/sidebar' %>
-
   <% if User.current.allowed_to?(:add_issue_watchers, @project) || (@issue.watchers.present? && User.current.allowed_to?(:view_issue_watchers, @project)) %>
-    <div id="watchers">
-      <%= render 'watchers/watchers', watched: @issue %>
-    </div>
+    <%= render 'watchers/watchers', watched: @issue %>
   <% end %>
 <% end %>
 
 <% content_for :header_tags do %>
   <%= auto_discovery_link_tag(:atom, { format: 'atom', key: User.current.rss_key }, title: "#{@issue.project} - #{@issue.tracker} ##{@issue.id}: #{@issue.subject}") %>
 <% end %>
-
-<%= context_menu %>

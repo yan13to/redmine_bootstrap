@@ -2,50 +2,23 @@
 <% my_queries = queries.select(&:is_private?) %>
 <% pub_queries = queries.reject(&:is_private?) %>
 
-<div class="accordion" id="accordionPanelsProjects">
-  <% if my_queries.any? %>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="project-headingOne">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#projects-my-queries-sidebar" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-          <strong><%= l(:label_my_queries) %></strong>
-        </button>
-      </h2>
-      <div id="projects-my-queries-sidebar" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-        <div class="accordion-body">
-          <ul class="list-group list-group-flush">
-            <% my_queries.collect do |query| %>
-              <li class="list-group-item list-group-item-action d-flex justify-content-between<%= ' active bg-dark' if query == @query %>">
-                <%= link_to query.name, {}.merge(query_id: query), class: "text-decoration-none#{' text-white' if query == @query}" %>
-                <%= link_to content_tag(:i, nil, class: 'bi bi-x'), { set_filter: 1, sort: '', project_id: @project }, class: 'btn badge bg-danger', title: l(:button_clear) if query == @query %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-    </div>
-  <% end %>
-
-  <% if pub_queries.any? %>
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="project-headingTwo">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#projects-queries-sidebar" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-          <strong><%= l(:label_query_plural) %></strong>
-        </button>
-      </h2>
-      <div id="projects-queries-sidebar" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingTwo">
-        <div class="accordion-body">
-          <ul class="list-group list-group-flush">
-            <% pub_queries.collect do |query| %>
-              <li class="list-group-item list-group-item-action d-flex justify-content-between<%= ' active bg-dark' if query == @query %>">
-                <%= link_to query.name, {}.merge(query_id: query), class: "text-decoration-none#{' text-white' if query == @query}" %>
-                <%= link_to content_tag(:i, nil, class: 'bi bi-x'), { set_filter: 1, sort: '', project_id: @project }, class: 'btn badge bg-danger', title: l(:button_clear) if query == @query %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-    </div>
-  <% end %>
-</div>
+<%= page_accordion [
+  {
+    header: {
+      content: l(:label_my_queries)
+    },
+    body: {
+      content: render('queries', queries: my_queries)
+    }
+  },
+  {
+    header: {
+      content: l(:label_query_plural)
+    },
+    body: {
+      content: render('queries', queries: pub_queries)
+    }
+  }
+] %>
 
 <%= call_hook(:view_projects_sidebar_queries_bottom) %>

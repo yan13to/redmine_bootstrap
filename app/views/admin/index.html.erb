@@ -1,8 +1,5 @@
 <% html_title(l(:label_administration)) -%>
 
-<%= page_title content_tag(:h2, l(:label_administration)) %>
-
-<div id="admin-index">
-  <%= render 'application/no_data' if @no_configuration_data %>
-  <%= render 'menu' %>
-</div>
+<%= page_title page_heading(:h2, [page_icon(:administration), l(:label_administration)].join('&nbsp;').html_safe) %>
+<%= page_empty if @no_configuration_data %>
+<%= render 'menu', count: true %>

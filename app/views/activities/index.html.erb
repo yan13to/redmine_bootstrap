@@ -1,25 +1,54 @@
 <% html_title(l(:label_activity), @author) -%>
 
 <% title = @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %>
-<% heading = content_tag(:div, l(:label_date_from_to, start: format_date(@date_to - @days), end: format_date(@date_to-1)), class: 'small text-muted') %>
-<% title = content_tag(:h2, title) + heading %>
+<% title = page_heading(:h2, page_icon(:activity) + '&nbsp;'.html_safe + title) %>
 
-<%= page_title title, html_class: 'my-3' %>
-
+<%= page_title content_tag(:div, title) %>
+<%= page_paragraph do %>
+  <%= l(:label_date_from_to, :start => format_date(@date_to - @days), :end => format_date(@date_to-1)) %>
+<% end %>
 <%= render 'activities/activities', events_by_day: @events_by_day %>
-
-<%= render 'no_data' if @events_by_day.empty? %>
-
-<%= render 'pagination' %>
-
+<%= page_empty if @events_by_day.empty? %>
+<%= page_pagination do %>
+  <%= page_pagination_item do %>
+    <%= page_pagination_link("\xc2\xab " + l(:label_previous), { params: request.query_parameters.merge(from: @date_to - @days - 1) }, title: l(:label_date_from_to, start: format_date(@date_to - 2*@days), end: format_date(@date_to - @days - 1)), accesskey: accesskey(:previous)) %>
+  <% end %>
+  <% unless @date_to > User.current.today %>
+    <%= page_pagination_item do %>
+      <%= page_pagination_link(l(:label_next) + " \xc2\xbb", { params: request.query_parameters.merge(:from => @date_to + @days - 1) }, title: l(:label_date_from_to, start: format_date(@date_to), end: format_date(@date_to + @days - 1)), accesskey: accesskey(:next)) %>
+    <% end %>
+  <% end %>
+<% end %>
+<% content_for :sidebar do %>
+  <%= page_heading :h3, l(:label_activity) %>
+  <%= page_form_tag({}, method: :get) do %>
+    <%= page_list flush: true do %>
+      <%= page_list_item do %>
+        <%= page_date_field_tag('from', '', value: (@date_to - 1), size: 10, label: t(:label_days_to_html, days: @days, date: nil)) %>
+      <% end %>
+      <%= page_list_item do %>
+        <%= page_select_tag('user_id', activity_authors_options_for_select(@project, params[:user_id]), include_blank: true, label: l(:label_user)) %>
+      <% end %>
+      <% @activity.event_types.each do |t| %>
+        <%= page_list_item do %>
+          <%= page_check_box_tag "show_#{t}", 1, @activity.scope.include?(t), label: page_link_to(l("label_#{t.singularize}_plural"), {"show_#{t}" => 1, :user_id => params[:user_id], :from => params[:from]}) %>
+        <% end %>
+      <% end %>
+      <% if @project && @project.descendants.active.any? %>
+        <%= hidden_field_tag 'with_subprojects', 0, id: nil %>
+        <%= page_list_item do %>
+          <%= page_check_box_tag 'with_subprojects', 1, @with_subprojects, label: l(:label_subproject_plural) %>
+        <% end %>
+      <% end %>
+      <%= page_list_item class: 'd-grid gap-2' do %>
+        <%= page_submit_tag l(:button_apply), name: 'submit' %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
 <% other_formats_links do |f| %>
   <%= f.link_to_with_query_parameters 'Atom', from: nil, key: User.current.rss_key %>
 <% end %>
-
 <% content_for :header_tags do %>
   <%= auto_discovery_link_tag(:atom, params: request.query_parameters.merge(from: nil, key: User.current.rss_key), format: 'atom') %>
-<% end %>
-
-<% content_for :sidebar do %>
-  <%= render 'sidebar' %>
 <% end %>

@@ -1,0 +1,7 @@
+<% url = options.delete(:url) %>
+<% options = options.delete(:options) || {} %>
+<% options.delete(:name) %>
+
+<%= form_tag url, to_html_options(options) do %>
+  <%= content %>
+<% end %>

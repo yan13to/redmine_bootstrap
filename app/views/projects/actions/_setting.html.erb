@@ -1,7 +1,8 @@
 <% icon = icon.nil? ? true : icon %>
 <% text = text.nil? ? false : text %>
+
 <% html = [] %>
-<% html << content_tag(:i, nil, class: 'bi bi-gear') if icon %>
+<% html << page_icon(:gear) if icon %>
 <% html << content_tag(:span, project.name) if text %>
 
 <% if project.active? %>

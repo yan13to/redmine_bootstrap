@@ -1,39 +1,53 @@
-<h2><%=l(:label_enumerations)%></h2>
-
-<% Enumeration.get_subclasses.each do |klass| %>
-<h3><%= l(klass::OptionName) %></h3>
-
-<% enumerations = klass.shared %>
-
-<p><%= link_to l(:label_enumeration_new), new_enumeration_path(:type => klass.name), :class => 'icon icon-add' %></p>
-
-<% if enumerations.any? %>
-<table class="list enumerations"><thead>
-<tr>
-    <th><%= l(:field_name) %></th>
-    <th><%= l(:field_is_default) %></th>
-    <th><%= l(:field_active) %></th>
-    <th></th>
-</tr></thead>
-<% enumerations.each do |enumeration| %>
-<tr>
-    <td class="name"><%= link_to enumeration, edit_enumeration_path(enumeration) %></td>
-    <td class="tick"><%= checked_image enumeration.is_default? %></td>
-    <td class="tick"><%= checked_image enumeration.active? %></td>
-    <td class="buttons">
-      <%= reorder_handle(enumeration, :url => enumeration_path(enumeration), :param => 'enumeration') %>
-      <%= delete_link enumeration_path(enumeration) %>
-    </td>
-</tr>
-<% end %>
-</table>
-<% else %>
-<p class="nodata"><%= l(:label_no_data) %></p>
-<% end %>
-<% end %>
-
 <% html_title(l(:label_enumerations)) -%>
 
-<%= javascript_tag do %>
-  $(function() { $("table.enumerations tbody").positionedItems(); });
+<%= page_title content_tag(:h2, l(:label_enumerations)) %>
+<% Enumeration.get_subclasses.each do |klass| %>
+  <%= page_title content_tag(:h3, l(klass::OptionName)) do %>
+    <%= page_link_to l(:label_enumeration_new), new_enumeration_path(type: klass.name), icon: :plus, class: 'btn btn-outline-success' %>
+  <% end %>
+  <% enumerations = klass.shared %>
+  <%= page_card do %>
+    <% if enumerations.any? %>
+      <%= page_table do %>
+        <%= page_table_thead do %>
+          <%= page_table_tr do %>
+            <% [l(:field_name), l(:field_is_default), l(:field_active), nil].each do |th_label| %>
+              <%= page_table_th do %>
+                <%= th_label %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= page_table_tbody processor: 'enumerations/sortable' do %>
+          <% enumerations.each do |enumeration| %>
+            <% tr_class = if enumeration.is_default?
+                            'table-success'
+                          elsif !enumeration.active?
+                            'table-danger'
+                          end %>
+            <%= page_table_tr class: tr_class do %>
+              <%= page_table_td do %>
+                <%= page_link_to enumeration, edit_enumeration_path(enumeration) %>
+              <% end %>
+              <%= page_table_td do %>
+                <%= page_icon(:check) if enumeration.is_default? %>
+              <% end %>
+              <%= page_table_td do %>
+                <%= page_icon(:check) if enumeration.active? %>
+              <% end %>
+              <%= page_table_td do %>
+                <%#= reorder_handle(enumeration, url: enumeration_path(enumeration), param: 'enumeration') %>
+                <span class="btn handle-move" role="button" data-url="<%= enumeration_path(enumeration) %>" data-bs-toggle="tooltip" title="<%= l(:button_sort) %>" style="cursor:move;">
+                  <%= page_icon('arrows-move') %>
+                </span>
+                <%= page_link_to l(:button_delete), enumeration_path(enumeration), icon: :trash %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% else %>
+      <%= page_empty %>
+    <% end %>
+  <% end %>
 <% end %>

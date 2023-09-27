@@ -1,0 +1,29 @@
+<% options ||= {} %>
+
+<% navbar = options.delete :navbar  %>
+<% bg = options.delete :bg %>
+<% container = options.delete :container %>
+
+<% tag_class = [] %>
+<% tag_class << 'navbar' %>
+<% tag_class << 'navbar-expand-lg' %>
+<% tag_class << "navbar-#{navbar.to_s}" if navbar.present? %>
+<% tag_class << "bg-#{bg.to_s}" if bg.present? %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% container_class = 'container' %>
+<% container_class = "container-#{container}" if container.present? %>
+
+<%= content_tag :nav, to_html_options(options) do %>
+  <div class="<%= container_class %>">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#<%= "#{options[:id]}_collapse" %>" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="<%= "#{options[:id]}_collapse" %>">
+      <%= content %>
+    </div>
+  </div>
+<% end %>

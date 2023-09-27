@@ -1,13 +1,15 @@
-<%= page_title title(l(:label_auth_source_plural)) do %>
-  <%= render 'auth_sources/actions/add', text: true %>
+<% html_title(l(:label_auth_source_plural)) %>
+
+<%= page_title content_tag(:h2, [page_icon(:ldap_authentication), l(:label_auth_source_plural)].join('&nbsp;').html_safe) do %>
+  <%= page_link_to l(:label_auth_source_new), new_auth_source_path, icon: 'plus' %>
 <% end %>
 
 <%= page_card do %>
   <% if @auth_sources.any? %>
     <%= render 'listing' %>
   <% else %>
-    <%= render 'no_data' %>
+    <%= page_empty %>
   <% end %>
 <% end %>
 
-<span class="pagination"><%= pagination_links_full @auth_source_pages %></span>
+<%= pagination_links_full @auth_source_pages %>

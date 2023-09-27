@@ -12,7 +12,7 @@
 <% end %>
 
 <% if !replying && !@message.new_record? && @message.safe_attribute?('board_id') %>
-  <%= f.select_form_group :board_id, boards_options_for_select(@message.project.boards), {}, label: l(:label_board) %>
+  <%= f.page_selectd_id, boards_options_for_select(@message.project.boards), {}, label: l(:label_board) %>
 <% end %>
 
 <%= f.text_area_form_group :content, cols: 80, rows: 15, id: 'message_content', accesskey: accesskey(:edit), data: { auto_complete: true }, label: l(:description_message_content) %>

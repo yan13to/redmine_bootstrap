@@ -1,7 +1,7 @@
-<% html_title(l(:label_my_page)) -%>
+<% html_title l(:label_my_page) -%>
 
-<%= page_title content_tag(:h2, l(:label_my_page)) do %>
-  <%= form_tag({action: 'add_block'}, remote: true, id: 'block-form', authenticity_token: true) do %>
+<%= page_title page_heading(:h2, l(:label_my_page)) do %>
+  <%= page_form_tag({action: 'add_block'}, remote: true, id: 'block-form', authenticity_token: true) do %>
     <div class="row align-items-center">
       <div class="col-auto">
         <label for="block-select"><%= l(:button_add) %></label>
@@ -17,12 +17,8 @@
   <% end %>
 <% end %>
 
-<div id="my-page" class="splitcontent">
-  <% @groups.each do |group| %>
-    <div id="list-<%= group %>" class="block-receiver splitcontent<%= group %>">
-      <%= render_blocks(@blocks[group], @user) %>
-    </div>
-  <% end %>
-</div>
-
-<%= context_menu %>
+<% @groups.each do |group| %>
+  <div id="list-<%= group %>" class="block-receiver splitcontent<%= group %>">
+    <%= render_blocks(@blocks[group], @user) %>
+  </div>
+<% end %>

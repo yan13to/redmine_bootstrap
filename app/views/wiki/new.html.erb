@@ -1,8 +1,15 @@
-<%= page_title title(l(:label_wiki_page_new)) %>
+<% html_title l(:label_wiki_page_new) %>
 
-<%= form_for :page, @page, url: new_project_wiki_page_path(@project) do |f| %>
-  <%= render_error_messages @page.errors.full_messages_for(:title) %>
+<%= page_title page_heading(:h2, (page_icon(:wiki) + '&nbsp;'.html_safe + l(:label_wiki_page_new))) %>
 
-  <%= f.text_form_group :title, name: 'title', size: 60, required: true, hint: "#{l(:text_unallowed_characters)}: , . / ? ; : |" %>
-  <%= submit_tag(l(:label_next)) %>
+<%= page_card do %>
+  <%= labelled_form_for :page, @page, url: new_project_wiki_page_path(@project) do |f| %>
+    <%= render_error_messages @page.errors.full_messages_for(:title) %>
+    <%= page_paragraph do %>
+      <%= f.page_text_field :title, name: 'title', size: 60, required: true, hint: "#{l(:text_unallowed_characters)}: , . / ? ; : |" %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= page_submit_tag l(:label_next) %>
+    <% end %>
+  <% end %>
 <% end %>

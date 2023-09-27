@@ -1,14 +1,14 @@
-<div class="card">
-  <div class="projects box card-body">
-    <h3 class="icon icon-projects">
-      <%= l(:label_subproject_plural) %>
-    </h3>
-    <ul class="subprojects">
-      <% @subprojects.each do |project| %>
-        <li>
-          <%= link_to(project.name, project_path(project), class: project.css_classes).html_safe %>
-        </li>
-      <% end %> 
-    </ul>
-  </div>
-</div>
+<h3>
+  <%= page_icon(:bricks, class: 'small me-1') %>
+  <%= l(:label_subproject_plural) %>
+</h3>
+
+<%= page_card class: 'mb-3' do %>
+  <ul class="list-unstyled">
+    <% @subprojects.each do |project| %>
+      <li>
+        <%= link_to(project.name, project_path(project), class: project.css_classes).html_safe %>
+      </li>
+    <% end %> 
+  </ul>
+<% end %>

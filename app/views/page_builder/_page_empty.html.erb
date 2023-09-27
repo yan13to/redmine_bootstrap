@@ -1,0 +1,4 @@
+<% options[:class] ||= 'my-3 small text-muted alert alert-warning p-1' %>
+<% content ||= l(:label_no_data) %>
+
+<%= content_tag :div, content, to_html_options(options) %>

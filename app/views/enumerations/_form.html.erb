@@ -1,11 +1,19 @@
-<%= error_messages_for 'enumeration' %>
+<% url ||= enumerations_path %>
+<% action_button ||= :button_create %>
+<% method ||= :post %>
 
-<div class="box tabular">
-  <p><%= f.text_field :name %></p>
-  <p><%= f.check_box :active %></p>
-  <p><%= f.check_box :is_default %></p>
+<%= form_for @enumeration, url: enumerations_path, builder: PageFormBuilder, html: { multipart: true, method: method } do |f| %>
+  <%= error_messages_for 'enumeration' %>
+
+  <%= f.hidden_field :type  %>
+  <%= f.text_field_form_group :name %>
+  <%= f.check_box_form_group :active %>
+  <%= f.check_box_form_group :is_default %>
 
   <% @enumeration.custom_field_values.each do |value| %>
-    <p><%= custom_field_tag_with_label :enumeration, value %></p>
+    <div class="mb-3">
+      <%= custom_field_tag_with_label :enumeration, value %>
+    </div>
   <% end %>
-</div>
+  <%= f.action_form_group action_button %>
+<% end %>

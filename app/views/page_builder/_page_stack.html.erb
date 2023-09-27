@@ -1,0 +1,13 @@
+<% align = options.delete(:align) %>
+<% gap = options.delete(:gap) || 1 %>
+<% type = options.delete(:type) || 'hstack' %>
+
+<% html_class = ['align-items-center'] %>
+<% html_class << type if type.present? %>
+<% html_class << "gap-#{gap}" if gap.present? %>
+<% html_class << options[:class] if options[:class].present? %>
+<% html_class << 'justify-content-end' if align == :end %>
+
+<% options[:class] = html_class.compact.join(' ') %>
+
+<%= content_tag :div, content, to_html_options(options) %>

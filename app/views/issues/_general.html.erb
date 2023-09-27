@@ -5,12 +5,11 @@
   <div class="col">
     <div class="hstack gap-1">
       <label><%= l(:field_status) %>:</label>
-      <span class="badge bg-success shadow"><%= issue.status.name %></span>
-      <a href="#" data-bs-toggle="tooltip" title="edit status"><i class="bi bi-pencil small"></i></a>
+      <span class="badge bg-success"><%= issue.status.name %></span>
     </div>
     <div class="hstack gap-1">
       <label><%= l(:field_priority) %>:</label>
-      <span class="badge bg-warning text-dark shadow"><%= issue.priority.name %></span>
+      <span class="badge bg-warning text-dark"><%= issue.priority.name %></span>
     </div>
     <% unless issue.disabled_core_fields.include?('assigned_to_id') %>
       <div class="hstack gap-1">

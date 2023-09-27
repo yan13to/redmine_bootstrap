@@ -1,0 +1,11 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'd-flex' %>
+<% tag_class << 'align-items-start' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :div, content, to_html_options(options) %>

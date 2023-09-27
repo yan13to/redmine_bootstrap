@@ -1,0 +1,13 @@
+<% tag = options.delete(:tag) || :span %>
+<% muted = options.delete(:muted) %>
+<% small = options.delete(:small) %>
+
+<% tag_class = [] %>
+<% tag_class << 'text-muted' if muted %>
+<% tag_class << 'small' if small %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+
+<%= content_tag tag, content, to_html_options(options) %>

@@ -1,17 +1,18 @@
 <% html_title(l(:label_information_plural)) -%>
 
-<%= page_title content_tag(:h2, l(:label_information_plural)) %>
-
+<%= page_title page_heading(:h2, [page_icon(:info), l(:label_information_plural)].join('&nbsp;').html_safe) %>
 <%= page_card do %>
-  <p>
+  <%= page_paragraph do %>
     <strong><%= Redmine::Info.versioned_name %></strong>
-  </p>
-  <table class="table table-hover">
-    <% @checklist.each do |label, result| %>
-      <%= render 'info', label: label, result: result %>
+  <% end %>
+  <%= page_table do %>
+    <%= page_table_tbody do %>
+      <% @checklist.each do |label, result| %>
+        <%= render 'info', label: label, result: result %>
+      <% end %>
     <% end %>
-  </table>
-  <div>
+  <% end %>
+  <%= page_paragraph do %>
     <pre><%= Redmine::Info.environment %></pre>
-  </div>
+  <% end %>
 <% end %>

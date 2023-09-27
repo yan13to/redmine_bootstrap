@@ -1,19 +1,36 @@
 <% events_by_day.keys.sort.reverse_each do |day| %>
-  <%= page_card class: 'mb-3' do %>
-    <h3><%= format_activity_day(day) %></h3>
-    <dl>
-      <% sort_activity_events(events_by_day[day]).each do |e, in_group| -%>
-        <dt class="<%= e.event_type %> icon icon-<%= e.event_type %> <%= "grouped" if in_group %> <%= User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author ? 'me' : nil %>">
-          <%= avatar(e.event_author) if e.respond_to?(:event_author) %>
-          <span class="time"><%= format_time(e.event_datetime, false) %></span>
-          <%= content_tag('span', e.project, class: 'project') if @project.nil? || @project != e.project %>
-          <%= link_to format_activity_title(e.event_title), e.event_url %>
-        </dt>
-        <dd class="<%= "grouped" if in_group %>">
-          <span class="description"><%= format_activity_description(e.event_description) %></span>
-          <span class="author"><%= link_to_user(e.event_author) if e.respond_to?(:event_author) %></span>
-        </dd>
-      <% end -%>
-    </dl>
+  <%= page_paragraph do %>
+    <%= page_paragraph do %>
+      <%= page_badge format_activity_day(day), type: 'success' %>
+    <% end %>
+    <%= page_card do %>
+      <%= page_list flush: true do %>
+        <% sort_activity_events(events_by_day[day]).each do |e, in_group| -%>
+          <%= page_list_item do %>
+            <% tag_class = [e.event_type] %>
+            <% tag_class << 'grouped' if in_group %>
+            <% tag_class << 'me' if User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author %>
+            <% tag_class = tag_class.compact.join(' ') %>
+            <%= content_tag :div, class: tag_class do %>
+              <% icon_class = nil %>
+              <% icon_class = 'link-danger' if e.event_type == 'issue-closed' %>
+              <% icon_class = 'link-success' if e.event_type == 'issue' %>
+              <%= page_icon(e.event_type, class: icon_class) %>
+              <%= avatar(e.event_author) if e.respond_to?(:event_author) %>
+              <%= page_text(format_time(e.event_datetime, false)) %>
+              <%= page_text(e.project) if @project.nil? || @project != e.project %>
+              <%= page_link_to(format_activity_title(e.event_title), e.event_url) %>
+            <% end %>
+            <% list_class = ['small'] %>
+            <% list_class << 'grouped' if in_group %>
+            <% list_class = list_class.join(' ') %>
+            <%= content_tag :div, class: list_class do %>
+              <%= format_activity_description(e.event_description) %>
+              <%= link_to_user(e.event_author) if e.respond_to?(:event_author) %>
+            <% end %>
+          <% end -%>
+        <% end -%>
+      <% end %>
+    <% end %>
   <% end %>
 <% end -%>

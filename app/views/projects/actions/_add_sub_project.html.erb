@@ -1,0 +1,15 @@
+<% icon = defined?(icon) ? icon : true %>
+<% text = defined?(text) ? text : false %>
+
+<% btn_class ||= 'btn' %>
+<% btn_label ||= l(:label_subproject_new) %>
+
+<% html = [] %>
+<% html << page_icon(:plus) if icon %>
+<% html << content_tag(:span, btn_label) if text %>
+
+<% project ||= @project %>
+
+<%= link_to new_project_path(parent_id: project), class: btn_class, 'data-bs-toggle': 'tooltip', title: btn_label do %>
+  <%= html.compact.join('&nbsp;').html_safe %>
+<% end %>

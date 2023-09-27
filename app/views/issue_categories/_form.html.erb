@@ -1,6 +1,8 @@
 <%= error_messages_for 'category' %>
 
-<div class="box tabular">
-<p><%= f.text_field :name, :size => 60, :required => true %></p>
-<p><%= f.select :assigned_to_id, principals_options_for_select(@project.assignable_users, @category.assigned_to), :include_blank => true %></p>
-</div>
+<%= page_paragraph do %>
+  <%= f.page_text_field :name, size: 60, required: true %>
+<% end %>
+<%= page_paragraph do %>
+  <%= f.page_select :assigned_to_id, principals_options_for_select(@project.assignable_users, @category.assigned_to), include_blank: true %>
+<% end %>

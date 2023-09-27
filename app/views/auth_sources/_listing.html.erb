@@ -1,14 +1,14 @@
-<table class="table">
-  <thead>
-    <tr>
-      <th><%= l(:field_name) %></th>
-      <th><%= l(:field_type) %></th>
-      <th><%= l(:field_host) %></th>
-      <th><%= l(:label_user_plural) %></th>
-      <th>&nbsp;</th>
-    </tr>
-  </thead>
-  <tbody>
+<%= page_table  do %>
+  <%= page_table_thead do %>
+    <%= page_table_tr do %>
+      <% [l(:field_name), l(:field_type), l(:field_host), l(:label_user_plural), nil].each do |th_label| %>
+        <%= page_table_th do %>
+          <%= th_label %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+  <%= page_table_tbody do %>
     <%= render partial: 'source', collection: @auth_sources %>
-  </tbody>
-</table>
+  <% end %>
+<% end %>

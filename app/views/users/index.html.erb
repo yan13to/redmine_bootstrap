@@ -1,64 +1,57 @@
 <% html_title(l(:label_user_plural)) -%>
 
-<%= page_title content_tag(:h2, l(:label_user_plural)) do %>
-  <%= render 'users/actions/add' %>
+<%= page_title content_tag(:h2, [page_icon(:users), l(:label_user_plural)].join('&nbsp;').html_safe) do %>
+  <%= page_link_to l(:label_user_new), new_user_path, icon: :plus %>
   <%= render 'users/actions/index' %>
 <% end %>
-
-<div class="accordion my-3" id="accordionPanelsStayOpenExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="filters-section-heading">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#filters-section" aria-expanded="true" aria-controls="filters-section">
-        <strong><%= l(:label_filter_plural) %></strong>
-      </button>
-    </h2>
-    <div id="filters-section" class="accordion-collapse collapse" aria-labelledby="filters-section">
-      <div class="accordion-body">
-        <%= render 'filters' %>
-      </div>
-    </div>
-  </div>
-</div>
-
+<%= page_paragraph do %>
+  <%= page_accordion [
+    {
+      id: 'admin_users_filter',
+      show: params.has_key?(:status) || params.has_key?(:name) || params.has_key?(:group_id),
+      header: l(:label_filter_plural),
+      body: render('users/filters')
+    }
+  ] %>
+<% end %>
 <% if @users.any? %>
-  <div class="card">
-    <div class="card-body">
-      <table class="table table-hover table-sm">
-        <thead>
-          <tr>
-            <%= sort_header_tag('login', caption: l(:field_login)) %>
-            <%= sort_header_tag('firstname', caption: l(:field_firstname)) %>
-            <%= sort_header_tag('lastname', caption: l(:field_lastname)) %>
-            <th><%= l(:field_mail) %></th>
-            <%= sort_header_tag('admin', caption: l(:field_admin), default_order: 'desc') %>
-            <%= sort_header_tag('created_on', caption: l(:field_created_on), default_order: 'desc') %>
-            <%= sort_header_tag('last_login_on', caption: l(:field_last_login_on), default_order: 'desc') %>
-            <th>&nbsp;</th>
-          </tr>
-        </thead>
-        <tbody>
-          <%= render @users %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <span class="pagination"><%= pagination_links_full @user_pages, @user_count %></span>
-
-  <% other_formats_links do |f| %>
-    <%= f.link_to_with_query_parameters 'CSV', {}, onclick: "showModal('csv-export-options', '330px'); return false;" %>
+  <%= page_table do %>
+    <%= page_table_thead do %>
+      <%= page_table_tr do %>
+        <%= sort_header_tag('login', caption: l(:field_login)) %>
+        <%= sort_header_tag('firstname', caption: l(:field_firstname)) %>
+        <%= sort_header_tag('lastname', caption: l(:field_lastname)) %>
+        <%= page_table_th l(:field_mail) %>
+        <%= sort_header_tag('admin', caption: l(:field_admin), default_order: 'desc') %>
+        <%= sort_header_tag('created_on', caption: l(:field_created_on), default_order: 'desc') %>
+        <%= sort_header_tag('last_login_on', caption: l(:field_last_login_on), default_order: 'desc') %>
+        <%= page_table_th '&nbsp;'.html_safe %>
+      <% end %>
+    <% end %>
+    <%= page_table_tbody render(@users) %>
   <% end %>
-
-  <div id="csv-export-options" style="display: none;">
-    <h3 class="title"><%= l(:label_export_options, export_format: 'CSV') %></h3>
-    <%= export_csv_encoding_select_tag %>
-    <p class="buttons">
-      <%= submit_tag l(:button_export), name: nil, id: 'csv-export-button' %>
-      <%= submit_tag l(:button_cancel), name: nil, onclick: 'hideModal(this);', type: 'button' %>
-    </p>
+  <div class="d-flex justify-content-between">
+    <div>
+      <%= pagination_links_full @user_pages, @user_count %>
+    </div>
+    <div>
+      <%= l(:label_export_to) %>
+      <% other_formats_links do |f| %>
+        <%= f.link_to_with_query_parameters 'CSV', {}, 'data-bs-toggle': 'modal', 'data-bs-target': '#csv-export-options' %>
+      <% end %>
+    </div>
   </div>
 <% else %>
-  <div class="mb-3">
-    <%= l(:label_no_data) %>
-  </div>
+  <%= page_empty %>
+<% end %>
+
+<%= page_modal id: 'csv-export-options' do %>
+  <%= page_form_tag users_path(format: :csv), method: :get do %>
+    <%= page_modal_header page_modal_title(l(:label_export_options, export_format: 'CSV')) %>
+    <%= page_modal_body export_csv_encoding_select_tag %>
+    <%= page_modal_footer do %>
+      <%= page_submit_tag(l(:button_export), name: nil, id: 'csv-export-button') %>
+      <%= page_submit_tag(l(:button_cancel), name: nil, type: 'button', color: 'link', 'data-bs-dismiss': 'modal') %>
+    <% end %>
+  <% end %>
 <% end %>

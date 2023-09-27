@@ -1,65 +1,81 @@
 <%= page_title title([l(:label_tracker_plural), trackers_path], l(:field_summary)) %>
 
 <% if @trackers.any? %>
-  <%= page_card do %>
-
-    <%= form_tag fields_trackers_path do %>
-      <%= page_table head: ['&nbsp;'] + @trackers.map {|tracker| link_to(content_tag(:i, nil, class: 'bi bi-check-all h4 text-success'), '#', title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}") + tracker.name} do %>
-        <tr class="group open">
-          <td colspan="<%= @trackers.size + 1 %>">
-            <span class="expander icon icon-expended" onclick="toggleRowGroup(this);">&nbsp;</span>
-            <%= l(:field_core_fields) %>
-          </td>
-        </tr>
-        <% Tracker::CORE_FIELDS.each do |field| %>
-          <tr>
-            <% field_name = l("field_#{field}".sub(/_id$/, '')) %>
-            <td class="name">
-              <%= link_to_function('', "toggleCheckboxesBySelector('input.core-field-#{field}')", title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}") %>
-              <%= field_name %>
-            </td>
-            <% @trackers.each do |tracker| %>
-              <td title="<%= "#{tracker.name}: #{field_name}" %>">
-                <%= check_box_tag "trackers[#{tracker.id}][core_fields][]", field, tracker.core_fields.include?(field), class: "tracker-#{tracker.id} core-field-#{field}" %>
-              </td>
-            <% end %>
-          </tr>
-        <% end %>
-        <% if @custom_fields.any? %>
-          <tr class="group open">
-            <td colspan="<%= @trackers.size + 1 %>">
-              <span class="expander icon icon-expended" onclick="toggleRowGroup(this);">&nbsp;</span>
-              <%= l(:label_custom_field_plural) %>
-            </td>
-          </tr>
-          <% @custom_fields.each do |field| %>
-            <tr>
-              <td class="name">
-                <%= link_to_function('', "toggleCheckboxesBySelector('input.custom-field-#{field.id}')", title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}", class: 'icon-only icon-checked') %>
-                <%= field.name %>
-              </td>
-              <% @trackers.each do |tracker| %>
-                <td title="<%= "#{tracker.name}: #{field.name}" %>">
-                  <%= check_box_tag "trackers[#{tracker.id}][custom_field_ids][]", field.id, tracker.custom_fields.include?(field), class: "tracker-#{tracker.id} custom-field-#{field.id}" %>
-                </td>
+  <%= page_form_tag fields_trackers_path do %>
+    <%= page_table do %>
+      <%= page_table_thead do %>
+        <%= page_table_tr do %>
+          <%= page_table_th '' %>
+          <% @trackers.each do |tracker| %>
+            <%= page_table_th do %>
+              <%= page_flex gap: 2 do %>
+                <%= page_link_to nil, '#', icon: 'check-all', title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+                <%= tracker.name %>
               <% end %>
-            </tr>
+            <% end %>
           <% end %>
         <% end %>
       <% end %>
-
-      <% @trackers.each do |tracker| %>
-        <%= hidden_field_tag "trackers[#{tracker.id}][core_fields][]", '' %>
-        <%= hidden_field_tag "trackers[#{tracker.id}][custom_field_ids][]", '' %>
+      <%= page_table_tbody do %>
+        <%= page_table_tr do %>
+          <%= page_table_td colspan: (@trackers.size + 1) do %>
+            <%= page_accordion_button l(:field_core_fields), target: '#core-fields-body', show: true %>
+          <% end %>
+        <% end %>
       <% end %>
-
-      <p>
-        <%= submit_tag l(:button_save) %>
-      </p>
-
+      <%= page_table_tbody id: 'core-fields-body', class: 'collapse show' do %>
+        <% Tracker::CORE_FIELDS.each do |field| %>
+          <%= page_table_tr do %>
+            <% field_name = l("field_#{field}".sub(/_id$/, '')) %>
+            <%= page_table_td do %>
+              <%= page_flex gap: 2 do %>
+                <%= page_link_to nil, '#', icon: 'check-all', title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+                <%= field_name %>
+              <% end %>
+            <% end %>
+            <% @trackers.each do |tracker| %>
+              <%= page_table_td title: "#{tracker.name}: #{field_name}" do %>
+                <%= page_check_box_tag "trackers[#{tracker.id}][core_fields][]", field, tracker.core_fields.include?(field), class: "tracker-#{tracker.id} core-field-#{field}" %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if @custom_fields.any? %>
+        <%= page_table_tbody do %>
+          <%= page_table_tr do %>
+            <%= page_table_td colspan: (@trackers.size + 1) do %>
+              <%= page_accordion_button l(:label_custom_field_plural), target: '#custom-fields-body', show: true %>
+            <% end %>
+          <% end %>
+        <% end %>
+        <%= page_table_tbody id: 'custom-fields-body', class: 'collapse show' do %>
+          <% @custom_fields.each do |field| %>
+            <%= page_table_tr do %>
+              <%= page_table_td do %>
+                <%= page_flex gap: 2 do %>
+                  <%= page_link_to nil, '#', icon: 'check-all', title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}" %>
+                  <%= field.name %>
+                <% end %>
+              <% end %>
+              <% @trackers.each do |tracker| %>
+                <%= page_table_td title: "#{tracker.name}: #{field.name}" do %>
+                  <%= page_check_box_tag "trackers[#{tracker.id}][custom_field_ids][]", field.id, tracker.custom_fields.include?(field), class: "tracker-#{tracker.id} custom-field-#{field.id}" %>
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% end %>
     <% end %>
-
+    <% @trackers.each do |tracker| %>
+      <%= hidden_field_tag "trackers[#{tracker.id}][core_fields][]", '' %>
+      <%= hidden_field_tag "trackers[#{tracker.id}][custom_field_ids][]", '' %>
+    <% end %>
+    <%= page_paragraph do %>
+      <%= page_submit_tag l(:button_save) %>
+    <% end %>
   <% end %>
 <% else %>
-  <%= render 'no_data' %>
+  <%= page_empty %>
 <% end %>

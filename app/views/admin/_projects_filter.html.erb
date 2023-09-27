@@ -1,16 +1,12 @@
-<%= form_tag({}, method: :get) do %>
-  <div class="mb-3 form-group">
-    <label for='status'><%= l(:field_status) %>:</label>
-    <%= select_tag 'status', project_status_options_for_select(@status), class: 'form-select', onchange: "this.form.submit(); return false;"  %>
-  </div>
-
-  <div class="mb-3 form-group">
-    <label for='name'><%= l(:label_project) %>:</label>
-    <%= text_field_tag 'name', params[:name], size: 30, class: 'form-control' %>
-  </div>
-
-  <div class="mb-3">
-    <%= submit_tag l(:button_apply), class: 'btn btn-primary', name: nil %>
-    <%= link_to l(:button_clear), admin_projects_path, class: 'btn btn-link text-decoration-none' %>
-  </div>
+<%= page_form_tag({}, method: :get) do %>
+  <%= page_paragraph do %>
+    <%= page_select_tag 'status', project_status_options_for_select(@status), label: l(:field_status)  %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= page_text_field_tag 'name', params[:name], size: 30, label: l(:label_project) %>
+  <% end %>
+  <%= page_paragraph do %>
+    <%= page_submit_tag l(:button_apply), name: nil %>
+    <%= page_link_to l(:button_clear), admin_projects_path, mode: :button %>
+  <% end %>
 <% end %>

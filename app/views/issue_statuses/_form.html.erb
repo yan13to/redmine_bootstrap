@@ -1,11 +1,11 @@
 <% button_action ||= :button_create %>
 
-<%= form_for @issue_status, builder: BootstrapFormBuilder do |f| %>
+<%= form_for @issue_status, builder: PageFormBuilder do |f| %>
   <%= error_messages_for 'issue_status' %>
 
   <%= f.text_field_form_group :name, required: true %>
   <% if Issue.use_status_for_done_ratio? %>
-    <%= f.select_form_group :default_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), { include_blank: true }, label: l(:field_done_ratio) %>
+    <%= f.page_selectult_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), { include_blank: true }, label: l(:field_done_ratio) %>
   <% end %>
   <%= f.check_box_form_group :is_closed %>
 

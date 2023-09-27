@@ -36,7 +36,7 @@
     </table>
     <span class="pagination"><%= pagination_links_full @topic_pages, @topic_count %></span>
   <% else %>
-    <%= render 'no_data' %>
+    <%= page_empty %>
   <% end %>
 <% end %>
 

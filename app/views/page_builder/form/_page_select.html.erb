@@ -1,0 +1,26 @@
+<% options ||= {} %>
+
+<% invalid = options.delete(:invalid) %>
+<% invalid = false if invalid.nil? %>
+<% label = options.delete(:label) || {} %>
+<% hint = options.delete(:hint) || {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'form-select' %>
+<% tag_class << html_options[:class] if html_options[:class].present? %>
+<% tag_class << 'is-invalid' if invalid %>
+
+<% html_options[:class] = tag_class.compact.join(' ') %>
+
+<% label = { content: label } if label.is_a?(String) %>
+<% label_content = label[:content] %>
+<% label_options = label[:options] || {} %>
+
+<% hint = { content: hint } if hint.is_a?(String) %>
+<% hint_content = hint[:content] %>
+<% hint_options = hint[:options] || {} %>
+
+<%= f.page_label method, label_content, to_html_options(label_options) %>
+<%= f.select method, choices, options, to_html_options(html_options) %>
+<%= f.page_hint method, hint_content, to_html_options(hint_options) if hint_content.present? %>
+<%= f.page_feedback method, :invalid if invalid %>

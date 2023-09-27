@@ -1,50 +1,49 @@
-<table class="list workflows transitions transitions-<%= name %>">
-<thead>
-  <tr>
-    <th>
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled)')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'no-tooltip icon-only icon-checked') %>
-      <%=l(:label_current_status)%>
-    </th>
-    <th colspan="<%= @statuses.length %>"><%=l(:label_new_statuses_allowed)%></th>
-  </tr>
-  <tr>
-    <td></td>
-    <% for new_status in @statuses %>
-    <td style="width:<%= 75 / @statuses.size %>%;">
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled).new-status-#{new_status.id}')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'no-tooltip icon-only icon-checked') %>
-      <%= new_status.name %>
-    </td>
-    <% end %>
-  </tr>
-</thead>
-<% transition_counts = workflows.each_with_object(Hash.new(0)) {|w,memo| memo[[w.old_status, w.new_status]] += 1} %>
-<tbody>
-  <% for old_status in [nil] + @statuses %>
-  <% next if old_status.nil? && name != 'always' %>
-  <tr>
-    <td class="name">
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled).old-status-#{old_status.try(:id) || 0}')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'no-tooltip icon-only icon-checked') %>
-      <% if old_status %>
-        <% old_status_name = old_status.name %>
-        <%= old_status_name %>
-      <% else %>
-        <% old_status_name = l(:label_issue_new) %>
-        <%= content_tag('em', old_status_name) %>
+<% table_name = "transitions-#{name}" %>
+
+<%= page_table class: table_name do %>
+  <%= page_table_thead do %>
+    <%= page_table_tr class: 'table-secondary' do %>
+      <%= page_table_th do %>
+        <%= page_flex gap: 2 do %>
+          <%= page_link_to nil, '#', icon: :check, title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}", processor: 'shared/toggle_checkbox', target: "table.#{table_name} input[type=checkbox]:not(:disabled)" %>
+          <%= page_text l(:label_current_status) %>
+        <% end %>
       <% end %>
-    </td>
-    <% for new_status in @statuses -%>
-    <% checked = (old_status == new_status) || (transition_counts[[old_status, new_status]] > 0) %>
-    <td class="no-tooltip <%= checked ? 'enabled' : '' %>" title="<%= old_status_name %> &#187; <%= new_status.name %>">
-      <%= transition_tag transition_counts[[old_status, new_status]], old_status, new_status, name %>
-    </td>
-    <% end -%>
-  </tr>
+      <%= page_table_th colspan: @statuses.length do %>
+        <%= l(:label_new_statuses_allowed) %>
+      <% end %>
+    <% end %>
+    <%= page_table_tr do %>
+      <%= page_table_td %>
+      <% for new_status in @statuses %>
+        <%= page_table_td style: "width:#{75 / @statuses.size}%;" do %>
+          <%= page_flex gap: 2 do %>
+            <%= page_link_to nil, '#', icon: :check, title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}", processor: 'shared/toggle_checkbox', target: "table.#{table_name} input[type=checkbox]:not(:disabled).new-status-#{new_status.id}" %>
+            <%= page_text new_status.name %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
   <% end %>
-</tbody>
-</table>
+  <% transition_counts = workflows.each_with_object(Hash.new(0)) {|w,memo| memo[[w.old_status, w.new_status]] += 1} %>
+  <%= page_table_tbody do %>
+    <% for old_status in [nil] + @statuses %>
+      <% next if old_status.nil? && name != 'always' %>
+      <% old_status_name = old_status ? old_status.name : l(:label_issue_new) %>
+      <%= page_table_tr do %>
+        <%= page_table_td do %>
+          <%= page_flex gap: 2 do %>
+            <%= page_link_to nil, '#', icon: :check, title: "#{l(:button_check_all)}/#{l(:button_uncheck_all)}", processor: 'shared/toggle_checkbox', target: "table.#{table_name} input[type=checkbox]:not(:disabled).old-status-#{old_status.try(:id) || 0}" %>
+            <%= page_text (old_status ? old_status_name : content_tag(:em, old_status_name)) %>
+          <% end %>
+        <% end %>
+        <% for new_status in @statuses -%>
+          <% checked = (old_status == new_status) || (transition_counts[[old_status, new_status]] > 0) %>
+          <%= page_table_td class: "no-tooltip#{' table-success' if checked}", title: [old_status_name, new_status.name].join(' &#187; ').html_safe do %>
+            <%= transition_tag transition_counts[[old_status, new_status]], old_status, new_status, name %>
+          <% end %>
+        <% end -%>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

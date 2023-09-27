@@ -3,12 +3,12 @@
 
 <%= error_messages_for @board %>
 
-<%= form_for @board, url: url, builder: BootstrapFormBuilder do |f| %>
+<%= form_for @board, url: url, builder: PageFormBuilder do |f| %>
   <%= f.text_field_form_group :name, required: true %>
   <%= f.text_field_form_group :description, required: true, size: 80 %>
 
   <% if @board.valid_parents.any? %>
-    <%= f.select_form_group :parent_id, boards_options_for_select(@board.valid_parents), { include_blank: true }, label: l(:field_board_parent) %>
+    <%= f.page_select :parent_id, boards_options_for_select(@board.valid_parents), { include_blank: true }, label: l(:field_board_parent) %>
   <% end %>
 
   <%= f.action_form_group action_button %>

@@ -1,5 +1,6 @@
-<tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-  <td class="align-middle">
+<tr class="<%= project.css_classes %>">
+  <td class="align-middle" style="padding-left:<%= level.positive? ? "#{level}rem;" : nil %>;">
+    <%= page_icon('chevron-right') if level.positive? %>
     <%= render 'projects/actions/setting', project: project, text: true, icon: false %>
   </td>
   <td class="align-middle">
@@ -9,10 +10,10 @@
     <%= format_date(project.created_on) %>
   </td>
   <td class="align-middle">
-    <div class="btn-group btn-group-sm">
-      <%= render 'projects/actions/archive', project: project, text: true %>
-      <%= render 'projects/actions/copy', project: project, text: true %>
-      <%= render 'projects/actions/delete', project: project, text: true %>
+    <div class="hstack gap-1">
+      <%= render 'projects/actions/archive', project: project, text: true, btn_class: 'btn btn-sm' %>
+      <%= render 'projects/actions/copy', project: project, text: true, btn_class: 'btn btn-sm' %>
+      <%= render 'projects/actions/delete', project: project, text: true, btn_class: 'btn btn-sm' %>
     </div>
   </td>
 </tr>

@@ -1,0 +1,43 @@
+<% options ||= {} %>
+
+<% show = options.delete :show %>
+<% target = options.delete :target %>
+<% mode = options.delete :mode %>
+
+<% tag_class = [] %>
+<% tag_class << 'd-flex' %>
+<% tag_class << 'align-items-center' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% txt_class = [] %>
+<% txt_class << 'px-3' unless mode.to_s == 'simple' %>
+<% txt_class << 'fs-5' %>
+<% txt_class = txt_class.join(' ') %>
+
+<% txt_options = {} %>
+<% txt_options[:class] = txt_class %>
+
+<% btn_options = {} %>
+<% btn_options[:type] ||= 'button' %>
+<% btn_options['data-bs-toggle'] = 'collapse' %>
+<% btn_options['data-bs-target'] = target %>
+<% btn_options['aria-expanded'] = show.to_s %>
+
+<% btn_class = [] %>
+<% btn_class << 'accordion-button' %>
+<% btn_class << 'w-auto' %>
+<% btn_class << 'ms-auto' %>
+<% btn_class << 'shadow-none' %>
+<% btn_class << 'bg-transparent' %>
+<% btn_class << 'collapsed' unless show %>
+<% btn_class = btn_class.join(' ') %>
+
+<% btn_options[:class] = btn_class %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= content_tag :div, content, to_html_options(txt_options) %>
+  <%= content_tag :button, nil, to_html_options(btn_options) %>
+<% end %>

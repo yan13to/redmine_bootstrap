@@ -1,0 +1,21 @@
+<% options ||= {} %>
+
+<% active = options.delete :active %>
+<% disabled = options.delete :disabled %>
+<% mode = options.delete :mode %>
+<% mode = mode.to_s.to_sym %>
+
+<% tag = :li %>
+<% tag = :a if mode == :link %>
+
+<% tag_class = [] %>
+<% tag_class << 'list-group-item' %>
+<% tag_class << 'list-group-item-action' if mode == :link %>
+<% tag_class << 'active' if active %>
+<% tag_class << 'disabled' if disabled %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+
+<%= content_tag tag, content, to_html_options(options) %>

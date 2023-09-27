@@ -1,0 +1,11 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'modal-title' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :h5, content, to_html_options(options) %>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

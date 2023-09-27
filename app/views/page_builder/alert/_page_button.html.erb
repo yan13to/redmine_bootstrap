@@ -1,0 +1,13 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'btn-close' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:type] = 'button' %>
+<% options[:class] = tag_class %>
+<% options['data-bs-dismiss'] = :alert %>
+<% options['arial-label'] = 'Close' %>
+
+<%= content_tag :button, content, to_html_options(options) %>

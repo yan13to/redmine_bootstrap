@@ -1,48 +1,37 @@
-<div class="card mb-3">
-  <div class="issues box card-body">
-    <h3 class="icon icon-issue">
-      <%= l(:label_issue_tracking) %>&nbsp;
-      <%= link_to l(:label_details), project_issues_report_details_path(@project, detail: 'tracker'), class: 'icon-only icon-zoom-in', title: l(:label_details) %>
-    </h3>
-    <% if @trackers.present? %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th></th>
-            <th><%= l(:label_open_issues_plural) %></th>
-            <th><%= l(:label_closed_issues_plural) %></th>
-            <th><%= l(:label_total) %></th>
-          </tr>
-        </thead>
-        <tbody>
-        <% @trackers.each do |tracker| %>
-          <tr>
-            <td class="name">
-              <%= link_to tracker.name, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id), title: tracker.description %>
-            </td>
-            <td>
-              <%= link_to @open_issues_by_tracker[tracker].to_i, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id) %>
-            </td>
-            <td>
-              <%= link_to (@total_issues_by_tracker[tracker].to_i - @open_issues_by_tracker[tracker].to_i), project_issues_path(@project, set_filter: 1, tracker_id: tracker.id, status_id: 'c') %>
-            </td>
-            <td class="total">
-              <%= link_to @total_issues_by_tracker[tracker].to_i, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id, status_id: '*') %>
-            </td>
-          </tr>
-        <% end %>
-        </tbody>
-      </table>
+<h3>
+  <%= page_icon(:book, class: 'small me-1') %>
+  <%= l(:label_issue_tracking) %>&nbsp;
+  <%= page_link_to l(:label_details), project_issues_report_details_path(@project, detail: 'tracker'), class: 'icon-only icon-zoom-in', title: l(:label_details) %>
+</h3>
+<%= page_card class: 'mb-3' do %>
+  <% if @trackers.present? %>
+    <%= page_table head: ['&nbsp', l(:label_open_issues_plural), l(:label_closed_issues_plural), l(:label_total)] do %>
+      <% @trackers.each do |tracker| %>
+        <tr>
+          <td class="name">
+            <%= page_link_to tracker.name, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id), title: tracker.description %>
+          </td>
+          <td>
+            <%= page_link_to @open_issues_by_tracker[tracker].to_i, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id) %>
+          </td>
+          <td>
+            <%= page_link_to (@total_issues_by_tracker[tracker].to_i - @open_issues_by_tracker[tracker].to_i), project_issues_path(@project, set_filter: 1, tracker_id: tracker.id, status_id: 'c') %>
+          </td>
+          <td class="total">
+            <%= page_link_to @total_issues_by_tracker[tracker].to_i, project_issues_path(@project, set_filter: 1, tracker_id: tracker.id, status_id: '*') %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
-    <p>
-      <%= link_to l(:label_issue_view_all), project_issues_path(@project, set_filter: 1) %>
-      | <%= link_to l(:field_summary), project_issues_report_path(@project) %>
-      <% if User.current.allowed_to?(:view_calendar, @project, global: true) %>
-        | <%= link_to l(:label_calendar), project_calendar_path(@project) %>
-      <% end %>
-      <% if User.current.allowed_to?(:view_gantt, @project, global: true) %>
-        | <%= link_to l(:label_gantt), project_gantt_path(@project) %>
-      <% end %>
-    </p>
+  <% end %>
+  <div>
+    <%= page_link_to l(:label_issue_view_all), project_issues_path(@project, set_filter: 1) %>
+    | <%= page_link_to l(:field_summary), project_issues_report_path(@project) %>
+    <% if User.current.allowed_to?(:view_calendar, @project, global: true) %>
+      | <%= page_link_to l(:label_calendar), project_calendar_path(@project) %>
+    <% end %>
+    <% if User.current.allowed_to?(:view_gantt, @project, global: true) %>
+      | <%= page_link_to l(:label_gantt), project_gantt_path(@project) %>
+    <% end %>
   </div>
-</div>
+<% end %>

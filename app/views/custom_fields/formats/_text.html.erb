@@ -1,6 +1,6 @@
 <%= render 'custom_fields/formats/regexp', f: f, custom_field: custom_field %>
-<%= f.check_box_form_group :text_formatting, { label: l(:setting_text_formatting) }, 'full', '' %>
+<%= f.check_box :text_formatting, { label: l(:setting_text_formatting) }, 'full', '' %>
 <% if @custom_field.class.name == "IssueCustomField" %>
-  <%= f.check_box_form_group :full_width_layout %>
+  <%= f.check_box :full_width_layout %>
 <% end %>
-<%= f.text_area_form_group :default_value, rows: 5 %>
+<%= f.text_area :default_value, rows: 5 %>

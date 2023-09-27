@@ -2,11 +2,11 @@
 
 <div class="row align-items-start">
   <div class="col">
-    <div class="card">
-      <div class="card-body">
+    <% if Setting.welcome_text.present? %>
+      <%= page_card do %>
         <%= textilizable Setting.welcome_text %>
-      </div>
-    </div>
+      <% end %>
+    <% end %>
 
     <%= call_hook(:view_welcome_index_left) %>
   </div>

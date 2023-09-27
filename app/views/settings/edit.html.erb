@@ -1,6 +1,22 @@
 <% html_title(l(:label_settings), l(:label_administration)) -%>
 
-<%= page_title content_tag(:h2, l(:label_settings)) %>
+<% title = [] %>
+<% title << page_icon(:settings) %>
+<% title << l(:label_settings) %>
+<% title = title.compact.join('&nbsp;').html_safe %>
 
+<%= page_title content_tag(:h2, title) %>
 <%= render_settings_error @setting_errors %>
-<%= render 'page_tab', tabs: administration_settings_tabs, default_tab: 'general', paginator_item_count: 9, paginator_buttons_class: 'nav-link' %>
+<%#= page_tab administration_settings_tabs, default_tab: 'general', paginator_item_count: 9, paginator_buttons_class: 'nav-link' %>
+
+<%= page_card do %>
+  <%= page_nav mode: :tabs do %>
+    <% administration_settings_tabs.each do |tab| %>
+      <%#= tab[:name] %>
+      <%= page_nav_item do %>
+        <%= page_nav_link l(tab[:label]), '#', active: tab[:name] == 'general' %>
+      <% end %>
+      <%#= render tab[:partial] %>
+    <% end %>
+  <% end %>
+<% end %>

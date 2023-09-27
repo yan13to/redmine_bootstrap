@@ -1,50 +1,42 @@
 <% html_title @user.name %>
 
-<div class="d-flex align-items-center justify-content-between my-3">
-  <h2><%= avatar @user, size: 50 %>&nbsp;<%= @user.name %></h2>
-  <%= link_to(l(:button_edit), edit_user_path(@user), class: 'btn btn-success') if User.current.admin? && @user.logged? %>
-</div>
+<%= page_title content_tag(:h2, "#{avatar(@user, size: 50)} #{@user.name}".html_safe) do %>
+  <%= page_link_to(l(:button_edit), edit_user_path(@user), icon: :plus) if User.current.admin? && @user.logged? %>
+<% end %>
 
 <div class="row">
   <div class="col">
-    <ul>
-      <li>
-        <%= l(:field_login) %>: <%= @user.login %>
-      </li>
-      <% unless @user.pref.hide_mail %>
+    <%= page_card do %>
+      <ul>
         <li>
-          <%= l(:field_mail) %>: <%= user_emails(@user) %>
+          <%= l(:field_login) %>: <%= @user.login %>
         </li>
-      <% end %>
-      <% @user.visible_custom_field_values.each do |custom_value| %>
-        <% if !custom_value.value.blank? %>
-          <li class="<%= custom_value.custom_field.css_classes %>">
-            <%= custom_value.custom_field.name %>: <%= show_value(custom_value) %>
+        <% unless @user.pref.hide_mail %>
+          <li>
+            <%= l(:field_mail) %>: <%= user_emails(@user) %>
           </li>
         <% end %>
-      <% end %>
-        <li>
-          <%= l(:label_registered_on) %>: <%= format_date(@user.created_on) %>
-        </li>
-      <% unless @user.last_login_on.nil? %>
-        <li>
-          <%= l(:field_last_login_on) %>: <%= format_date(@user.last_login_on) %>
-        </li>
-      <% end %>
-    </ul>
+        <% @user.visible_custom_field_values.each do |custom_value| %>
+          <% if !custom_value.value.blank? %>
+            <li class="<%= custom_value.custom_field.css_classes %>">
+              <%= custom_value.custom_field.name %>: <%= show_value(custom_value) %>
+            </li>
+          <% end %>
+        <% end %>
+          <li>
+            <%= l(:label_registered_on) %>: <%= format_date(@user.created_on) %>
+          </li>
+        <% unless @user.last_login_on.nil? %>
+          <li>
+            <%= l(:field_last_login_on) %>: <%= format_date(@user.last_login_on) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
 
     <h3><%= l(:label_issue_plural) %></h3>
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th>&nbsp;</th>
-          <th><%= l(:label_open_issues_plural) %></th>
-          <th><%= l(:label_closed_issues_plural) %></th>
-          <th><%= l(:label_total) %></th>
-        </tr>
-      </thead>
-      <tbody>
+    <%= page_card do %>
+      <%= page_table head: ['&nbsp', l(:label_open_issues_plural), l(:label_closed_issues_plural), l(:label_total)] do %>
         <% assigned_to_ids = ([@user.id] + @user.group_ids).join("|") %>
         <% sort_cond = 'priority:desc,updated_on:desc' %>
         <tr>
@@ -75,38 +67,28 @@
             <%= link_to @issue_counts[:reported][:total], issues_path(set_filter: 1, status_id: '*', author_id: @user.id, sort: sort_cond) %>
           </td>
         </tr>
-      </tbody>
-    </table>
+      <% end %>
+    <% end %>
 
     <% unless @memberships.empty? %>
       <h3><%= l(:label_project_plural) %></h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th><%= l(:label_project) %></th>
-            <th><%= l(:label_role_plural) %></th>
-            <th><%= l(:label_registered_on) %></th>
+      <%= page_table head: [l(:label_project), l(:label_role_plural), l(:label_registered_on)] do %>
+        <% memberships_by_project = @memberships.group_by(&:project) %>
+        <% project_tree(memberships_by_project.keys, init_level: true) do |project, level| %>
+          <% membership = memberships_by_project[project].first %>
+          <tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
+            <td class="name">
+              <span><%= link_to_project(project) %></span>
+            </td>
+            <td class="roles">
+              <%= membership.roles.sort.collect(&:to_s).join(', ') %>
+            </td>
+            <td>
+              <%= format_date(membership.created_on) %>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <% memberships_by_project = @memberships.group_by(&:project) %>
-
-          <% project_tree(memberships_by_project.keys, init_level: true) do |project, level| %>
-            <% membership = memberships_by_project[project].first %>
-            <tr class="<%= project.css_classes %> <%= level > 0 ? "idnt idnt-#{level}" : nil %>">
-              <td class="name">
-                <span><%= link_to_project(project) %></span>
-              </td>
-              <td class="roles">
-                <%= membership.roles.sort.collect(&:to_s).join(', ') %>
-              </td>
-              <td>
-                <%= format_date(membership.created_on) %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
+        <% end %>
+      <% end %>
     <% end %>
 
     <% if (User.current == @user || User.current.admin?) && @user.groups.any? %>
@@ -121,13 +103,13 @@
     <% end %>
 
     <%= call_hook :view_account_left_bottom, user: @user %>
-
   </div>
 
-  <div class="col-auto">
-
+  <div class="col">
     <% unless @events_by_day.empty? %>
-      <h3><%= link_to l(:label_activity), controller: 'activities', action: 'index', id: nil, user_id: @user, from: @events_by_day.keys.first %></h3>
+      <h3>
+        <%= link_to l(:label_activity), controller: 'activities', action: 'index', id: nil, user_id: @user, from: @events_by_day.keys.first %>
+      </h3>
       <%= render 'activities/activities', events_by_day: @events_by_day %>
 
       <% other_formats_links do |f| %>
@@ -138,8 +120,6 @@
         <%= auto_discovery_link_tag(:atom, controller: 'activities', action: 'index', user_id: @user, format: :atom, key: User.current.rss_key) %>
       <% end %>
     <% end %>
-
     <%= call_hook :view_account_right_bottom, user: @user %>
-
   </div>
 </div>

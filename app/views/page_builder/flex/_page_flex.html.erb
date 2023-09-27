@@ -1,0 +1,33 @@
+<% options ||= {} %>
+
+<% display = options.delete :display %>
+<% tag_display = [] %>
+<% tag_display << 'd' %>
+<% tag_display << display if display.present? %>
+<% tag_display << 'flex' %>
+<% tag_display = tag_display.join('-') %>
+
+<% align_items_class = options.delete :align_items %>
+<% align_items_class = "align-items-#{align_items_class}" if align_items_class.present? %>
+
+<% gap_class = options.delete :gap %>
+<% gap_class = "gap-#{gap_class}" if gap_class.present? %>
+
+<% ms_class = options.delete :ms %>
+<% ms_class = "ms-#{ms_class}" if ms_class.present? %>
+
+<% justify_content_class = options.delete :justify_content %>
+<% justify_content_class = "justify-content-#{justify_content_class}" if justify_content_class.present? %>
+
+<% tag_class = [] %>
+<% tag_class << tag_display %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << align_items_class if align_items_class.present? %>
+<% tag_class << gap_class if gap_class.present? %>
+<% tag_class << ms_class if ms_class.present? %>
+<% tag_class << justify_content_class if justify_content_class.present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :div, content, to_html_options(options) %>

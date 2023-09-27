@@ -1,4 +1,4 @@
-<%= form_for @project, builder: BootstrapFormBuilder do |f| %>
+<%= form_for @project, builder: PageFormBuilder do |f| %>
   <%= hidden_field_tag 'tab', 'issues' %>
 
   <% unless @trackers.empty? %>
@@ -45,8 +45,8 @@
   <% end %>
 
   <%= page_card class: 'mb-3' do %>
-    <%= f.select_form_group :default_version_id, project_default_version_options(@project), include_blank: l(:label_none) if @project.safe_attribute?('default_version_id') %>
-    <%= f.select_form_group :default_assigned_to_id, project_default_assigned_to_options(@project), include_blank: l(:label_none) if @project.safe_attribute?('default_assigned_to_id') %>
+    <%= f.page_selectult_version_id, project_default_version_options(@project), include_blank: l(:label_none) if @project.safe_attribute?('default_version_id') %>
+    <%= f.page_select :default_assigned_to_id, project_default_assigned_to_options(@project), include_blank: l(:label_none) if @project.safe_attribute?('default_assigned_to_id') %>
   <% end %>
 
   <%= f.action_form_group :button_save %>

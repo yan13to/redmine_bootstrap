@@ -1,0 +1,46 @@
+<% options ||= {} %>
+
+<% invalid = options.delete(:invalid) %>
+<% invalid = false if invalid.nil? %>
+<% label = options.delete(:label) || {} %>
+<% prepend = options.delete(:prepend) || {} %>
+<% append = options.delete(:append) || {} %>
+<% hint = options.delete(:hint) || {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'form-control' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class << 'is-invalid' if invalid || f.object.errors[method].present? %>
+
+<% options[:class] = tag_class.compact.join(' ') %>
+
+<% label = { content: label } if label.is_a?(String) %>
+<% label_content = label[:content] %>
+<% label_options = label[:options] || {} %>
+
+<% prepend_content = prepend[:content] %>
+<% prepend_options = prepend[:options] || {} %>
+<% prepend_options[:class] = ['input-group-text', prepend_options[:class]].compact.join(' ') %>
+
+<% append_content = append[:content] %>
+<% append_options = append[:options] || {} %>
+<% append_options[:class] = ['input-group-text', append_options[:class]].compact.join(' ') %>
+
+<% hint = { content: hint } if hint.is_a?(String) %>
+<% hint_content = hint[:content] %>
+<% hint_options = hint[:options] || {} %>
+
+<% contents = [] %>
+<% contents << content_tag(:span, prepend_content, prepend_options) if prepend.present? %>
+<% contents << f.date_field(method, to_html_options(options)) %>
+<% contents << content_tag(:span, append_content, append_options) if append.present? %>
+<% content = contents.compact.join.html_safe %>
+
+<%= f.page_label method, label_content, label_options %>
+<% if append.present? || prepend.present? %>
+  <%= content_tag(:div, content, class: 'input-group') %>
+<% else %>
+  <%= content %>
+<% end %>
+<%= f.page_feedback method, :invalid if invalid %>
+<%= f.page_hint method, hint_content, hint_options if hint_content.present? %>

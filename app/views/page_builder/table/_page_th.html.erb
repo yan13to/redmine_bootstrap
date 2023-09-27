@@ -1,0 +1,13 @@
+<% if content.is_a?(Array) %>
+  <% content.each do |item| %>
+    <% item = { content: item } if item.is_a?(String) || item.nil? %>
+    <% item_content = item[:content] %>
+    <% item_options = item[:options] || {} %>
+    <% item_options[:scope] = 'col' %>
+    <%= content_tag :th, item_content, to_html_options(item_options) %>
+  <% end %>
+<% else %>
+  <% options ||= {} %>
+  <% options[:scope] = 'col' %>
+  <%= content_tag :th, content, to_html_options(options) %>
+<% end %>

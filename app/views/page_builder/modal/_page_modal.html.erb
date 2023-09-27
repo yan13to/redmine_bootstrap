@@ -1,0 +1,42 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'modal' %>
+<% tag_class << 'fade' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+<% options[:tabindex] = -1 %>
+<% options['data-bs-backdrop'] = 'static' %>
+<% options['data-bs-keyboard'] = false %>
+
+<% header = options.delete :header %>
+<% header = { content: header } if header.is_a?(String) || header.nil? %>
+<% header[:options] ||= {} %>
+
+<% body = options.delete :body %>
+<% body = { content: body } if body.is_a?(String) || body.nil? %>
+<% body[:options] ||= {} %>
+
+<% footer = options.delete :footer %>
+<% footer = { content: footer } if footer.is_a?(String) || footer.nil? %>
+<% footer[:options] ||= {} %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= page_modal_dialog do %>
+    <%= page_modal_content do %>
+      <%= page_modal_header header[:options] do %>
+        <%= page_modal_title header[:content] %>
+      <% end if header[:content].present? %>
+      <% if body[:content].present? %>
+        <%= page_modal_body body[:content], body[:options] %>
+      <% else %>
+        <%= content %>
+      <% end %>
+      <%= page_modal_footer footer[:options] do %>
+        <%= footer[:content] %>
+      <% end if footer[:content].present? %>
+    <% end %>
+  <% end %>
+<% end %>

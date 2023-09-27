@@ -1,0 +1,9 @@
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'alert-heading' %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class if tag_class.present? %>
+
+<%= page_heading :h4, content, to_html_options(options) %>

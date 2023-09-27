@@ -1,0 +1,18 @@
+<% options ||= {} %>
+
+<% color = options.delete :color %>
+<% color = 'primary' unless color # make color primary by default %>
+<% outline = options.delete :outline %>
+<% outline = true unless outline # make style outline by default %>
+
+<% btn_type = ['btn'] %>
+<% btn_type << 'outline' if outline %>
+<% btn_type << color %>
+
+<% tag_class = ['btn'] %>
+<% tag_class << btn_type.compact.join('-') %>
+<% tag_class << options[:class] if options[:class].present? %>
+
+<% options[:class] = tag_class.compact.join(' ') %>
+
+<%= submit_tag content, options %>

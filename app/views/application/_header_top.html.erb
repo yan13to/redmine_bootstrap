@@ -1,19 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary p-0 small">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopMenu" aria-controls="navbarTopMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTopMenu">
-      <%= render 'top_menu' if User.current.logged? || !Setting.login_required? -%>
-      <%= content_tag('span', "#{l(:label_logged_as)} #{link_to_user(User.current, format: :username)}".html_safe, class: 'navbar-text ms-auto') if User.current.logged? %>
-      <ul class="navbar-nav" data-menu-name="account_menu">
-        <% menu_items_for(:account_menu) do |node| %>
-          <% caption, url, selected = extract_node_details(node) %>
-          <li class="nav-item">
-            <%= link_to caption, url, class: "nav-link#{' active' if selected}", 'data-name': node.name %>
-          </li>
+<%= page_navbar navbar: :dark, bg: :primary, id: :header_top_menu do %>
+  <%= page_nav mode: :navbar, 'data-menu-name': :top_menu do %>
+    <% menu_items_for(:top_menu) do |node| %>
+      <% caption, url, selected = extract_node_details(node) %>
+      <% if node.name == :administration %>
+        <%= page_dropdown tag: :li, id: "top-menu-#{node.name}", class: 'nav-item', button: { content: caption, options: { split: true, icon: node.name, tag: :a, href: url_for(url), active: selected } } do %>
+          <%= menu_items_for(:admin_menu) do |n| %>
+            <% caption, url, selected = extract_node_details(n) %>
+            <%= page_dropdown_item page_dropdown_link(caption, url, icon: n.name, active: selected), id: "top-menu-#{node.name}-#{n.name}" %>
+          <% end %>
         <% end %>
-      </ul>
-    </div>
-  </div>
-</nav>
+      <% else %>
+        <%= page_nav_item page_nav_link(caption, url, active: selected, icon: node.name, 'data-name': node.name) %>
+      <% end %>
+    <% end %>
+  <% end if User.current.logged? || !Setting.login_required? %>
+  <%= content_tag('span', "#{l(:label_logged_as)} #{link_to_user(User.current, format: :username)}".html_safe, class: 'navbar-text ms-auto') if User.current.logged? %>
+  <%= page_nav mode: :navbar, 'data-menu-name': :account_menu do %>
+    <% menu_items_for(:account_menu) do |node| %>
+      <% caption, url, selected = extract_node_details(node) %>
+      <%= page_nav_item page_nav_link(caption, url, active: selected, icon: node.name, 'data-name': node.name) %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,19 +1,8 @@
 <% unless controller_name == 'admin' && action_name == 'index' %>
   <% content_for :sidebar do %>
-    <div class="accordion sticky-top" id="accordionAdminMenu">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="flush-headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#admin-menu-accordion" aria-expanded="true" aria-controls="admin menu">
-            <strong><%= l(:label_administration) %></strong>
-          </button>
-        </h2>
-        <div id="admin-menu-accordion" class="accordion-collapse collapse show" aria-labelledby="admin-menu-accordion" data-bs-parent="#accordionAdminMenu">
-          <div class="accordion-body">
-            <%= render 'admin/menu' %>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= page_card header: { content: page_heading(:h4, [page_icon(:administration), l(:label_administration)].join('&nbsp').html_safe) } do %>
+      <%= render 'admin/menu', mode: :flush %>
+    <% end %>
   <% end %>
 <% end %>
 

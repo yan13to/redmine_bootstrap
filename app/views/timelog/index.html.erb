@@ -1,7 +1,10 @@
 <% html_title(@query.new_record? ? l(:label_spent_time) : @query.name, l(:label_details)) %>
 
 <div class="d-flex justify-content-between mt-3">
-  <h2><%= @query.new_record? ? l(:label_spent_time) : @query.name %></h2>
+  <h2>
+    <%= page_icon(:clock) %>
+    <%= @query.new_record? ? l(:label_spent_time) : @query.name %>
+  </h2>
   <%= render 'actions' %>
 </div>
 

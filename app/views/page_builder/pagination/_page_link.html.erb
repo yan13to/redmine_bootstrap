@@ -1,0 +1,17 @@
+<% options ||= {} %>
+
+<% url = options.delete :url %>
+<% current = options.delete :current %>
+<% disabled = options.delete :disabled %>
+
+<% tag_class = ['page-link'] %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.compact.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<% if current || disabled  %>
+  <%= content_tag :span, content, options %>
+<% else %>
+  <%= page_link_to content, url, options %>
+<% end %>

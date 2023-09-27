@@ -1,12 +1,11 @@
 <% html_title(l(:label_calendar)) -%>
 <% label = @query.new_record? ? l(:label_calendar) : @query.name %>
 
-<%= page_title content_tag(:h2, label) %>
+<%= page_title content_tag(:h2, page_icon(:calendar) + '&nbsp;'.html_safe + label) %>
 
 <%= form_tag({ controller: 'calendars', action: 'show', project_id: @project }, method: :get) do %>
   <%= hidden_field_tag 'set_filter', '1' %>
   <%= hidden_field_tag 'calendar', '1' %>
-
   <div>
     <fieldset class="collapsible <%= @query.new_record? ? "" : "collapsed" %>">
       <legend class="icon icon-<%= @query.new_record? ? "expended" : "collapsed" %>">
@@ -16,7 +15,6 @@
         <%= render 'queries/filters', query: @query %>
       </div>
     </fieldset>
-
     <div class="d-flex justify-content-between align-items-center mb-3">
       <div>
         <div class="hstack gap-1">
@@ -35,13 +33,11 @@
           </div>
         </div>
       </div>
-
       <div class="btn-group btn-group-sm shadow">
         <%= link_to_previous_month(@year, @month, accesskey: accesskey(:previous), class: 'btn btn-outline-primary') %>
         <%= link_to_next_month(@year, @month, accesskey: accesskey(:next), class: 'btn btn-outline-primary') %>
       </div>
     </div>
-
   </div>
 <% end %>
 
@@ -51,13 +47,17 @@
   <%= page_card class: 'shadow' do %>
     <%= render 'common/calendar', calendar: @calendar %>
   <% end %>
-
   <%= call_hook(:view_calendars_show_bottom, year: @year, month: @month, project: @project, query: @query) %>
-
   <div class="vstack">
-    <span><%= content_tag(:i, nil, class: 'bi bi-backspace-reverse-fill') %><%= l(:text_tip_issue_begin_day) %></span>
-    <span><%= content_tag(:i, nil, class: 'bi bi-backspace-fill') %><%= l(:text_tip_issue_end_day) %></span>
-    <span><%= content_tag(:i, nil, class: 'bi bi-diamond-fill') %><%= l(:text_tip_issue_begin_end_day) %></span>
+    <span>
+      <%= page_icon('backspace-reverse-fill') %>&nbsp;<%= l(:text_tip_issue_begin_day) %>
+    </span>
+    <span>
+      <%= page_icon('backspace-fill') %>&nbsp;<%= l(:text_tip_issue_end_day) %>
+    </span>
+    <span>
+      <%= page_icon('diamond-fill') %>&nbsp;<%= l(:text_tip_issue_begin_end_day) %>
+    </span>
   </div>
 <% end %>
 

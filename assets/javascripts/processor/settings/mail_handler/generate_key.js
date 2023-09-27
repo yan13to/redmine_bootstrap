@@ -1,4 +1,4 @@
-import { randomKey } from "../../../libs/shared.js";
+import { randomKey } from "../../../libs/constants.js";
 
 export default function (currentElement) {
   currentElement.addEventListener('click', function(e) {

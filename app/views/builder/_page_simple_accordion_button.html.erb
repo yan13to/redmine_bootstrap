@@ -1,8 +1,0 @@
-<div class="row align-items-center">
-  <div class="col-auto">
-    <div class="simple-accordion-button<%= " #{html_class}" if defined?(html_class) %>" data-bs-toggle="collapse" data-bs-target="<%= target %>">
-      <%= title %>
-    </div>
-  </div>
-  <%= content if block_given? && defined?(content) %>
-</div>

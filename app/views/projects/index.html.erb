@@ -1,32 +1,34 @@
 <% html_title(l(:label_project_plural)) -%>
 <% title = @query.new_record? ? l(:label_project_plural) : @query.name %>
 
-<%= page_title content_tag(:h2, title) do %>
+<%= page_title content_tag(:h2, page_icon(:briefcase) + '&nbsp;'.html_safe + title) do %>
   <%= render 'projects/actions/add', text: true, icon: true if User.current.allowed_to?(:add_project, nil, global: true) %>
   <%= render 'projects/actions/administration', text: true, icon: true if User.current.admin? %>
 <% end %>
 
-<%= form_tag(projects_path(@project, nil), method: :get, id: 'query_form') do %>
+<%= form_tag(projects_path(@project, nil), method: :get) do %>
   <%= render 'queries/query_form' %>
 <% end %>
 
-<div class="card">
-  <div class="card-body">
-    <% if @query.valid? %>
-      <% if @entries.empty? %>
-        <%= render 'no_data' %>
-      <% else %>
-        <%= render @query.display_type, entries: @entries %>
-      <% end %>
+<%= page_card do %>
+  <% if @query.valid? %>
+    <% if @entries.empty? %>
+      <%= page_empty %>
+    <% else %>
+      <%= render @query.display_type, entries: @entries %>
     <% end %>
-  </div>
-</div>
+  <% end %>
+<% end %>
 
 <% if User.current.logged? %>
-  <p style="text-align:right;">
-    <span class="icon icon-user my-project"><%= l(:label_my_projects) %></span>
-    <span class="icon icon-bookmarked-project"><%= l(:label_my_bookmarks) %></span>
-  </p>
+  <div class="text-end">
+    <%= page_badge class: 'bg-success' do %>
+      <%= l(:label_my_projects) %>
+    <% end %>
+    <%= page_badge do %>
+      <%= l(:label_my_bookmarks) %>
+    <% end %>
+  </div>
 <% end %>
 
 <% content_for :sidebar do %>
@@ -34,7 +36,7 @@
 <% end %>
 
 <% other_formats_links do |f| %>
-  <%= f.link_to 'Atom', :url => { key: User.current.rss_key } %>
+  <%= f.link_to 'Atom', url: { key: User.current.rss_key } %>
   <% if @query.display_type == 'list' %>
     <%= f.link_to_with_query_parameters 'CSV', {}, onclick: "showModal('csv-export-options', '350px'); return false;" %>
   <% end %>

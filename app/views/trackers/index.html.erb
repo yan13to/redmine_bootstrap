@@ -1,12 +1,10 @@
 <% html_title(l(:label_tracker_plural)) -%>
 
-<%= page_title content_tag(:h2, l(:label_tracker_plural)) do  %>
-  <%= link_to l(:label_tracker_new), new_tracker_path %>
-  <%= link_to l(:field_summary), fields_trackers_path %>
+<%= page_title page_heading(:h2, l(:label_tracker_plural)) do  %>
+  <%= page_link_to l(:label_tracker_new), new_tracker_path, icon: :plus %>
+  <%= page_link_to l(:field_summary), fields_trackers_path, icon: :overview %>
 <% end %>
 
-<%= page_card do %>
-  <%= page_table head: [l(:label_tracker), l(:field_default_status), l(:field_description), '&nbsp;', '&nbsp;'] do %>
-    <%= render @trackers %>
-  <% end %>
+<%= page_table head: [l(:label_tracker), l(:field_default_status), l(:field_description), '&nbsp;', '&nbsp;'] do %>
+  <%= render @trackers %>
 <% end %>

@@ -1,0 +1,12 @@
+<% align = options.delete :align %>
+<% label = options.delete :label %>
+
+<% html_class = ['d-flex justify-content-between my-3'] %>
+<% html_class << "align-items-#{align.to_s}" if align.present? %>
+
+<% options[:class] = html_class.compact.join(' ') %>
+
+<%= content_tag :div, to_html_options(options) do %>
+  <%= label %>
+  <%= content_tag :div, content, class: 'd-flex align-items-center gap-3' if content.present? %>
+<% end %>

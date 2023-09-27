@@ -1,0 +1,23 @@
+<%= page_heading :h3, l(:label_time_tracking) %>
+<%= page_card class: 'mb-3' do %>
+  <%= page_table do %>
+    <%= page_table_tr do %>
+      <%= page_table_th do %>
+        <%= l(:field_estimated_hours) %>
+      <% end %>
+      <%= page_table_td do %>
+        <%= link_to html_hours(l_hours(@version.visible_fixed_issues.estimated_hours)), project_issues_path(@version.project, set_filter: 1, status_id: '*', fixed_version_id: @version.id, c: [:tracker, :status, :subject, :estimated_hours], t: [:estimated_hours]) %>
+      <% end %>
+    <% end %>
+    <% if User.current.allowed_to_view_all_time_entries?(@project) %>
+      <%= page_table_tr do %>
+        <%= page_table_th do %>
+          <%= l(:label_spent_time) %>
+        <% end %>
+        <%= page_table_td do %>
+          <%= link_to html_hours(l_hours(@version.spent_hours)), project_time_entries_path(@version.project, set_filter: 1, 'issue.fixed_version_id': @version.id) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -1,0 +1,9 @@
+<%= page_row do %>
+  <%= page_col l(:label_subtask_plural) %>
+  <%= page_col do %>
+    <%= render_descendants_stats(@issue) %>
+  <% end unless @issue.leaf? %>
+  <%= page_col do %>
+    <%= link_to_new_subtask(@issue) %>
+  <% end if User.current.allowed_to?(:manage_subtasks, @project) %>
+<% end %>

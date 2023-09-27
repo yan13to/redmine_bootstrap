@@ -1,0 +1,12 @@
+<%= page_link_to l(:button_edit), edit_issue_path(@issue), icon: :edit, onclick: 'showAndScrollTo("update", "issue_notes"); return false;', accesskey: accesskey(:edit) if @issue.editable? %>
+<%= page_link_to l(:button_log_time), new_issue_time_entry_path(@issue), icon: :plus if User.current.allowed_to?(:log_time, @project) %>
+<%= watcher_link(@issue, User.current) %>
+<%= page_link_to l(:button_copy), project_copy_issue_path(@project, @issue), icon: :copy if User.current.allowed_to?(:copy_issues, @project) && Issue.allowed_target_projects.any? %>
+<%= page_dropdown button: { content: page_icon('three-dots', title: l(:button_actions)), options: { mode: :no_icon } } do %>
+  <%= page_dropdown_item do %>
+    <%= page_dropdown_link l(:button_copy_link), issue_url(@issue, only_path: false), icon: :copy %>
+  <% end %>
+  <%= page_dropdown_item do %>
+    <%= page_dropdown_link l(:button_delete), issue_path(@issue), data: {confirm: issues_destroy_confirmation_message(@issue)}, method: :delete, icon: :delete if @issue.deletable? %>
+  <% end %>
+<% end %>

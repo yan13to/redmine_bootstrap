@@ -1,0 +1,15 @@
+<% icon = icon.nil? ? true : icon %>
+<% text = text.nil? ? false : text %>
+
+<% btn_class ||= 'btn' %>
+<% btn_label ||= l(:label_settings) %>
+
+<% html = [] %>
+<% html << page_icon(:gear) if icon %>
+<% html << content_tag(:span, btn_label) if text %>
+
+<%= link_to_if_authorized html.join('&nbsp;').html_safe,
+      { controller: 'projects', action: 'settings', id: @project },
+      class: btn_class,
+      'data-bs-toggle': 'tooltip',
+      title: btn_label %>

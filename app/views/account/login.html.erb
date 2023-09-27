@@ -1,43 +1,40 @@
 <%= call_hook :view_account_login_top %>
-
 <%= page_card class: 'mx-auto w-25 shadow' do %>
-  <h3 class="card-title text-center">
-    <%= t(:sign_in) %>
-  </h3>
-
-  <%= form_tag(signin_path) do %>
+  <%= cache do %>
+    <%= image_tag '/plugin_assets/redmine_bootstrap/images/logo.png', class: 'mx-auto d-block', style: 'height:62px !important;' %>
+  <% end %>
+  <%= page_heading :h3, t(:sign_in), class: 'text-center' %>
+  <%= render_flash_messages %>
+  <%= page_form_tag signin_path do %>
     <%= back_url_hidden_field_tag %>
-
-    <div class="mb-3 form-group">
-      <label for="username"><%= l(:field_login) %></label>
-      <%= text_field_tag 'username', params[:username], tabindex: 1, class: 'form-control', autofocus: true, 'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', title: 'Enter login' %>
-    </div>
-
-    <div class="mb-3 form-group">
-      <label for="password">
-        <%= l(:field_password) %>
-        <em class="small"><%= link_to l(:label_password_lost), lost_password_path, class: "lost_password" if Setting.lost_password? %></em>
-      </label>
-      <%= password_field_tag 'password', nil, tabindex: 2, class: 'form-control', 'data-bs-toggle': 'tooltip', 'data-bs-placement': 'right', title: 'Enter password' %>
-    </div>
-
+    <%= page_paragraph do %>
+      <%= page_text_field_tag 'username', params[:username], label: l(:field_login), tabindex: 1, autofocus: true, invalid: flash.present? %>
+    <% end %>
+    <%= page_paragraph do %>
+      <% labels = [] %>
+      <% labels << content_tag(:span, l(:field_password)) %>
+      <% labels << content_tag(:em, page_link_to(l(:label_password_lost), lost_password_path), class: 'small') if Setting.lost_password? %>
+      <%= page_password_field_tag 'password', nil, label: labels.compact.join(' ').html_safe, tabindex: 2, invalid: flash.present? %>
+    <% end %>
     <% if Setting.openid? %>
-      <div class="mb-3 form-group">
-        <label for="openid_url"><%= l(:field_identity_url) %></label>
-        <%= text_field_tag "openid_url", nil, tabindex: 3 %>
-      </div>
+      <%= page_paragraph do %>
+        <%= page_text_field_tag 'openid_url', nil, label: l(:field_identity_url), tabindex: 3, invalid: flash.present? %>
+      <% end %>
     <% end %>
-    
     <% if Setting.autologin? %>
-      <div class="mb-3 form-group">
-        <label for="autologin"><%= check_box_tag 'autologin', 1, false, tabindex: 4 %> <%= l(:label_stay_logged_in) %></label>
-      </div>
+      <%= page_paragraph do %>
+        <%= page_check_box_tag 'autologin', 1, false, label: l(:label_stay_logged_in), tabindex: 4, invalid: flash.present? %>
+      <% end %>
     <% end %>
-    
-    <div class="mb-3 d-grid gap-2">
-      <input type="submit" name="login" value="<%= l(:button_login) %>" tabindex="5" id="login-submit" class="btn btn-primary" />
-    </div>
+    <%= page_paragraph class: 'd-grid gap-2' do %>
+      <%= page_submit_tag l(:button_login), tabindex: 5 %>
+    <% end %>
+    <%= page_paragraph class: 'text-center' do %>
+      <span>Or</span>
+    <% end %>
+    <%= page_paragraph class: 'text-center' do %>
+      <%= page_link_to l(:label_register), register_path %>
+    <% end %>
   <% end %>
 <% end %>
-
 <%= call_hook :view_account_login_bottom %>

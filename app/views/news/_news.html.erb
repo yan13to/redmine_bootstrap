@@ -1,19 +1,17 @@
-<div class="card mb-3">
-  <div class="card-body">
-    <div class="mb-3">
-      <%= link_to_project(news.project) + ': ' unless @project %>
-      <%= link_to news.title, news_path(news) %>
-    </div>
-    <% if news.comments_count > 0 %>
-      <span class="comments">(<%= l(:label_x_comments, :count => news.comments_count) %>)</span>
-    <% end %>
-    <% unless news.summary.blank? %>
-      <div class="mb-3 summary">
-        <%= news.summary %>
-      </div>
-    <% end %>
-    <div class="author small text-muted">
-      <%= authoring news.created_on, news.author %>
-    </div>
+<%= page_card class: 'mb-3' do %>
+  <div class="mb-1">
+    <%= link_to_project(news.project) + ': ' unless @project %>
+    <%= page_link_to news.title, news_path(news) %>
   </div>
-</div>
+  <% if news.comments_count > 0 %>
+    <span class="comments">(<%= l(:label_x_comments, count: news.comments_count) %>)</span>
+  <% end %>
+  <% unless news.summary.blank? %>
+    <div class="mb-3 summary">
+      <%= news.summary %>
+    </div>
+  <% end %>
+  <div class="author small text-muted">
+    <%= authoring news.created_on, news.author %>
+  </div>
+<% end %>

@@ -1,12 +1,4 @@
-<div class="btn-group">
-  <button id="btnGroupUserAction" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="bi bi-three-dots"></i>&nbsp;<%= l(:button_actions) %>
-  </button>
-  <ul class="dropdown-menu">
-    <li>
-      <% if User.current.allowed_to?(:import_users, nil, global: true) %>
-        <%= link_to l(:button_import), new_users_import_path, class: 'dropdown-item' %>
-      <% end %>
-    </li>
-  </ul>
-</div>
+<% items = [] %>
+<% items << { content: l(:button_import), options: { url: new_users_import_path } } if User.current.allowed_to?(:import_users, nil, global: true) %>
+
+<%= page_dropdown items, button: { content: page_icon('three-dots', title: l(:button_actions)), options: { mode: :no_icon } } if items.present? %>

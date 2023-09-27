@@ -1,0 +1,12 @@
+<% content ||= '&#x26D4;'.html_safe %>
+<% options ||= {} %>
+
+<% tag_class = [] %>
+<% tag_class << 'fs-2' %>
+<% tag_class << 'me-1' %>
+<% tag_class << options[:class] if options[:class].present? %>
+<% tag_class = tag_class.join(' ') %>
+
+<% options[:class] = tag_class %>
+
+<%= content_tag :div, content, to_html_options(options) %>

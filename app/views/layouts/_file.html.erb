@@ -1,25 +1,22 @@
-<div class="contextual">
-  <%= link_to_attachment @attachment, :text => "#{l(:button_download)} (#{number_to_human_size(@attachment.filesize)})", :download => true, :class => 'icon icon-download' -%>
-</div>
-
-<h2>
-  <%= safe_join([link_to_attachment_container(@attachment.container), @attachment.filename].compact, ' » ') %>
-</h2>
-
-<div class="attachments">
-<p><%= "#{@attachment.description} - " unless @attachment.description.blank? %>
-   <span class="author"><%= link_to_user(@attachment.author) %>, <%= format_time(@attachment.created_on) %></span></p>
-</div>
-<div class="filecontent-container">
-  <%= yield %>
-</div>
-
-<span class="pagination filepreview">
-  <%= render_pagination %>
-</span>
-
 <% html_title @attachment.filename %>
 
+<%= page_title page_heading(:h2, safe_join([link_to_attachment_container(@attachment.container), @attachment.filename].compact, ' » ')) do %>
+  <%= link_to_attachment @attachment, text: "#{l(:button_download)} (#{number_to_human_size(@attachment.filesize)})", download: true, icon: :download -%>
+<% end %>
+
+<%= page_paragraph do %>
+  <%= "#{@attachment.description} - " unless @attachment.description.blank? %>
+  <%= link_to_user(@attachment.author) %>, <%= format_time(@attachment.created_on) %>
+<% end %>
+
+<%= page_paragraph do %>
+  <%= yield %>
+<% end %>
+
+<%= page_paragraph do %>
+  <%= page_stack render_pagination, gap: 3 %>
+<% end %>
+
 <% content_for :header_tags do -%>
-    <%= stylesheet_link_tag "scm" -%>
+  <%= stylesheet_link_tag 'scm' -%>
 <% end -%>
