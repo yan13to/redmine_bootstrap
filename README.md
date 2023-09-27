@@ -13,6 +13,15 @@ or as submodule
 $ git submodule add git@github.com:yan13to/redmine_bootstrap.git plugins/redmine_bootstrap
 ```
 
+or as symlink
+```
+yan13to@remote:~$ cd www/bukaproject/current/plugins/
+```
+
+```
+yan13to@remote:~/www/bukaproject/current/plugins$ ln -s ../../../redmine_bootstrap redmine_bootstrap
+```
+
 ## Demo
 
 <https://bukaproject.herokuapp.com/>
